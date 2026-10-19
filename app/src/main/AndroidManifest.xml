@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- No INTERNET permission (SPEC 0.6, harvest row GM9). No activity yet: screens are the owner's to decide (SPEC 0.3).
+     No icon yet either: it is a visual decision, so the lint check waits for it rather than a placeholder. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:label="SisyphusFit"
+        tools:ignore="MissingApplicationIcon" />
+</manifest>

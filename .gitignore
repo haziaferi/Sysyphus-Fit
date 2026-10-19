@@ -1,0 +1,49 @@
+# Gradle and Kotlin
+.gradle/
+.kotlin/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+output-metadata.json
+
+# Signing and secrets: never public
+*.jks
+*.keystore
+keystore.properties
+signing.properties
+google-services.json
+.env
+.env.*
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.fleet/
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build and mutant logs at the root
+/*.log
+
+# The app survey, the phone walk and the feature harvest (SPEC 0.4): phone screenshots, walk logs
+# pinned to the phone, the list of apps on the owner's phone. Kept locally; the repository is public.
+research/

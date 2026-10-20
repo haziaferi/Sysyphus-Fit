@@ -1,7 +1,13 @@
 # SisyphusFit — specification
 
-Version 0.1, 2026-10-19. Offline-first Android app for organising and tracking near-daily training:
-gym and strength, bodyweight, mobility and timers, offline cardio. Package `com.hazia.sisyphusfit`.
+Version 0.2 (draft for the owner's workshop), 2026-10-20. Offline-first Android app for organising
+and tracking near-daily movement and training, built from training modules that can be used alone or
+stacked: daily movement, strength, stamina, mobility and balance, and optionally body measures. It
+records, and comments neutrally with graded scientific evidence; it never promises or prescribes.
+Package `com.hazia.sisyphusfit`.
+
+Sections 7-11 are new in 0.2 and are a DRAFT: marked **[decided]** where the owner has decided,
+**[proposed]** where it is a proposal for the workshop, **[open]** where the owner has deferred it.
 
 ## 0. Owner decisions so far
 
@@ -11,8 +17,29 @@ gym and strength, bodyweight, mobility and timers, offline cardio. Package `com.
 | 0.2 | Package name `com.hazia.sisyphusfit`. | 2026-10-19 |
 | 0.3 | Data layer and skeleton first; screens later. | 2026-10-19 |
 | 0.4 | Repository: github.com/haziaferi/Sysyphus-Fit (public). `research/` stays local: it holds phone screenshots and per-phone state. | 2026-10-19 |
-| 0.5 | Scope: the 50-point scope of the feature harvest (§3), staged as recorded there. | 2026-10-19 |
+| 0.5 | Scope: the 50-point scope of the feature harvest, re-cut by module in §3 (0.22-0.27) with the owner's additions. | 2026-10-19, re-cut 2026-10-20 |
 | 0.6 | No account, no network at runtime (harvest row GM9: no INTERNET permission). | 2026-10-19 (scope) |
+| 0.7 | The two evidence reports are the app's foundation (§7). | 2026-10-20 |
+| 0.8 | The app makes no promises and cannot recommend anything with certainty; it can neutrally comment with scientific evidence. Broad studies cannot prescribe for one person, so features reflect the findings but allow customisation. | 2026-10-20 |
+| 0.9 | Modular structure: daily movement, strength, stamina, mobility and balance, usable alone or stacked into a personal set-up (§8). | 2026-10-20 |
+| 0.10 | Body measures is an optional fifth module, off by default, with no BMI/BMR verdicts and no forecasts. | 2026-10-20 |
+| 0.11 | Features are gathered into screens by shared purpose, with few overlaps and only where necessary (§9); Factotum's Today and purpose map are a skeleton to adapt, not a blueprint. | 2026-10-20 |
+| 0.12 | Today is designed last: it depends on every other screen. | 2026-10-20 |
+| 0.13 | While logging sets, the past is shown as the live comparison only (today vs last time, harvest row SG2). It also does LL2's job: last time's numbers show from the start of each set, and today's fill in as they are logged (workshop). | 2026-10-20 |
+| 0.14 | Visual size follows function hierarchy (not every control is visually 48 dp). Touch-area minimum: see 0.21 (42 dp), which replaces the 48 dp first written here. | 2026-10-20 |
+| 0.15 | Prefer evidence from authors without commercial interests; the short-bout rules rest on independent physiology and trials, the VILPA cohort is a supporting association only. | 2026-10-20 |
+| 0.16 | The commentary rules of §7 are adopted as written. Evidence notes sit behind a circled "i"; tapping it opens the note in a bottom sheet. | 2026-10-20 (workshop) |
+| 0.17 | Evidence notes default to the brief level for a new user. | 2026-10-20 (workshop) |
+| 0.18 | Training modules are chosen at first launch; nothing is assumed on. | 2026-10-20 (workshop) |
+| 0.19 | Added inside existing modules: isometric holds as a first-class exercise type and "move fast" (power) as a set option, in Strength; self-checks (chair rise, balance hold, walking speed) as the person's own trend only, never a verdict, in Mobility and balance. | 2026-10-20 (workshop) |
+| 0.20 | The purposes and screens of §9, with the rows left out, are the working list for mockups; screens can still move when mockups show a problem. | 2026-10-20 (workshop) |
+| 0.21 | The screen rules of §10 are adopted, with: touch areas at least 42 dp (avoids overlap or too much empty space when two lines or buttons are close), touch targets at least 5 dp apart; charts and tracking are part of the app, never presented as success versus failure. Note: 42 dp is above WCAG 2.2 AA (24 px), below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner will flag it. | 2026-10-20 (workshop) |
+| 0.22 | Stages: a thin slice first (every module minimally usable on a shared base), then deepening stages ordered by scoring on the owner's axes (evidence strength, everyday usefulness, effort, foundation value; equal weights). A stage is done when tests and gates are green, it has been walked on the 6T, the owner has signed off its screens from mockups, and it is pushed after the publish check. | 2026-10-20 (workshop) |
+| 0.23 | Modules are tags on exercises; an exercise may carry several. A session carries the tags of the exercises in it, is logged per calendar date, and can be given labels from a reusable list the person keeps (several per session). | 2026-10-20 (workshop) |
+| 0.24 | "This week" counts a mixed session by its parts: each exercise's sets and time count under its own module tag(s); per-module totals stay separate and are never combined. | 2026-10-20 (workshop) |
+| 0.25 | Until Today exists, the app opens on "Start or log". | 2026-10-20 (workshop) |
+| 0.26 | Daily movement gains steps (entered, and counted by the phone's step sensor), movement reminders the person schedules, and sitting-break prompts in hours the person chooses. | 2026-10-20 (workshop) |
+| 0.27 | Backup (one file and scheduled to a folder) and resuming a session after the app is killed stay in the first stage: nothing logged may be lost. | 2026-10-20 (workshop) |
 
 **Not decided, and not to be decided by the code:** screens, layout, wording, navigation, palette
 (owner rule: discuss frontend before building). The skeleton therefore has no screen.
@@ -41,30 +68,57 @@ and test on the desktop JVM, which is also where most tests run (fast, no emulat
 User-defined exercises; a session holding sets of reps / weight / time / distance; a saved routine
 that can be started again; a history of sessions; one local database; no account; works offline.
 
-## 3. Scope, staged (from `research/harvest-2026-10-19`, kept locally)
+## 3. Scope, staged by module (re-cut 2026-10-20; worksheet `research/stages-2026-10-20/`, kept locally)
 
-Each stage ships on its own. Packages ship whole.
+**[decided 0.22-0.27; order proposed by scoring]** A thin slice first, then deepening stages. Each
+stage ships on its own; packages ship whole. Done = tests and gates green, walked on the 6T, screens
+signed off by the owner from mockups before they are built, pushed after the publish check.
 
-1. LL2 last session's value beside each set · TR2 launcher shortcut per routine/timer · FT2 record /
-   enter / import / repeat-last from one place · GM9 no INTERNET permission · CM3 weekday to-do list ·
-   FA15 presence only, never a streak or missed-day count · GM2 last sets shown when picking an
-   exercise · BC1 RPE / reps in reserve per set
-2. KA6 Today: the week, what is due, the suggested next session, one start
-3. FA9 goal progress in plain words, the amount done only
-4. Backup package: KA9 one-file backup and restore · OS8 scheduled backup to a chosen folder
-5. GR4 close a session with duration, intensity 1-5 and a comment · FA13 a session over midnight
-   counts on its start day
-6. Progression package: LL5 advance after a session where every set hit its target · GM6 show the
-   next target while logging
-7. Rest-timer package: GL2 foreground-service countdown with notification · LL4 start on set
-   completion · KA5 -10 s / +10 s / skip
-8. Intervals package: TX1 prepare / work / rest / rounds / sets from presets · TR5 +1 min and step
-   back / forward · FA5 work resumes after a rest · FA1 repeat a whole run with one tap
-9. SH1 start intervals from one cycles stepper · KA2 an early stop is reviewed; unfinished sets are
-   skipped, not logged
-10. GPS package: OT1 GPS track recorded offline in a foreground service, saved as GPX · FA4 stop on a
-    held press, Undo for 10 s · OT5 every finished track exported to a chosen folder · FT5 "waiting for
-    GPS - start anyway?"
+The deepening order comes from `stages.py` (four axes, equal weights, effort checked against the
+existing code). It is a **plateau**, not a verdict: neighbours differ by less than 0.05 and swap
+under ±50% weight changes; only the first group (stage 2) and the last group (body measures,
+self-checks, GPS) hold in every variant. Neighbouring packages that tie were merged into one stage
+(owner: fewest stages compatible with stability).
+
+**Stage 1a, the shared base, proven by Strength** (split from 1b for stability: a mistake in the
+shared base is caught before four modules depend on it):
+- schema 2, additive from schema 1 with a migration test: module tags on exercises (several per
+  exercise, 0.23), reusable session labels, a body-measure table, the power flag on a set (0.19);
+- app shell; module choice at first launch (X-MODULES, 0.18); opens on "Start or log" (0.25);
+- exercises, routines, one session model across modules, logged per calendar date (N-EXERCISES,
+  N-ROUTINES, N-SESSION, FT2, FA13); resume after the app is killed (GL1, 0.27);
+- history; "This week" per module, mixed sessions counted by their parts (N-HISTORY, X-WEEK, 0.24);
+  no streak or missed-day count (FA15);
+- evidence notes behind a circled "i", brief by default, from the evidence pack (X-EVIDENCE, §7);
+- settings (X-SETTINGS); backup package: one-file backup and restore, scheduled backup to a chosen
+  folder (KA9, OS8, 0.27); no INTERNET permission (GM9);
+- Strength minimal: sets with the live comparison showing last time from the start of each set
+  (SG2, 0.13).
+
+**Stage 1b, the other modules, minimal:**
+- Daily movement: a quick amount and the day total (FA10, FA11).
+- Stamina: a steady session, live or entered afterwards, with pace (FT3).
+- Mobility and balance: holds counted per side (CM2).
+- Body measures (offered unticked): entering a measure (OS1).
+
+**Deepening stages (scored order):**
+2. Strength detail: effort per set, RPE or reps in reserve (BC1); "move fast" (N-POWER); hold timer
+   for isometric holds (KA3).
+3. Looking back and planning: last sets shown when picking an exercise (GM2); one own-trend chart,
+   no success/failure framing (N-CHART); weekday to-do list (CM3); steps entered (N-STEPS) and
+   **counted by the phone's step sensor (new row, not yet priced; needs the Physical-activity
+   permission, 0.26)**.
+4. Intervals package (TX1, TR5, FA5, FA1); movement reminders the person schedules (IT1);
+   sitting-break prompts in chosen hours (AK1).
+5. Goals in plain words (FA9, N-GOAL); closing a session with duration, intensity, comment (GR4);
+   launcher shortcut per routine or timer (TR2).
+6. Rest-timer package (GL2, LL4, KA5).
+7. Progression package (LL5, GM6). **Blocked until the owner decides where suggestions stop (§11).**
+8. Early stop reviewed, unfinished sets skipped (KA2); quick intervals from a cycles stepper (SH1);
+   body-measure chart (OS2, OS4).
+9. Self-checks as own trend (PL1, 0.19); body-measure changes (OS5).
+10. GPS package (OT1, FA4, OT5, FT5).
+11. Today (KA6), designed last (0.12).
 
 Standing rule from the harvest: before building a row, read it against the code; its effort and
 frequency were estimated before any code existed.
@@ -121,3 +175,140 @@ screen). `./gradlew --offline check` passes: 39 tests (core 13 on desktop and 13
 data 10 on desktop and 3 under Robolectric) and lint at zero warnings. Two planted mutants (restore
 outside a transaction; a table missing from the backup list) each turned the intended test red.
 Next: stage 1 (§3), after the owner's screen decisions for it.
+
+2026-10-20: screens paused by the owner ("the premises for these screens are flawed": the first
+mockups assumed a set-by-set gym session as the app's centre). Evidence gathered first (§7), the
+structure re-cut into training modules (§8) and screens by purpose (§9). No code changed.
+
+## 7. Foundation: evidence and commentary
+
+**Sources [decided 0.7].** Two local reports, every citation machine-checked against PubMed and
+doi.org (`research/verify_ids.py`):
+- `research/reports/Exercise evidence for daily training.md`: strength, muscle, stamina, muscular
+  endurance, joints, daily vs N days; rules 1-31.
+- `research/reports/Exercise evidence for health and longevity.md`: health and longevity, insulin
+  sensitivity, sedentary vs active, real-life adoption; rules 32-63, updates to 1-31; short-bout
+  rules re-anchored on independent evidence (0.15).
+
+**What the evidence says about the app's shape [decided, from the reports].**
+- Weekly totals per module decide long-term outcomes; frequency spreads the dose. The app counts
+  weekly, and never forms a combined score across modules.
+- Near-daily movement is justified by metabolism (insulin sensitivity raised ~24-48 h after
+  activity; light movement is enough for the acute glucose effect) and by habit, not by more
+  strength or longer life. Consensus: no more than two days in a row without activity (Strong
+  for diabetes or prediabetes, an inference otherwise).
+- No streaks, no reset-style pressure, no readiness or recovery scores, no load-ratio injury
+  alarms; a missed day changes nothing.
+- Self-monitoring with self-chosen goals is the best-supported technique; app effects fade, so
+  the app must stay useful without novelty.
+
+**Commentary rules [decided 0.16, 0.17].** Shown behind a circled "i" that opens a bottom sheet;
+brief by default. An evidence note:
+1. states a finding, never an instruction: "Studi su adulti allenati hanno trovato…", never
+   "dovresti";
+2. carries who was studied, certainty in plain words, and "associazione, non causa" when the
+   evidence is observational;
+3. names its sources (author, year, PMID/DOI) one level down;
+4. appears only where it concerns what the person is doing, never as a notification;
+5. can be hidden by type; a setting chooses the level: off / brief / full;
+6. **never carries invented or approximated evidence**: every note comes from the evidence pack,
+   which comes only from the two reports (a placeholder note was caught in the round-2 mockups);
+7. never interprets the person's own data as a health condition (e.g. no "your glucose…", no
+   BMI verdict). General information about studies, not individual advice; this is also the line
+   between a wellness app and medical software (to confirm, not legal advice).
+
+**Evidence pack [proposed].** The reports' claims as versioned data shipped with the app (offline):
+id, claim, population, design, certainty, association/cause, sources (PMID/DOI), which features it
+explains, Italian and English text written with the hedging intact. Its gate: every source id is
+in a report's verified id list; no note text without a claim id.
+
+## 8. Training modules
+
+**[decided 0.9, 0.10, 0.18, 0.19]** Each module can be used alone or stacked; the person chooses
+which are on at first launch (nothing assumed) and can change it later; the settings inside a
+module reflect the evidence and every one is editable.
+
+| Module | Covers | Offered at first launch |
+|---|---|---|
+| Daily movement | sitting breaks, walks after meals, steps entered or counted, a quick amount | yes |
+| Strength | sessions, sets, routines, programmes, progression; isometric holds as an exercise type; "move fast" (power) as a set option | yes |
+| Stamina | steady sessions, intervals and timers, offline GPS recordings | yes |
+| Mobility and balance | mobility and balance routines, fall-prevention work (most relevant 65+); self-checks (chair rise, balance hold, walking speed) as the person's own trend, never a verdict | yes |
+| Body measures | weight and measurements, changes over time; no verdicts, no forecasts | yes, unticked |
+
+**Cross-module rules [proposed]:** one session model under all modules (the schema's `session`
+already carries any activity); weekly totals per module, side by side, never combined; notes that
+span modules (strength plus aerobic together, lifting before cardio for strength, two days without
+movement) appear only where the person is doing one of them.
+
+**Modules as tags [decided 0.23, 0.24]:** a module is a tag on an exercise (several allowed); a
+session carries its exercises' tags, belongs to a calendar date and can carry labels from the
+person's reusable list; weekly totals count each exercise under its own tag(s), per module, never
+combined.
+
+**Schema impact [decided for stage 1a]:** schema 2, additive from schema 1 with a migration test:
+exercise-module tags (many-to-many), labels and session-label links, a body-measure table, a power
+flag on a logged set. Module on/off and evidence-note levels live in `setting`.
+
+## 9. Screens by purpose
+
+**[decided 0.11; draft content]** Method ported from Factotum (`research/purpose-2026-10-20/`:
+`purpose-map-method.md`, checker `purpose_map.py --map <json>` with a selftest, `score_maps.py`).
+Every one of the 162 harvest rows is placed on exactly one screen, or declared shared with a
+reason, or left out with a reason.
+
+Three groupings were drafted and scored on the owner's axes (few overlaps, calm load per screen,
+taps to common tasks, purpose coherence; equal weights): by module 0.61, by purpose 0.836, hybrid
+0.841. Grouping screens by module loses (it duplicates session, history and exercise screens per
+module); modules are switches and content, not a screen tree. By purpose and the hybrid are a
+plateau and differ only in Today (deferred, 0.12).
+
+**Purposes and screens [proposed, from the two leading maps; Today excluded]:**
+
+| Purpose | Its job | Screens |
+|---|---|---|
+| What's next | see what today holds and start or log it | Today **[open]**, Start or log (sheet) |
+| Doing it | move, and have the app keep count | Session, Exercise in a session, Set details (sheet), Number entry (sheet), Interval timer, Recording, Stopping and finishing, Log afterwards |
+| Looking back | see what was done | This week (a section per module), History, A recorded activity, Progress |
+| Making it yours | choose modules and goals; shape routines, programmes, timers, exercises | Modules and goals, Your plans, Programme library, Timers and routes, Exercises |
+| Knowing why | the evidence behind a feature, how a movement is done | Evidence notes |
+| Looking after the app | settings, backup, import/export, privacy | Settings, Back up and restore, Import, export, delete |
+
+**Left out of the register [proposed]:** per-set prescriptions and automatic deloads (0.8),
+readiness claims ("muscle recovered"), a hidden swipe duplicating a visible control, multi-person
+profiles, Health Connect and Bluetooth sensors (owner: not chosen), BMI/BMR verdicts and weight
+forecasts (0.10). Full reasons in `research/purpose-2026-10-20/compare.md`.
+
+## 10. Screen rules
+
+**[decided 0.21]** Adapted from Factotum's Today skeleton (`research/purpose-2026-10-20/factotum-today.md`)
+and the round-1/2 scoring (`research/screens-2026-10-20/`):
+1. Calm before complete: zones separated by tonal depth, not hue; one obvious primary action per
+   screen, in the bottom zone; anything that can grow collapses to one row.
+2. One home per thing: a summary links to the thing's screen; nothing is edited in two places.
+3. The same element has one form, place and wording on every screen (module card, row, set row,
+   evidence-note chip).
+4. Visual size follows function hierarchy; touch areas at least 42 dp (0.14, 0.21).
+5. Judgement-free wording: no streaks, "Niente qui." when empty. Charts and tracking are part of
+   the app, never presented as success versus failure.
+6. Hard gates on every mockup before it is shown: G1 no overlaps, G2 nothing clipped or wider than
+   the screen, G3 touch targets at least 5 dp apart, G4 touch areas at least 42 dp. Then the owner's
+   axes: harmony, density, visual and functional hierarchy, reach and legibility, taps per set,
+   at-a-glance clarity, consistency (equal weights; a plateau is shown as a plateau).
+7. Greyscale until the palette is discussed.
+
+## 11. Decided, deferred, and the workshop agenda
+
+**Decided 2026-10-20:** 0.7-0.27 above (0.16-0.27 in the workshop: agenda items 1-5 done).
+
+**Deferred by the owner [open]:** the shape of Today (by purpose with a Start sheet, or a card per
+module); where suggestions stop (record and comment only / one editable "next time" proposal after
+a session / a per-set proposal); the evidence note's form (full or short).
+
+**Workshop agenda [proposed order]:**
+1. Commentary rules (§7) and the evidence pack.
+2. Training modules (§8): the list, defaults, what each covers.
+3. Purposes and screens (§9), and the rows left out.
+4. Screen rules (§10).
+5. ~~Re-cut of the scope stages by module~~ done: §3, decisions 0.22-0.27.
+6. Inner screens to mock up first, then the deferred items, then Today last.

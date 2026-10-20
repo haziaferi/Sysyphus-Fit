@@ -40,6 +40,12 @@ Sections 7-11 are new in 0.2 and are a DRAFT: marked **[decided]** where the own
 | 0.25 | Until Today exists, the app opens on "Start or log". | 2026-10-20 (workshop) |
 | 0.26 | Daily movement gains steps (entered, and counted by the phone's step sensor), movement reminders the person schedules, and sitting-break prompts in hours the person chooses. | 2026-10-20 (workshop) |
 | 0.27 | Backup (one file and scheduled to a folder) and resuming a session after the app is killed stay in the first stage: nothing logged may be lost. | 2026-10-20 (workshop) |
+| 0.28 | Set input is the hybrid: − and + change a value by 1 at a time; tapping the number opens a keypad; weight accepts up to two decimals (e.g. 61,25 kg; stored in grams, no schema change). | 2026-10-20 (stage 1a mockups) |
+| 0.29 | Navigation: a bottom tab bar, Inizia · Questa settimana · Storico · Altro. | 2026-10-20 (stage 1a mockups) |
+| 0.30 | Evidence notes open brief (claim and certainty); who was studied, study type and sources sit under "Dettagli". | 2026-10-20 (stage 1a mockups) |
+| 0.31 | Screens that show things (This week, Settings, Altro) have no main action button; screens for doing things keep one, and its form is chosen by scoring a few variations. | 2026-10-20 (stage 1a mockups) |
+| 0.32 | The next mockup round adds visual polish (typography, spacing and rhythm, icons, depth and detail), still greyscale, drawing on the creative-design-suite and design-optimization resources. | 2026-10-20 (stage 1a mockups) |
+| 0.33 | Partial reps are a separate count from full reps, never converted (7½ = 7 + 1 partial; five half-reps = 0 + 5 partials). The partial count appears only on exercises where the person switches it on. Schema 2 adds `partial_reps` to a logged set and a per-exercise switch. | 2026-10-20 (stage 1a mockups) |
 
 **Not decided, and not to be decided by the code:** screens, layout, wording, navigation, palette
 (owner rule: discuss frontend before building). The skeleton therefore has no screen.
@@ -83,7 +89,7 @@ self-checks, GPS) hold in every variant. Neighbouring packages that tie were mer
 **Stage 1a, the shared base, proven by Strength** (split from 1b for stability: a mistake in the
 shared base is caught before four modules depend on it):
 - schema 2, additive from schema 1 with a migration test: module tags on exercises (several per
-  exercise, 0.23), reusable session labels, a body-measure table, the power flag on a set (0.19);
+  exercise, 0.23), reusable session labels, a body-measure table, the power flag and the partial-reps count on a set (0.19, 0.33);
 - app shell; module choice at first launch (X-MODULES, 0.18); opens on "Start or log" (0.25);
 - exercises, routines, one session model across modules, logged per calendar date (N-EXERCISES,
   N-ROUTINES, N-SESSION, FT2, FA13); resume after the app is killed (GL1, 0.27);
@@ -248,7 +254,7 @@ combined.
 
 **Schema impact [decided for stage 1a]:** schema 2, additive from schema 1 with a migration test:
 exercise-module tags (many-to-many), labels and session-label links, a body-measure table, a power
-flag on a logged set. Module on/off and evidence-note levels live in `setting`.
+flag and a partial-reps count on a logged set, a per-exercise partial-reps switch (0.33). Module on/off and evidence-note levels live in `setting`.
 
 ## 9. Screens by purpose
 
@@ -283,8 +289,9 @@ forecasts (0.10). Full reasons in `research/purpose-2026-10-20/compare.md`.
 
 **[decided 0.21]** Adapted from Factotum's Today skeleton (`research/purpose-2026-10-20/factotum-today.md`)
 and the round-1/2 scoring (`research/screens-2026-10-20/`):
-1. Calm before complete: zones separated by tonal depth, not hue; one obvious primary action per
-   screen, in the bottom zone; anything that can grow collapses to one row.
+1. Calm before complete: zones separated by tonal depth, not hue; a screen for doing things has
+   one obvious primary action in the bottom zone, a screen that shows things has none (0.31);
+   anything that can grow collapses to one row.
 2. One home per thing: a summary links to the thing's screen; nothing is edited in two places.
 3. The same element has one form, place and wording on every screen (module card, row, set row,
    evidence-note chip).
@@ -303,7 +310,7 @@ and the round-1/2 scoring (`research/screens-2026-10-20/`):
 
 **Deferred by the owner [open]:** the shape of Today (by purpose with a Start sheet, or a card per
 module); where suggestions stop (record and comment only / one editable "next time" proposal after
-a session / a per-set proposal); the evidence note's form (full or short).
+a session / a per-set proposal). The evidence note's form is decided (0.30).
 
 **Workshop agenda [proposed order]:**
 1. Commentary rules (§7) and the evidence pack.

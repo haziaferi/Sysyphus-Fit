@@ -19,14 +19,15 @@ English) to this format and to the gate together.
 
 ```json
 {
-  "format": 1,
-  "pack_version": 1,
+  "format": 2,
+  "pack_version": 2,
   "labels": { "observational": {"en": "..."}, "certainty_level": { "<level>": {"en": "..."} } },
   "claims": [ { ...claim... } ]
 }
 ```
 
-- `format`: the schema version of this file (this document). A change to the fields bumps it.
+- `format`: the schema version of this file (this document). A change to the fields bumps it
+  (2 added `held`).
 - `pack_version`: bumped whenever any claim is added, removed or changed.
 - `labels`: shared UI words. `observational` is the flag text shown on every observational claim
   ("Association, not cause"); `certainty_level` names the four levels below.
@@ -39,6 +40,7 @@ A *text object* is `{"en": "..."}`; no other keys.
 |---|---|---|---|
 | `id` | string | yes | Stable id, `module.topic.name`, lowercase (`^[a-z][a-z0-9_]*(\.[a-z0-9_]+){2}$`). Never reused for a different finding. The app finds note text only through this id. |
 | `version` | integer ≥ 1 | yes | Bumped when the claim's text or sources change. |
+| `held` | string | no | Present = the claim is in the pack but **no screen may show it**; the text says what it waits for (e.g. "SPEC §11: …"). Removing it is the owner's decision. |
 | `module` | enum | yes | `shared`, `strength`, `stamina`, `daily_movement`, `mobility_balance`, `body_measures` (SPEC §8). Notes about the week or the app as a whole are `shared`. |
 | `features` | list of strings | yes, ≥ 1 | What the claim explains: harvest row ids (e.g. `FA15`, `AK1`), SPEC features (`X-WEEK`, `N-HISTORY`) or decision numbers (`0.19`). Each must be named in SPEC.md. |
 | `report_rules` | list of `{report, rule}` | yes, ≥ 1 | The report rules the claim comes from. `report` is 1 or 2; `rule` is a string, one number or a range (`"6"`, `"1-4"`). Report 1 holds 1-31; Report 2 holds 32-63 and updates to 1-31. |
@@ -117,6 +119,7 @@ It fails on:
   that does not match PubMed's record; a DOI that differs from PubMed's DOI for the same PMID;
 - rules: a rule number outside its report's range;
 - features: an id SPEC.md does not name;
+- held: an empty `held` (a held claim must say what it waits for);
 - text: an empty or missing `en`; a banned instruction, promise ("will"), second-person or weight word
   (word-boundary matched, case-insensitive);
 - report content (§7 rule 6), against the report(s) the claim's `report_rules` cite: a `grade` or

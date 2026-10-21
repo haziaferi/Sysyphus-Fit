@@ -37,7 +37,7 @@ RULE_RANGE = {1: (1, 31), 2: (1, 63)}  # Report 2 holds 32-63 and updates to 1-3
 
 TOP_KEYS = {"format": int, "pack_version": int, "labels": dict, "claims": list}
 CLAIM_KEYS = {  # name: (type, required)
-    "id": (str, True), "version": (int, True), "module": (str, True), "features": (list, True),
+    "id": (str, True), "version": (int, True), "held": (str, False), "module": (str, True), "features": (list, True),
     "report_rules": (list, True), "claim": (dict, True), "body": (dict, False), "population": (dict, True),
     "design": (dict, True), "certainty": (dict, True), "grade": (str, True), "status": (str, True),
     "observational": (bool, True), "sources": (list, True),
@@ -258,6 +258,8 @@ def check_pack(pack, ids, features, reports=None):
         for f in ("grade", "status"):
             if isinstance(c.get(f), str) and not c[f].strip():
                 out.append(f"{where}: {f} must be the report's own text, not empty")
+        if isinstance(c.get("held"), str) and not c["held"].strip():
+            out.append(f"{where}: held must say what the claim waits for")
         obs_design = any("Obs" in x for x in codes or [] if isinstance(x, str))
         if obs_design and c.get("observational") is not True:
             out.append(f"{where}: observational design {codes} without observational: true")
@@ -304,7 +306,8 @@ CLEAN = {
     "labels": {"observational": {"en": "Association, not cause"},
                "certainty_level": {k: {"en": k} for k in sorted(LEVELS)}},
     "claims": [
-        {"id": "strength.progression.double", "version": 1, "module": "strength", "features": ["LL5"],
+        {"id": "strength.progression.double", "version": 1, "held": "SPEC §11", "module": "strength",
+         "features": ["LL5"],
          "report_rules": [{"report": 1, "rule": "6"}],
          # 'shoulder', 'mustard', 'fatigue', 'willing': banned words inside longer words must not trip the gate
          "claim": {"en": "A guideline (2009) describes a 2–10% load increase, also for shoulder work and fatigue "
@@ -388,6 +391,8 @@ DEFECTS = [  # (defect class, mutation, a substring the finding must contain)
     ("malformed rule", _set(C0 + ["report_rules"], [{"report": 3, "rule": "6"}]), "report_rules entry"),
     ("no features", _set(C0 + ["features"], []), "features must be"),
     ("empty grade", _set(C0 + ["grade"], "  "), "grade must be the report's own text"),
+    ("held without a reason", _set(C0 + ["held"], " "), "held must say what the claim waits for"),
+    ("held not text", _set(C0 + ["held"], True), "'held' must be str"),
     ("banned promise", _set(C0 + ["claim", "en"], "Lifting will raise the load by 2–10% (2009)."), "'will'"),
     ("banned 'recommended'", _set(C0 + ["body"], {"en": "Holds are recommended."}), "'recommended'"),
     ("banned 'ought to'", _set(C0 + ["body"], {"en": "Load ought to rise."}), "'ought to'"),
@@ -476,7 +481,8 @@ def main(argv=None):
     findings = check_pack(pack, ids, features, reports)
     claims = pack.get("claims", []) if isinstance(pack, dict) else []
     n_src = sum(len(c.get("sources", [])) for c in claims if isinstance(c, dict))
-    print(f"evidence_check: {len(claims)} claims, {n_src} source citations, "
+    n_held = sum(1 for c in claims if isinstance(c, dict) and "held" in c)
+    print(f"evidence_check: {len(claims)} claims ({n_held} held), {n_src} source citations, "
           f"{len(lists)} id lists ({len(ids.pmids)} PMIDs, {len(ids.dois)} DOIs), "
           f"{len(features)} SPEC feature ids, report text {'checked' if reports else 'NOT checked'}")
     for f in findings:

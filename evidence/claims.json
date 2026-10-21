@@ -1,6 +1,6 @@
 {
-  "format": 1,
-  "pack_version": 1,
+  "format": 2,
+  "pack_version": 2,
   "labels": {
     "observational": {
       "en": "Association, not cause"
@@ -24,6 +24,7 @@
     {
       "id": "strength.progression.double",
       "version": 1,
+      "held": "SPEC §11: the progression package is blocked until the owner decides where suggestions stop",
       "module": "strength",
       "features": [
         "LL5",
@@ -797,6 +798,166 @@
           "year": 2014,
           "pmid": "24648017"
         }
+      ]
+    },
+    {
+      "id": "daily.insulin.two_day_window",
+      "version": 1,
+      "module": "daily_movement",
+      "features": ["X-WEEK", "FA10"],
+      "report_rules": [{"report": 2, "rule": "34"}],
+      "claim": {
+        "en": "In small clamp studies, one bout of exercise raised insulin sensitivity for about a day or two, and the effect was gone by about five days."
+      },
+      "body": {
+        "en": "An ACSM consensus statement for type 2 diabetes calls for no more than two consecutive days between aerobic bouts. In a large accelerometer cohort, activity concentrated in a few days and activity spread across the week showed similar associations with diabetes (HR 0.57 vs 0.54)."
+      },
+      "population": {
+        "en": "Young men and trained middle-aged adults (clamp and glucose-tolerance studies); adults with type 2 diabetes (consensus); adults in a large cohort"
+      },
+      "design": {
+        "codes": ["Mech", "Cons", "Obs"],
+        "en": "Small mechanistic studies, an expert consensus statement and a cohort study"
+      },
+      "certainty": {
+        "level": "limited",
+        "en": "Limited: small mechanistic studies; for type 2 diabetes, an expert consensus"
+      },
+      "grade": "{Mech · P1 · C2; Cons · M3 CC}",
+      "status": "Strong for users with type 2 diabetes or prediabetes (consensus); Inference for others (no frequency trial, and concentrated weekly activity shows equal diabetes incidence in cohorts)",
+      "observational": true,
+      "sources": [
+        {"author": "Mikines", "year": 1988, "pmid": "3126668"},
+        {"author": "King", "year": 1995, "pmid": "7713807"},
+        {"author": "Boulé", "year": 2005, "pmid": "15616242"},
+        {"author": "Kanaley", "year": 2022, "pmid": "35029593",
+         "coi": {"en": "One author reports speakers-bureau ties to drug and device companies"}},
+        {"author": "Kany", "year": 2024, "pmid": "39324186",
+         "coi": {"en": "Some co-authors report pharmaceutical funding and wearable-company employment"}}
+      ]
+    },
+    {
+      "id": "shared.week.aerobic_and_strength",
+      "version": 1,
+      "module": "shared",
+      "features": ["X-WEEK"],
+      "report_rules": [{"report": 2, "rule": "32"}],
+      "claim": {
+        "en": "In cohort studies, resistance training combined with aerobic exercise was associated with lower mortality than no exercise (hazard ratio 0.60), compared with 0.79 for resistance training alone."
+      },
+      "body": {
+        "en": "In 216,339 older adults (mean age 70), weight training was not associated with mortality at all in people who did no aerobic exercise."
+      },
+      "population": {
+        "en": "Adults in cohort studies; older adults (mean age 70) in the largest one"
+      },
+      "design": {
+        "codes": ["MA of Obs", "Obs"],
+        "en": "Meta-analysis of observational studies and a cohort study"
+      },
+      "certainty": {
+        "level": "moderate",
+        "en": "Moderate for the association: large studies, mostly consistent"
+      },
+      "grade": "{MA of Obs · P3 · C2 · M3 R; Obs}",
+      "status": "Strong",
+      "observational": true,
+      "sources": [
+        {"author": "Saeidifard", "year": 2019, "pmid": "31104484"},
+        {"author": "Shailendra", "year": 2024, "pmid": "38831478"}
+      ]
+    },
+    {
+      "id": "body.size.early_swelling",
+      "version": 1,
+      "module": "body_measures",
+      "features": ["OS1"],
+      "report_rules": [{"report": 1, "rule": "8"}, {"report": 1, "rule": "16"}],
+      "claim": {
+        "en": "In beginners, part of the increase in muscle size seen in the first 3-4 weeks of training was swelling from muscle damage, not true growth."
+      },
+      "body": {
+        "en": "Muscle damage peaked in the first week and was largely gone by week 3."
+      },
+      "population": {
+        "en": "Beginners (small mechanistic studies)"
+      },
+      "design": {
+        "codes": ["Mech"],
+        "en": "Small mechanistic studies"
+      },
+      "certainty": {
+        "level": "limited",
+        "en": "Limited: small studies"
+      },
+      "grade": "{Mech · P1 · C2 · M2 B}",
+      "status": "Inference",
+      "observational": false,
+      "sources": [
+        {"author": "Damas", "year": 2016, "pmid": "26280652"},
+        {"author": "Damas", "year": 2016, "pmid": "27219125"}
+      ]
+    },
+    {
+      "id": "body.strength.during_deficit",
+      "version": 1,
+      "module": "body_measures",
+      "features": ["OS1", "N-CHART"],
+      "report_rules": [{"report": 1, "rule": "30"}],
+      "claim": {
+        "en": "In a meta-analysis, an energy deficit slowed lean-mass gain but not strength gain; across 114 trials, resistance training during a calorie deficit maintained lean mass, across ages and sexes."
+      },
+      "body": {
+        "en": "Reading strength trends as a progress signal for people with a long history of weight loss and regain is an inference, not a tested intervention."
+      },
+      "population": {
+        "en": "Adults in resistance-training trials, across ages and sexes"
+      },
+      "design": {
+        "codes": ["MA"],
+        "en": "Meta-analyses of training trials"
+      },
+      "certainty": {
+        "level": "limited",
+        "en": "Limited for strength still rising (one meta-analysis, inconsistent results); good for lean mass kept (114 trials)"
+      },
+      "grade": "{MA · P3 · C3 · M2 WC}",
+      "status": "Strong for resistance training during a deficit; Inference for everything else",
+      "observational": false,
+      "sources": [
+        {"author": "Murphy", "year": 2022, "pmid": "34623696"},
+        {"author": "Lopez", "year": 2022, "pmid": "35191588"}
+      ]
+    },
+    {
+      "id": "body.weight.activity_without_weight",
+      "version": 1,
+      "module": "body_measures",
+      "features": ["OS1"],
+      "report_rules": [{"report": 2, "rule": "61"}],
+      "claim": {
+        "en": "In the Diabetes Prevention Program, weight loss was the dominant predictor of lower diabetes incidence; among participants who missed the weight goal, those who met the activity goal still had 44% lower incidence."
+      },
+      "body": {
+        "en": "That second finding is an association within the trial, not a randomised comparison. The trial's 58% lower progression to type 2 diabetes came from the whole lifestyle change (at least 7% weight loss and 150 minutes a week of activity), not from activity alone."
+      },
+      "population": {
+        "en": "Adults in a diabetes-prevention trial"
+      },
+      "design": {
+        "codes": ["RCT", "Obs"],
+        "en": "Randomised trial, with an observational analysis within it"
+      },
+      "certainty": {
+        "level": "moderate",
+        "en": "Moderate: a large trial, but this finding is observational within it"
+      },
+      "grade": "{RCT secondary (observational within trial) · P2 · M3 CC}",
+      "status": "Inference for design; Strong for the claim limits",
+      "observational": true,
+      "sources": [
+        {"author": "Hamman", "year": 2006, "pmid": "16936160"},
+        {"author": "Knowler", "year": 2002, "pmid": "11832527"}
       ]
     }
   ]

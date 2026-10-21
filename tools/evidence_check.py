@@ -22,8 +22,7 @@ import unicodedata
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PACK = ROOT / "evidence" / "claims.json"
 
-LANGS = ("en", "it")  # languages a text may carry
-REQUIRED_LANGS = ("en",)  # first draft is English only; add "it" here when the translations land
+LANGS = ("en",)  # first draft is English only; Italian and its checks come in a separate pass
 MODULES = {"shared", "strength", "stamina", "daily_movement", "mobility_balance", "body_measures"}
 LEVELS = {"high", "moderate", "limited", "consensus"}
 INDEPENDENCE = {"IND", "IND-decl", "UNK", "COMM"}
@@ -41,31 +40,17 @@ CLAIM_KEYS = {  # name: (type, required)
 }
 SOURCE_KEYS = {"author": (str, True), "year": (int, True), "pmid": (str, False), "doi": (str, False),
                "coi": (dict, False), "independence": (str, False)}
-TEXT_FIELDS = ("claim", "body", "population", "design", "certainty")  # bilingual fields shown to the person
+TEXT_FIELDS = ("claim", "body", "population", "design", "certainty")  # text fields shown to the person
 
 # Instructions, promises, second person (never about the person, §7 rule 7) and weight-judging words.
 BANNED = {
-    "it": ["dovresti", "dovreste", "dovrebbe", "dovrebbero", "devi", "deve", "dovete", "devono", "bisogna",
-           "occorre", "è necessario", "consigliamo", "ti consigliamo", "raccomandiamo", "assicurati",
-           "cerca di", "prova a", "evita", "evitare di", "fai", "fate", "garantisce", "garantito", "garantita",
-           "sicuramente", "tu", "ti", "tuo", "tua", "tuoi", "tue", "sovrappeso", "obeso", "obesa", "obesi",
-           "obesità", "imc", "grasso"],
     "en": ["should", "must", "need to", "needs to", "have to", "has to", "make sure", "try to", "we recommend",
            "avoid", "guarantee", "guaranteed", "guarantees", "definitely", "you", "your", "yours", "you're",
            "overweight", "obese", "obesity", "bmi", "fat"],
 }
-ASSOC = {"it": re.compile(r"\bassoci", re.I), "en": re.compile(r"\bassociat", re.I)}
+ASSOC = {"en": re.compile(r"\bassociat", re.I)}
 BANNED_RE = {lang: [(w, re.compile(r"(?<!\w)" + re.escape(w) + r"(?!\w)", re.I)) for w in words]
              for lang, words in BANNED.items()}
-
-
-def numbers(text, lang):
-    """The numbers in a text, written one way: Italian 15.827 / 4,7 and English 15,827 / 4.7 both normalise."""
-    if lang == "it":
-        text = re.sub(r"(?<=\d)\.(?=\d{3}\b)", "", text).replace(",", ".")
-    else:
-        text = re.sub(r"(?<=\d),(?=\d{3}\b)", "", text)
-    return sorted(re.findall(r"\d+(?:\.\d+)?", text))
 
 
 def norm_name(s):
@@ -101,7 +86,7 @@ def check_keys(obj, spec, where, out):
             out.append(f"{where}: '{k}' must be {typ.__name__}")
 
 
-def check_bilingual(obj, where, out, extra=()):
+def check_text_object(obj, where, out, extra=()):
     if not isinstance(obj, dict):
         return
     for k in obj:
@@ -109,7 +94,7 @@ def check_bilingual(obj, where, out, extra=()):
             out.append(f"{where}: unknown field '{k}'")
     for lang in LANGS:
         v = obj.get(lang)
-        if (lang in REQUIRED_LANGS or lang in obj) and (not isinstance(v, str) or not v.strip()):
+        if not isinstance(v, str) or not v.strip():
             out.append(f"{where}: missing {lang} text")
 
 
@@ -119,9 +104,6 @@ def check_text(obj, where, out):
         for word, rx in BANNED_RE[lang]:
             if rx.search(t):
                 out.append(f"{where}.{lang}: banned word '{word}'")
-    if len(texts) == 2 and numbers(texts["it"], "it") != numbers(texts["en"], "en"):
-        out.append(f"{where}: numbers differ between it {numbers(texts['it'], 'it')} "
-                   f"and en {numbers(texts['en'], 'en')}")
 
 
 def check_source(s, where, ids, out):
@@ -135,7 +117,7 @@ def check_source(s, where, ids, out):
     if "independence" in s and s["independence"] not in INDEPENDENCE:
         out.append(f"{where}: independence '{s['independence']}' not one of {sorted(INDEPENDENCE)}")
     if "coi" in s:
-        check_bilingual(s["coi"], where + ".coi", out)
+        check_text_object(s["coi"], where + ".coi", out)
         if isinstance(s["coi"], dict):
             check_text(s["coi"], where + ".coi", out)
     if pmid:
@@ -161,7 +143,7 @@ def check_pack(pack, ids):
         return ["pack: must be an object"]
     check_keys(pack, {k: (t, True) for k, t in TOP_KEYS.items()}, "pack", out)
     labels = pack.get("labels") if isinstance(pack.get("labels"), dict) else {}
-    check_bilingual(labels.get("observational"), "labels.observational", out)
+    check_text_object(labels.get("observational"), "labels.observational", out)
     if labels.get("observational") is None:
         out.append("labels: missing 'observational'")
     lv = labels.get("certainty_level") if isinstance(labels.get("certainty_level"), dict) else {}
@@ -169,7 +151,7 @@ def check_pack(pack, ids):
         if level not in lv:
             out.append(f"labels.certainty_level: missing '{level}'")
         else:
-            check_bilingual(lv[level], f"labels.certainty_level.{level}", out)
+            check_text_object(lv[level], f"labels.certainty_level.{level}", out)
     seen = set()
     claims = pack.get("claims") if isinstance(pack.get("claims"), list) else []
     if not claims:
@@ -212,7 +194,7 @@ def check_pack(pack, ids):
             if f not in c:
                 continue
             extra = {"design": ("codes",), "certainty": ("level",)}.get(f, ())
-            check_bilingual(c[f], f"{where}.{f}", out, extra)
+            check_text_object(c[f], f"{where}.{f}", out, extra)
             if isinstance(c[f], dict):
                 check_text(c[f], f"{where}.{f}", out)
         design = c.get("design") if isinstance(c.get("design"), dict) else {}
@@ -232,8 +214,6 @@ def check_pack(pack, ids):
         if c.get("observational") is True:
             parts = [c[f] for f in ("claim", "body") if isinstance(c.get(f), dict)]
             for lang in LANGS:
-                if lang not in REQUIRED_LANGS and not any(lang in p for p in parts):
-                    continue
                 said = " ".join(p.get(lang, "") for p in parts if isinstance(p.get(lang, ""), str))
                 if not ASSOC[lang].search(said):
                     out.append(f"{where}: observational, but claim/body.{lang} has no association wording")
@@ -317,24 +297,20 @@ DEFECTS = [  # (defect class, mutation, a substring the finding must contain)
     ("no sources", _set(C0 + ["sources"], []), "no sources"),
     ("missing en claim", _set(C0 + ["claim", "en"], ...), "missing en text"),
     ("empty en claim", _set(C0 + ["claim", "en"], "  "), "missing en text"),
-    ("empty optional it claim", _set(C0 + ["claim", "it"], "  "), "missing it text"),
     ("unknown language", _set(C0 + ["claim", "fr"], "Une ligne directrice."), "unknown field 'fr'"),
+    ("Italian before its pass", _set(C0 + ["claim", "it"], "Una linea guida."), "unknown field 'it'"),
     ("missing en population", _set(C0 + ["population", "en"], ...), "missing en text"),
     ("missing population", _set(C0 + ["population"], ...), "missing field 'population'"),
     ("missing certainty", _set(C0 + ["certainty"], ...), "missing field 'certainty'"),
     ("certainty without en text", _set(C0 + ["certainty", "en"], ...), "missing en text"),
     ("invalid certainty level", _set(C0 + ["certainty", "level"], "sure"), "level 'sure'"),
-    ("banned it instruction", _set(C0 + ["claim", "it"], "Dovresti aumentare il carico del 2–10% (2009)."),
-     "banned word 'dovresti'"),
     ("banned en instruction", _set(C0 + ["claim", "en"], "You should raise the load by 2–10% (2009)."),
      "banned word 'should'"),
     ("banned en phrase", _set(C0 + ["body"], {"en": "We recommend it."}), "'we recommend'"),
-    ("about the person (it)", _set(C1 + ["body", "it"], "Il tuo glucosio."), "banned word 'tuo'"),
-    ("about the person (en)", _set(C1 + ["body", "en"], "Your glucose."), "banned word 'your'"),
+    ("about the person", _set(C1 + ["body", "en"], "You may see this."), "banned word 'you'"),
+    ("about the person's data", _set(C1 + ["body", "en"], "Your glucose."), "banned word 'your'"),
     ("weight-judging word", _set(C1 + ["population", "en"], "Obese adults"), "banned word 'obese'"),
     ("banned word in a coi note", _set(C1 + ["sources", 1, "coi", "en"], "You must know"), "banned word"),
-    ("numbers differ it/en", _set(C0 + ["claim", "it"], "Una linea guida (2009) descrive un aumento del 2–5%."),
-     "numbers differ"),
     ("claim without id", _set(C0 + ["id"], ...), "missing or malformed id"),
     ("malformed id", _set(C0 + ["id"], "Strength progression"), "malformed id"),
     ("duplicate id", _set(C1 + ["id"], "strength.progression.double"), "duplicate id"),
@@ -370,9 +346,6 @@ def selftest():
         hit = [f for f in found if expect in f]
         print(f"  {'PASS' if hit else 'FAIL'}  {name}: " + (hit[0] if hit else f"not caught (got {found})"))
         failures += not hit
-    if not (numbers("15.827 e 4,7", "it") == numbers("15,827 and 4.7", "en") == ["15827", "4.7"]):
-        print("  FAIL  number normalisation")
-        failures += 1
     print(f"selftest: {len(DEFECTS)} defect classes + clean case, {failures} failure(s)")
     return 1 if failures else 0
 

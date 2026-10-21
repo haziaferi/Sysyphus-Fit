@@ -2,12 +2,22 @@
   "format": 1,
   "pack_version": 1,
   "labels": {
-    "observational": {"it": "Associazione, non causa", "en": "Association, not cause"},
+    "observational": {
+      "en": "Association, not cause"
+    },
     "certainty_level": {
-      "high": {"it": "Alta", "en": "High"},
-      "moderate": {"it": "Media", "en": "Moderate"},
-      "limited": {"it": "Limitata", "en": "Limited"},
-      "consensus": {"it": "Parere di esperti", "en": "Expert opinion"}
+      "high": {
+        "en": "High"
+      },
+      "moderate": {
+        "en": "Moderate"
+      },
+      "limited": {
+        "en": "Limited"
+      },
+      "consensus": {
+        "en": "Expert opinion"
+      }
     }
   },
   "claims": [
@@ -15,486 +25,778 @@
       "id": "strength.progression.double",
       "version": 1,
       "module": "strength",
-      "features": ["LL5", "GM6"],
-      "report_rules": [{"report": 1, "rule": "6"}],
+      "features": [
+        "LL5",
+        "GM6"
+      ],
+      "report_rules": [
+        {
+          "report": 1,
+          "rule": "6"
+        }
+      ],
       "claim": {
-        "it": "Una linea guida di esperti (ACSM 2009) descrive un aumento del carico del 2–10% quando le ripetizioni previste vengono superate di 1–2.",
         "en": "An expert guideline (ACSM 2009) describes a load increase of 2–10% once the target repetitions are exceeded by 1–2."
       },
       "body": {
-        "it": "Una meta-analisi (2022) su persone allenate ha trovato risultati di forza simili regolando il carico a sensazione (RPE/RIR) o con percentuali fisse. La linea guida del 2009 è stata sostituita nel 2026 da una nuova posizione dell'ACSM.",
         "en": "A meta-analysis (2022) in trained people found similar strength results whether load was set by feel (RPE/RIR) or by fixed percentages. The 2009 guideline was replaced in 2026 by a new ACSM position stand."
       },
       "population": {
-        "it": "Adulti sani (linea guida); persone allenate (meta-analisi)",
         "en": "Healthy adults (guideline); trained people (meta-analysis)"
       },
       "design": {
-        "codes": ["Guide", "MA"],
-        "it": "Linea guida di consenso e una meta-analisi",
+        "codes": [
+          "Guide",
+          "MA"
+        ],
         "en": "Consensus guideline and a meta-analysis"
       },
       "certainty": {
         "level": "consensus",
-        "it": "Bassa: è un parere di esperti, non il risultato diretto di uno studio",
         "en": "Low: expert opinion, not the direct result of a study"
       },
       "grade": "{Guide (consensus) · P1 · C2}",
       "status": "Inference (consensus-based)",
       "observational": false,
       "sources": [
-        {"author": "American College of Sports Medicine", "year": 2009, "pmid": "19204579"},
-        {"author": "Hickmott", "year": 2022, "pmid": "35038063"},
-        {"author": "Currier", "year": 2026, "pmid": "41843416"}
+        {
+          "author": "American College of Sports Medicine",
+          "year": 2009,
+          "pmid": "19204579"
+        },
+        {
+          "author": "Hickmott",
+          "year": 2022,
+          "pmid": "35038063"
+        },
+        {
+          "author": "Currier",
+          "year": 2026,
+          "pmid": "41843416"
+        }
       ]
     },
     {
       "id": "shared.week.totals",
       "version": 1,
       "module": "shared",
-      "features": ["X-WEEK", "0.24"],
-      "report_rules": [{"report": 1, "rule": "13"}, {"report": 1, "rule": "20"}, {"report": 2, "rule": "17"}],
+      "features": [
+        "X-WEEK",
+        "0.24"
+      ],
+      "report_rules": [
+        {
+          "report": 1,
+          "rule": "13"
+        },
+        {
+          "report": 1,
+          "rule": "20"
+        },
+        {
+          "report": 2,
+          "rule": "17"
+        }
+      ],
       "claim": {
-        "it": "In grandi studi di coorte su adulti, a parità di attività settimanale, concentrarla in 1–2 giorni o distribuirla nella settimana si è associato a una mortalità simile.",
         "en": "In large cohort studies of adults, at equal weekly activity, packing it into 1–2 days or spreading it across the week was associated with similar mortality."
       },
       "body": {
-        "it": "Un'analisi con accelerometro su 89.573 partecipanti e 678 malattie non ha trovato nessuna condizione in cui i due schemi differissero.",
         "en": "An accelerometer analysis of 89,573 participants across 678 conditions found no condition in which the two patterns differed."
       },
       "population": {
-        "it": "Adulti in grandi coorti (350.978 nello studio principale), uomini e donne, anche oltre i 65 anni",
         "en": "Adults in large cohorts (350,978 in the main study), men and women, including over 65"
       },
       "design": {
-        "codes": ["Obs", "MA of Obs"],
-        "it": "Studi osservazionali e meta-analisi di studi osservazionali",
+        "codes": [
+          "Obs",
+          "MA of Obs"
+        ],
         "en": "Observational studies and meta-analyses of observational studies"
       },
       "certainty": {
         "level": "high",
-        "it": "Buona per l'associazione: molti studi grandi e concordi",
         "en": "Good for the association: many large, consistent studies"
       },
       "grade": "{MA of Obs · P3 · C3 · M3 R,O,W; Obs}",
       "status": "Strong that daily pressure has no physiological basis; Inference for the design choice itself",
       "observational": true,
       "sources": [
-        {"author": "dos Santos", "year": 2022, "pmid": "35788615"},
-        {"author": "Kim", "year": 2025, "pmid": "41067094"},
-        {"author": "Kany", "year": 2024, "pmid": "39324186",
-         "coi": {"it": "Alcuni coautori dichiarano finanziamenti farmaceutici e impieghi presso un'azienda di dispositivi indossabili", "en": "Some co-authors report pharmaceutical funding and wearable-company employment"}}
+        {
+          "author": "dos Santos",
+          "year": 2022,
+          "pmid": "35788615"
+        },
+        {
+          "author": "Kim",
+          "year": 2025,
+          "pmid": "41067094"
+        },
+        {
+          "author": "Kany",
+          "year": 2024,
+          "pmid": "39324186",
+          "coi": {
+            "en": "Some co-authors report pharmaceutical funding and wearable-company employment"
+          }
+        }
       ]
     },
     {
       "id": "shared.week.frequency",
       "version": 1,
       "module": "shared",
-      "features": ["X-WEEK"],
-      "report_rules": [{"report": 1, "rule": "4"}],
+      "features": [
+        "X-WEEK"
+      ],
+      "report_rules": [
+        {
+          "report": 1,
+          "rule": "4"
+        }
+      ],
       "claim": {
-        "it": "A parità di serie settimanali, 25 studi su adulti, anche allenati, non hanno trovato differenze di crescita muscolare tra allenarsi più o meno spesso.",
         "en": "At equal weekly sets, 25 studies in adults, including trained people, found no difference in muscle growth between training more or less often."
       },
       "body": {
-        "it": "Per la forza, le differenze trovate sono state nulle o piccole. Due prove di sei settimane su uomini allenati, con 3 o 6 sedute a settimana, hanno dato risultati quasi identici.",
         "en": "For strength, the differences found were none or small. Two six-week trials in trained men, with 3 or 6 sessions a week, gave near-identical results."
       },
       "population": {
-        "it": "Adulti, anche allenati; le prove dirette sono su giovani uomini allenati",
         "en": "Adults, including trained people; the direct trials are in young trained men"
       },
       "design": {
-        "codes": ["MA", "RCT"],
-        "it": "Meta-analisi e prove randomizzate",
+        "codes": [
+          "MA",
+          "RCT"
+        ],
         "en": "Meta-analyses and randomised trials"
       },
       "certainty": {
         "level": "moderate",
-        "it": "Media: risultati concordi, ma soprattutto su giovani uomini",
         "en": "Moderate: consistent results, but mostly in young men"
       },
       "grade": "{MA + RCT · P2 · C3 · M2}",
       "status": "Strong",
       "observational": false,
       "sources": [
-        {"author": "Schoenfeld", "year": 2019, "pmid": "30558493"},
-        {"author": "Grgic", "year": 2018, "pmid": "29470825"},
-        {"author": "Colquhoun", "year": 2018, "pmid": "29324578"},
-        {"author": "Saric", "year": 2019, "pmid": "30363041"},
-        {"author": "Pelland", "year": 2026, "pmid": "41343037",
-         "coi": {"it": "Tutti gli autori sono allenatori e autori del settore fitness", "en": "All authors are fitness-industry coaches and writers"}}
+        {
+          "author": "Schoenfeld",
+          "year": 2019,
+          "pmid": "30558493"
+        },
+        {
+          "author": "Grgic",
+          "year": 2018,
+          "pmid": "29470825"
+        },
+        {
+          "author": "Colquhoun",
+          "year": 2018,
+          "pmid": "29324578"
+        },
+        {
+          "author": "Saric",
+          "year": 2019,
+          "pmid": "30363041"
+        },
+        {
+          "author": "Pelland",
+          "year": 2026,
+          "pmid": "41343037",
+          "coi": {
+            "en": "All authors are fitness-industry coaches and writers"
+          }
+        }
       ]
     },
     {
       "id": "shared.week.missed_day",
       "version": 1,
       "module": "shared",
-      "features": ["FA15", "X-WEEK"],
-      "report_rules": [{"report": 1, "rule": "20"}, {"report": 2, "rule": "20"}, {"report": 2, "rule": "58"}],
+      "features": [
+        "FA15",
+        "X-WEEK"
+      ],
+      "report_rules": [
+        {
+          "report": 1,
+          "rule": "20"
+        },
+        {
+          "report": 2,
+          "rule": "20"
+        },
+        {
+          "report": 2,
+          "rule": "58"
+        }
+      ],
       "claim": {
-        "it": "In uno studio osservazionale sulla formazione delle abitudini in adulti, saltare un'occasione non si è associato a cambiamenti rilevanti nel formarsi dell'abitudine.",
         "en": "In an observational study of habit formation in adults, missing one opportunity was not associated with a material change in how the habit formed."
       },
       "body": {
-        "it": "L'automatismo cresceva lungo una curva che raggiungeva il plateau tra 18 e 254 giorni. Nei grandi studi di coorte, le associazioni con la salute seguono i totali settimanali, non i giorni consecutivi.",
         "en": "Automaticity grew along a curve that plateaued anywhere from 18 to 254 days. In large cohort studies, health associations follow weekly totals, not consecutive days."
       },
       "population": {
-        "it": "Adulti (studio sulle abitudini); adulti in grandi coorti",
         "en": "Adults (habit study); adults in large cohorts"
       },
       "design": {
-        "codes": ["Obs", "MA of Obs"],
-        "it": "Studio osservazionale; meta-analisi di studi osservazionali",
+        "codes": [
+          "Obs",
+          "MA of Obs"
+        ],
         "en": "Observational study; meta-analysis of observational studies"
       },
       "certainty": {
         "level": "limited",
-        "it": "Limitata per l'abitudine (un solo studio piccolo); buona per i totali settimanali",
         "en": "Limited for the habit finding (one small study); good for weekly totals"
       },
       "grade": "{Obs · P1 · C2; MA of Obs · P3 · C3}",
       "status": "Strong that daily pressure has no physiological basis; Inference for the design choice itself",
       "observational": true,
       "sources": [
-        {"author": "Lally", "year": 2010, "doi": "10.1002/ejsp.674"},
-        {"author": "Kim", "year": 2025, "pmid": "41067094"}
+        {
+          "author": "Lally",
+          "year": 2010,
+          "doi": "10.1002/ejsp.674"
+        },
+        {
+          "author": "Kim",
+          "year": 2025,
+          "pmid": "41067094"
+        }
       ]
     },
     {
       "id": "strength.week.health_dose",
       "version": 1,
       "module": "strength",
-      "features": ["X-WEEK"],
-      "report_rules": [{"report": 2, "rule": "1-4"}, {"report": 2, "rule": "33"}],
+      "features": [
+        "X-WEEK"
+      ],
+      "report_rules": [
+        {
+          "report": 2,
+          "rule": "1-4"
+        },
+        {
+          "report": 2,
+          "rule": "33"
+        }
+      ],
       "claim": {
-        "it": "In 16 studi di coorte, l'attività di rafforzamento muscolare si è associata a un rischio più basso del 10–17% di morte, malattie cardiovascolari, tumori e diabete, con la riduzione massima intorno a 30–60 minuti a settimana.",
         "en": "Across 16 cohort studies, muscle-strengthening activity was associated with a 10–17% lower risk of death, cardiovascular disease, cancer and diabetes, with the largest reduction at about 30–60 minutes a week."
       },
       "body": {
-        "it": "Oltre quel volume non si è vista un'associazione più forte, e le stime ad alto volume sono imprecise: è un plateau, non una prova di danno.",
         "en": "Beyond that volume no stronger association was seen, and the high-volume estimates are imprecise: a plateau, not evidence of harm."
       },
       "population": {
-        "it": "Adulti in 16 coorti",
         "en": "Adults in 16 cohorts"
       },
       "design": {
-        "codes": ["MA of Obs"],
-        "it": "Meta-analisi di studi osservazionali",
+        "codes": [
+          "MA of Obs"
+        ],
         "en": "Meta-analysis of observational studies"
       },
       "certainty": {
         "level": "moderate",
-        "it": "Media per l'associazione: dati concordi, curva della dose imprecisa",
         "en": "Moderate for the association: consistent data, imprecise dose curve"
       },
       "grade": "{MA of Obs · P2 · C3 · M3 R; Obs}",
       "status": "Strong for not making the claim",
       "observational": true,
       "sources": [
-        {"author": "Momma", "year": 2022, "pmid": "35228201"}
+        {
+          "author": "Momma",
+          "year": 2022,
+          "pmid": "35228201"
+        }
       ]
     },
     {
       "id": "daily.sitting.breaks",
       "version": 1,
       "module": "daily_movement",
-      "features": ["AK1", "0.26"],
-      "report_rules": [{"report": 2, "rule": "39"}],
+      "features": [
+        "AK1",
+        "0.26"
+      ],
+      "report_rules": [
+        {
+          "report": 2,
+          "rule": "39"
+        }
+      ],
       "claim": {
-        "it": "Prove di laboratorio su adulti sotto i 65 anni hanno trovato che brevi pause camminando, durante una lunga seduta, hanno abbassato glucosio e insulina dopo il pasto nello stesso giorno.",
         "en": "Laboratory trials in adults under 65 found that short walking breaks during long sitting lowered post-meal glucose and insulin on the same day."
       },
       "body": {
-        "it": "Interrompere la seduta ogni 15–20 minuti ha dato l'effetto più chiaro; stare solo in piedi, o pause distanti 60 minuti o più, no. Sono effetti acuti su marcatori del sangue, e due prove su persone oltre i 65 anni non hanno trovato effetto.",
         "en": "Breaking up sitting every 15–20 minutes gave the clearest effect; standing alone, or breaks 60 minutes or more apart, did not. These are acute effects on blood markers, and two trials in people over 65 found no effect."
       },
       "population": {
-        "it": "Adulti sotto i 65 anni in prove di laboratorio di un giorno, anche impiegati d'ufficio e persone con malattie croniche",
         "en": "Adults under 65 in one-day laboratory trials, including desk workers and people with chronic conditions"
       },
       "design": {
-        "codes": ["MA of XO", "XO"],
-        "it": "Meta-analisi di prove crossover randomizzate (effetti acuti)",
+        "codes": [
+          "MA of XO",
+          "XO"
+        ],
         "en": "Meta-analyses of randomised crossover trials (acute effects)"
       },
       "certainty": {
         "level": "limited",
-        "it": "Bassa secondo l'unica sintesi che l'ha valutata (GRADE); l'effetto è concorde in molte sintesi indipendenti",
         "en": "Low according to the only synthesis that rated it (GRADE); the effect is consistent across many independent syntheses"
       },
       "grade": "{MA of XO, GRADE low where rated (Yin 2024a) · P2-P3 · C3 · M2 DW,CC; IND-decl/UNK}",
       "status": "Strong for acute effects in adults under 65; Inference for long-term health and for users 65+",
       "observational": false,
       "sources": [
-        {"author": "Buffey", "year": 2022, "pmid": "35147898", "independence": "IND-decl"},
-        {"author": "Gale", "year": 2026, "pmid": "42070794", "independence": "IND-decl"},
-        {"author": "Gong", "year": 2026, "pmid": "42586449", "independence": "IND-decl"},
-        {"author": "Peddie", "year": 2013, "pmid": "23803893", "independence": "UNK"},
-        {"author": "Bailey", "year": 2015, "pmid": "24704421", "independence": "UNK"},
-        {"author": "Yin", "year": 2024, "pmid": "39630056", "independence": "UNK"},
-        {"author": "Kerr", "year": 2017, "pmid": "29190761", "independence": "IND"},
-        {"author": "Correia", "year": 2023, "pmid": "36307098", "independence": "UNK"}
+        {
+          "author": "Buffey",
+          "year": 2022,
+          "pmid": "35147898",
+          "independence": "IND-decl"
+        },
+        {
+          "author": "Gale",
+          "year": 2026,
+          "pmid": "42070794",
+          "independence": "IND-decl"
+        },
+        {
+          "author": "Gong",
+          "year": 2026,
+          "pmid": "42586449",
+          "independence": "IND-decl"
+        },
+        {
+          "author": "Peddie",
+          "year": 2013,
+          "pmid": "23803893",
+          "independence": "UNK"
+        },
+        {
+          "author": "Bailey",
+          "year": 2015,
+          "pmid": "24704421",
+          "independence": "UNK"
+        },
+        {
+          "author": "Yin",
+          "year": 2024,
+          "pmid": "39630056",
+          "independence": "UNK"
+        },
+        {
+          "author": "Kerr",
+          "year": 2017,
+          "pmid": "29190761",
+          "independence": "IND"
+        },
+        {
+          "author": "Correia",
+          "year": 2023,
+          "pmid": "36307098",
+          "independence": "UNK"
+        }
       ]
     },
     {
       "id": "daily.light.enough",
       "version": 1,
       "module": "daily_movement",
-      "features": ["AK1", "FA10", "FA11"],
-      "report_rules": [{"report": 2, "rule": "39"}],
+      "features": [
+        "AK1",
+        "FA10",
+        "FA11"
+      ],
+      "report_rules": [
+        {
+          "report": 2,
+          "rule": "39"
+        }
+      ],
       "claim": {
-        "it": "Nelle prove sulle pause dalla seduta, una camminata leggera è bastata per l'effetto acuto sul glucosio dopo il pasto.",
         "en": "In the sitting-break trials, light walking was enough for the acute effect on post-meal glucose."
       },
       "body": {
-        "it": "In adulti con diabete di tipo 2, quattro giorni passati sostituendo 4,7 ore di seduta al giorno con stare in piedi e camminare piano hanno abbassato il glucosio delle 24 ore circa quanto l'esercizio strutturato. Una grande meta-analisi ha trovato invece che i trigliceridi rispondono a sessioni più lunghe o più intense.",
         "en": "In adults with type 2 diabetes, four days of replacing 4.7 hours of daily sitting with standing and light walking lowered 24-hour glucose about as much as structured exercise. A large meta-analysis found instead that triglycerides respond to longer or harder bouts."
       },
       "population": {
-        "it": "Adulti in prove di laboratorio; adulti con diabete di tipo 2 in una prova di 4 giorni",
         "en": "Adults in laboratory trials; adults with type 2 diabetes in a 4-day trial"
       },
       "design": {
-        "codes": ["XO", "MA"],
-        "it": "Prove crossover randomizzate e una meta-analisi",
+        "codes": [
+          "XO",
+          "MA"
+        ],
         "en": "Randomised crossover trials and a meta-analysis"
       },
       "certainty": {
         "level": "limited",
-        "it": "Limitata: prove piccole e di pochi giorni",
         "en": "Limited: small trials lasting a few days"
       },
       "grade": "{XO · P1-P2 · C2}",
       "status": "Holds for glucose. Triglycerides need longer or harder bouts (Vanherle 2026)",
       "observational": false,
       "sources": [
-        {"author": "Buffey", "year": 2022, "pmid": "35147898", "independence": "IND-decl"},
-        {"author": "Peddie", "year": 2013, "pmid": "23803893", "independence": "UNK"},
-        {"author": "Duvivier", "year": 2017, "pmid": "27904925", "independence": "IND-decl"},
-        {"author": "Vanherle", "year": 2026, "pmid": "41920954", "independence": "UNK"}
+        {
+          "author": "Buffey",
+          "year": 2022,
+          "pmid": "35147898",
+          "independence": "IND-decl"
+        },
+        {
+          "author": "Peddie",
+          "year": 2013,
+          "pmid": "23803893",
+          "independence": "UNK"
+        },
+        {
+          "author": "Duvivier",
+          "year": 2017,
+          "pmid": "27904925",
+          "independence": "IND-decl"
+        },
+        {
+          "author": "Vanherle",
+          "year": 2026,
+          "pmid": "41920954",
+          "independence": "UNK"
+        }
       ]
     },
     {
       "id": "daily.bouts.any_length",
       "version": 1,
       "module": "daily_movement",
-      "features": ["FA10", "FA11", "X-WEEK"],
-      "report_rules": [{"report": 2, "rule": "35"}],
+      "features": [
+        "FA10",
+        "FA11",
+        "X-WEEK"
+      ],
+      "report_rules": [
+        {
+          "report": 2,
+          "rule": "35"
+        }
+      ],
       "claim": {
-        "it": "Le linee guida OMS 2020 contano l'attività moderata o vigorosa a blocchi di qualsiasi durata, senza più il minimo di 10 minuti.",
         "en": "The WHO 2020 guidelines count moderate-to-vigorous activity in bouts of any length, with no 10-minute minimum."
       },
       "body": {
-        "it": "Nei dati da accelerometro, l'attività a blocchi e quella sporadica si sono associate a una mortalità simile. Che i blocchi brevi siano migliori resta incerto: due analisi indipendenti vanno in direzioni opposte.",
         "en": "In accelerometer data, bouted and sporadic activity were associated with similar mortality. Whether short bouts are better is unsettled: two independent analyses point in opposite directions."
       },
       "population": {
-        "it": "Adulti (linea guida); adulti in coorti con accelerometro",
         "en": "Adults (guideline); adults in accelerometer cohorts"
       },
       "design": {
-        "codes": ["Guide", "Obs"],
-        "it": "Linea guida OMS e studi osservazionali",
+        "codes": [
+          "Guide",
+          "Obs"
+        ],
         "en": "WHO guideline and observational studies"
       },
       "certainty": {
         "level": "moderate",
-        "it": "Media: linea guida chiara; per gli esiti, studi osservazionali in parte discordi",
         "en": "Moderate: a clear guideline; for outcomes, observational studies that partly disagree"
       },
       "grade": "{Guide; SR/Obs · P2-P3 · C2; Obs}",
       "status": "Strong for counting; Inference against any superiority claim",
       "observational": true,
       "sources": [
-        {"author": "Bull", "year": 2020, "pmid": "33239350"},
-        {"author": "Saint-Maurice", "year": 2018, "pmid": "29567764", "independence": "UNK"},
-        {"author": "Millard", "year": 2021, "pmid": "34525088", "independence": "IND"},
-        {"author": "Rowlands", "year": 2025, "pmid": "40803369", "independence": "IND-decl"},
-        {"author": "Li", "year": 2026, "pmid": "42701500", "independence": "IND-decl"}
+        {
+          "author": "Bull",
+          "year": 2020,
+          "pmid": "33239350"
+        },
+        {
+          "author": "Saint-Maurice",
+          "year": 2018,
+          "pmid": "29567764",
+          "independence": "UNK"
+        },
+        {
+          "author": "Millard",
+          "year": 2021,
+          "pmid": "34525088",
+          "independence": "IND"
+        },
+        {
+          "author": "Rowlands",
+          "year": 2025,
+          "pmid": "40803369",
+          "independence": "IND-decl"
+        },
+        {
+          "author": "Li",
+          "year": 2026,
+          "pmid": "42701500",
+          "independence": "IND-decl"
+        }
       ]
     },
     {
       "id": "strength.isometric.blood_pressure",
       "version": 1,
       "module": "strength",
-      "features": ["KA3", "0.19"],
-      "report_rules": [{"report": 2, "rule": "37"}],
+      "features": [
+        "KA3",
+        "0.19"
+      ],
+      "report_rules": [
+        {
+          "report": 2,
+          "rule": "37"
+        }
+      ],
       "claim": {
-        "it": "Una meta-analisi di rete di 270 prove randomizzate (15.827 persone) ha trovato che tutti i tipi di allenamento hanno abbassato la pressione, e le tenute isometriche di più: in media −8,24/−4,00 mmHg.",
         "en": "A network meta-analysis of 270 randomised trials (15,827 people) found that every training mode lowered blood pressure, and isometric holds lowered it most: on average −8.24/−4.00 mmHg."
       },
       "body": {
-        "it": "Lo squat isometrico al muro è risultato il migliore per la pressione sistolica. Le prove sulle tenute isometriche erano meno numerose di quelle sugli altri tipi di allenamento, e i dettagli dei protocolli non sono stati estratti.",
         "en": "The isometric wall squat ranked best for systolic pressure. There were fewer trials of isometric holds than of other training types, and protocol details were not extracted."
       },
       "population": {
-        "it": "Adulti, anche con malattie croniche",
         "en": "Adults, including people with chronic conditions"
       },
       "design": {
-        "codes": ["NMA"],
-        "it": "Meta-analisi di rete di prove randomizzate",
+        "codes": [
+          "NMA"
+        ],
         "en": "Network meta-analysis of randomised trials"
       },
       "certainty": {
         "level": "high",
-        "it": "Buona: molte prove, risultati concordi; meno prove sulle tenute isometriche",
         "en": "Good: many trials, consistent results; fewer trials of isometric holds"
       },
       "grade": "{NMA · P3 (fewer isometric trials) · C3 · M3 R,CC}",
       "status": "Strong for the effect; Inference for protocol details (not extracted)",
       "observational": false,
       "sources": [
-        {"author": "Edwards", "year": 2023, "pmid": "37491419"}
+        {
+          "author": "Edwards",
+          "year": 2023,
+          "pmid": "37491419"
+        }
       ]
     },
     {
       "id": "mobility.selfcheck.own_trend",
       "version": 1,
       "module": "mobility_balance",
-      "features": ["PL1", "0.19"],
-      "report_rules": [{"report": 2, "rule": "7"}, {"report": 2, "rule": "31"}],
+      "features": [
+        "PL1",
+        "0.19"
+      ],
+      "report_rules": [
+        {
+          "report": 2,
+          "rule": "7"
+        },
+        {
+          "report": 2,
+          "rule": "31"
+        }
+      ],
       "claim": {
-        "it": "In studi osservazionali su adulti oltre i 65 anni, una maggiore velocità del cammino si è associata a una sopravvivenza più lunga; anche alzarsi dalla sedia e l'equilibrio in piedi erano predittivi.",
         "en": "In observational studies of adults over 65, faster walking speed was associated with longer survival; chair rise and standing balance were also predictive."
       },
       "body": {
-        "it": "Ogni 0,1 m/s in più si è associato a un rischio di morte più basso (HR 0,88) in 34.485 adulti. Non è dimostrato che migliorare il risultato di questi test allunghi la vita.",
         "en": "Each 0.1 m/s faster was associated with a lower risk of death (HR 0.88) in 34,485 adults. Improving a score on these tests has not been shown to extend life."
       },
       "population": {
-        "it": "Adulti oltre i 65 anni, uomini e donne",
         "en": "Adults over 65, men and women"
       },
       "design": {
-        "codes": ["IPD-MA of Obs", "MA of Obs"],
-        "it": "Meta-analisi di studi osservazionali, anche su dati individuali",
+        "codes": [
+          "IPD-MA of Obs",
+          "MA of Obs"
+        ],
         "en": "Meta-analyses of observational studies, including individual-participant data"
       },
       "certainty": {
         "level": "high",
-        "it": "Buona per l'associazione; nessuna prova che migliorare il test cambi l'esito",
         "en": "Good for the association; no evidence that improving the test changes the outcome"
       },
       "grade": "{IPD-MA/MA of Obs · P3 · C3; Obs}",
       "status": "Inference",
       "observational": true,
       "sources": [
-        {"author": "Studenski", "year": 2011, "pmid": "21205966"},
-        {"author": "Cooper", "year": 2010, "pmid": "20829298",
-         "coi": {"it": "Un autore dichiara rapporti con aziende farmaceutiche", "en": "One author reports pharmaceutical relationships"}}
+        {
+          "author": "Studenski",
+          "year": 2011,
+          "pmid": "21205966"
+        },
+        {
+          "author": "Cooper",
+          "year": 2010,
+          "pmid": "20829298",
+          "coi": {
+            "en": "One author reports pharmaceutical relationships"
+          }
+        }
       ]
     },
     {
       "id": "mobility.balance.falls",
       "version": 1,
       "module": "mobility_balance",
-      "features": ["CM2"],
-      "report_rules": [{"report": 1, "rule": "26"}, {"report": 2, "rule": "26"}],
+      "features": [
+        "CM2"
+      ],
+      "report_rules": [
+        {
+          "report": 1,
+          "rule": "26"
+        },
+        {
+          "report": 2,
+          "rule": "26"
+        }
+      ],
       "claim": {
-        "it": "In 108 prove su persone di età media 76 anni, l'esercizio ha ridotto il tasso di cadute del 23% (certezza alta); l'allenamento di equilibrio e funzionale del 24%.",
         "en": "In 108 trials of people with a mean age of 76, exercise reduced the rate of falls by 23% (high certainty); balance and functional training by 24%."
       },
       "body": {
-        "it": "I programmi che combinano più tipi di esercizio hanno dato una riduzione del 34% (certezza moderata); per quelli fatti soprattutto di esercizi di forza, camminata o danza l'effetto è incerto. Un aggiornamento ha trovato il 42% di cadute in meno con 3 o più ore a settimana che includono l'equilibrio.",
         "en": "Programmes combining several types of exercise gave a 34% reduction (moderate certainty); for programmes mainly of strength exercises, walking or dance the effect is uncertain. An update found 42% fewer falls with 3 or more hours a week that include balance work."
       },
       "population": {
-        "it": "Adulti anziani (23.407 persone, età media 76 anni, 77% donne)",
         "en": "Older adults (23,407 people, mean age 76, 77% women)"
       },
       "design": {
-        "codes": ["CR", "MA"],
-        "it": "Revisione Cochrane di prove randomizzate; meta-analisi",
+        "codes": [
+          "CR",
+          "MA"
+        ],
         "en": "Cochrane review of randomised trials; meta-analysis"
       },
       "certainty": {
         "level": "high",
-        "it": "Alta (GRADE) per l'esercizio in generale e per equilibrio e funzione",
         "en": "High (GRADE) for exercise overall and for balance and functional training"
       },
       "grade": "{CR, GRADE high · P3 · C3 · M3 O,W}",
       "status": "Strong",
       "observational": false,
       "sources": [
-        {"author": "Sherrington", "year": 2019, "pmid": "30703272"},
-        {"author": "Sherrington", "year": 2020, "pmid": "33239019"}
+        {
+          "author": "Sherrington",
+          "year": 2019,
+          "pmid": "30703272"
+        },
+        {
+          "author": "Sherrington",
+          "year": 2020,
+          "pmid": "33239019"
+        }
       ]
     },
     {
       "id": "stamina.aerobic.steady_and_intervals",
       "version": 1,
       "module": "stamina",
-      "features": ["FT3"],
-      "report_rules": [{"report": 1, "rule": "17"}],
+      "features": [
+        "FT3"
+      ],
+      "report_rules": [
+        {
+          "report": 1,
+          "rule": "17"
+        }
+      ],
       "claim": {
-        "it": "In adulti di 18–45 anni, sia l'allenamento continuo moderato sia quello a intervalli hanno aumentato il VO2max rispetto a nessun esercizio: in media +4,9 e +5,5 mL/kg/min.",
         "en": "In adults aged 18–45, both steady moderate training and interval training raised VO2max compared with no exercise: on average +4.9 and +5.5 mL/kg/min."
       },
       "body": {
-        "it": "Gli intervalli ad alta intensità hanno aggiunto un vantaggio forse piccolo, +1,2 mL/kg/min. In adulti sani, la quota di chi non migliorava è scesa dal 69% con 60 minuti a settimana allo 0% con 240–300 minuti.",
         "en": "High-intensity intervals added a possibly small +1.2 mL/kg/min. In healthy adults, the share who did not improve fell from 69% at 60 minutes a week to 0% at 240–300 minutes."
       },
       "population": {
-        "it": "Adulti di 18–45 anni, anche principianti",
         "en": "Adults aged 18–45, including beginners"
       },
       "design": {
-        "codes": ["MA", "RCT"],
-        "it": "Meta-analisi; una prova controllata",
+        "codes": [
+          "MA",
+          "RCT"
+        ],
         "en": "Meta-analysis; a controlled trial"
       },
       "certainty": {
         "level": "moderate",
-        "it": "Media: risultati concordi, su adulti giovani",
         "en": "Moderate: consistent results, in young adults"
       },
       "grade": "{MA · P2 · C3 · M2 R,B}",
       "status": "Strong",
       "observational": false,
       "sources": [
-        {"author": "Milanović", "year": 2015, "pmid": "26243014"},
-        {"author": "Montero", "year": 2017, "pmid": "28133739"}
+        {
+          "author": "Milanović",
+          "year": 2015,
+          "pmid": "26243014"
+        },
+        {
+          "author": "Montero",
+          "year": 2017,
+          "pmid": "28133739"
+        }
       ]
     },
     {
       "id": "shared.tracking.self_monitoring",
       "version": 1,
       "module": "shared",
-      "features": ["X-WEEK", "N-HISTORY"],
-      "report_rules": [{"report": 2, "rule": "52"}, {"report": 2, "rule": "59"}],
+      "features": [
+        "X-WEEK",
+        "N-HISTORY"
+      ],
+      "report_rules": [
+        {
+          "report": 2,
+          "rule": "52"
+        },
+        {
+          "report": 2,
+          "rule": "59"
+        }
+      ],
       "claim": {
-        "it": "In 122 valutazioni di interventi, l'automonitoraggio spiegava la maggior parte delle differenze di efficacia; abbinarlo ad almeno un'altra tecnica, come obiettivi o feedback, ha alzato l'effetto da 0,26 a 0,42.",
         "en": "Across 122 evaluations of interventions, self-monitoring explained the most variation in effect; pairing it with at least one other technique, such as goals or feedback, raised the effect from 0.26 to 0.42."
       },
       "body": {
-        "it": "Gli effetti sono piccoli e calano nel tempo (da 0,32 a 0,21 dopo sei mesi o più). In adulti oltre i 60 anni, obiettivi, automonitoraggio sollecitato, confronto con gli altri e feedback sulle prestazioni si sono associati a meno fiducia in sé e meno attività.",
         "en": "Effects are small and fade over time (from 0.32 to 0.21 at six months or more). In adults over 60, goal setting, prompted self-monitoring, comparison with others and performance feedback were associated with lower self-efficacy and less activity."
       },
       "population": {
-        "it": "Adulti in studi di intervento, anche inattivi; adulti oltre i 60 anni (una revisione)",
         "en": "Adults in intervention studies, including inactive adults; adults over 60 (one review)"
       },
       "design": {
-        "codes": ["MA", "SR"],
-        "it": "Meta-analisi e una revisione sistematica",
+        "codes": [
+          "MA",
+          "SR"
+        ],
         "en": "Meta-analyses and a systematic review"
       },
       "certainty": {
         "level": "moderate",
-        "it": "Media: sostenuta da meta-analisi, con effetti piccoli",
         "en": "Moderate: supported by meta-analyses, with small effects"
       },
       "grade": "{MA · P2-P3 · C2 · M3 R,B,WC}",
       "status": "Strong",
       "observational": false,
       "sources": [
-        {"author": "Michie", "year": 2009, "pmid": "19916637"},
-        {"author": "Howlett", "year": 2019, "pmid": "29506209"},
-        {"author": "French", "year": 2014, "pmid": "24648017"}
+        {
+          "author": "Michie",
+          "year": 2009,
+          "pmid": "19916637"
+        },
+        {
+          "author": "Howlett",
+          "year": 2019,
+          "pmid": "29506209"
+        },
+        {
+          "author": "French",
+          "year": 2014,
+          "pmid": "24648017"
+        }
       ]
     }
   ]

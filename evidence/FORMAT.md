@@ -10,10 +10,10 @@ one of the two local evidence reports, whose citations were machine-checked agai
 The reports stay local (the repository is public); the pack carries what the app shows plus enough
 of the reports' own grading to trace each claim back. `tools/evidence_check.py` is the gate.
 
-**Language: this first draft is English only.** Every text object holds `en`. The app will show notes
-in the phone's language (Italian or English), so an `it` key is reserved: when the translations are
-written, `it` is added beside `en` in every text object and `"it"` is added to `REQUIRED_LANGS` in the
-gate. Until then the gate accepts `it` where present and checks it the same way.
+**Language: this first draft is English only.** Every text object holds `en` and nothing else; the gate
+rejects any other language key. Italian (the app shows notes in the phone's language) is a separate,
+later pass: it adds the Italian text and its checks (wording rules for Italian, numbers matching the
+English) to this format and to the gate together.
 
 ## File: `evidence/claims.json`
 
@@ -31,7 +31,7 @@ gate. Until then the gate accepts `it` where present and checks it the same way.
 - `labels`: shared UI words. `observational` is the flag text shown on every observational claim
   ("Association, not cause"); `certainty_level` names the four levels below.
 
-A *text object* is `{"en": "..."}` (later `{"en": "...", "it": "..."}`); no other keys.
+A *text object* is `{"en": "..."}`; no other keys.
 
 ## A claim
 
@@ -76,8 +76,7 @@ consistent results, but mostly in young men".
    describes…"), not passed on as orders.
 2. **Hedging preserved.** Past tense for what studies found; "associated with" for observational
    results; numbers, ranges and qualifiers ("about", "on average", "possibly small") exactly as the
-   report gives them. When the Italian text is added, it keeps the same numbers and qualifiers
-   (decimal comma and thousands dot in Italian; the gate compares the numbers).
+   report gives them.
 3. **Who was studied and how sure** travel with every claim (`population`, `certainty`); the
    observational flag travels with every observational claim.
 4. **Sources one level down**: author, year, PMID and/or DOI, plus any conflict of interest the report
@@ -110,13 +109,12 @@ root (where it sits, git-ignored, in the owner's main checkout). No id list foun
 pass.
 
 It fails on:
-- schema: a missing or unknown field (including an unknown language key), a wrong type, an invalid
+- schema: a missing or unknown field (including any language key other than `en`), a wrong type, an invalid
   enum, a malformed or duplicate id;
 - sources: a PMID or DOI not in a verified id list (or listed there as bad); a year or first author
   that does not match PubMed's record; a DOI that differs from PubMed's DOI for the same PMID;
 - rules: a rule number outside its report's range;
-- text: an empty or missing `en` (and `it`, once required or where present); a banned instruction,
-  second-person or weight word (word-boundary matched, case-insensitive, per language); numbers that
-  differ between `it` and `en` when both are present;
+- text: an empty or missing `en`; a banned instruction, second-person or weight word (word-boundary
+  matched, case-insensitive);
 - observational: design codes containing `Obs` without `observational: true`; an observational claim
-  whose claim or body lacks association wording ("associat…") in a language it carries.
+  whose claim or body lacks association wording ("associat…").

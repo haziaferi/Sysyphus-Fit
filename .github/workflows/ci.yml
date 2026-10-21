@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gradle:
+    name: Gradle check (tests and lint)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      # The SPEC 5 gate: every test and Android lint with warnings as errors. gradlew is not marked
+      # executable in git, so it runs through bash.
+      - run: bash ./gradlew check --stacktrace
+
+  evidence:
+    name: Evidence gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Selftest (every defect class must fail)
+        run: python tools/evidence_check.py --selftest
+      # The reports and full id lists stay local; CI checks sources against the committed trimmed list.
+      # The report-content check runs locally (python tools/evidence_check.py with research/ present).
+      - name: Pack against the committed verified ids
+        run: python tools/evidence_check.py --ids evidence/verified_ids.json --skip-content

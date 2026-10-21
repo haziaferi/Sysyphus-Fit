@@ -103,8 +103,15 @@ python tools/evidence_check.py                     # check evidence/claims.json
 python tools/evidence_check.py --research DIR      # where the local research folder is
 python tools/evidence_check.py --ids FILE --ids FILE --reports DIR
 python tools/evidence_check.py --skip-content      # no report text at hand: check everything else
+python tools/evidence_check.py --write-ids         # after changing sources: rewrite evidence/verified_ids.json
 python tools/evidence_check.py --selftest          # plant each defect, require each to fail
 ```
+
+`evidence/verified_ids.json` is the committed, trimmed id list: only the PMIDs and DOIs the pack
+cites, with PubMed's year, first author and DOI (public data). `--write-ids` writes it from the full
+local lists; every full local run fails if it is out of date. CI (`.github/workflows/ci.yml`) runs the
+selftest and `--ids evidence/verified_ids.json --skip-content`, because the reports and the full lists
+stay local; the report-content check is therefore a local gate, to run before every push.
 
 The verified id lists are read from `DIR/research_notes/*/ids_check.json` and the two reports from
 `DIR/reports/` (or `--reports`). `DIR` comes from `--research`, else the environment variable

@@ -24,6 +24,9 @@ import unicodedata
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PACK = ROOT / "evidence" / "claims.json"
 SPEC = ROOT / "SPEC.md"
+VERIFIED = ROOT / "evidence" / "verified_ids.json"
+TRIM_DOC = ("Written by tools/evidence_check.py --write-ids from the reports' local verified id lists: only the "
+            "PMIDs and DOIs evidence/claims.json cites, with PubMed's year, first author and DOI. Do not edit.")
 REPORT_FILES = {1: "Exercise evidence for daily training.md", 2: "Exercise evidence for health and longevity.md"}
 
 LANGS = ("en",)  # first draft is English only; Italian and its checks come in a separate pass
@@ -284,6 +287,41 @@ def find_id_lists(research):
     return sorted(pathlib.Path(research).glob("research_notes/*/ids_check.json"))
 
 
+def trim_ids(pack, ids):
+    """The committed id list (evidence/verified_ids.json): only the ids the pack cites, with only the public
+    PubMed fields the gate compares, so CI can check sources without the local research folder."""
+    pmids, dois = {}, {}
+    for c in pack.get("claims", []) if isinstance(pack, dict) else []:
+        for s in c.get("sources", []) if isinstance(c, dict) else []:
+            if not isinstance(s, dict):
+                continue
+            pmid, doi = s.get("pmid"), (s.get("doi") or "").lower()
+            if pmid in ids.pmids:
+                rec = ids.pmids[pmid]
+                pmids[pmid] = {k: rec.get(k) for k in ("year", "first_author", "doi")}
+            elif doi and doi in ids.dois:
+                dois[doi] = True
+    return {"_doc": TRIM_DOC, "pmids": dict(sorted(pmids.items())), "dois": dict(sorted(dois.items())),
+            "bad_pmids": [], "bad_dois": []}
+
+
+def check_verified(pack, ids, committed):
+    """The committed id list must be exactly what trim_ids gives from the full local lists."""
+    want = trim_ids(pack, ids)
+    if committed is None:
+        return [f"{VERIFIED.name}: missing; run with --write-ids"]
+    out = []
+    for key in ("pmids", "dois"):
+        have = committed.get(key) if isinstance(committed.get(key), dict) else {}
+        missing = sorted(set(want[key]) - set(have))
+        extra = sorted(set(have) - set(want[key]))
+        changed = sorted(k for k in set(want[key]) & set(have) if want[key][k] != have[k])
+        for label, ks in (("missing", missing), ("not cited", extra), ("changed", changed)):
+            if ks:
+                out.append(f"{VERIFIED.name}: {key} {label}: {', '.join(ks)}; run with --write-ids")
+    return out
+
+
 # ------------------------------------------------------------------ self-test
 FIXTURE_IDS = Ids([{
     "pmids": {"19204579": {"year": "2009", "first_author": "American College of Sports Medicine",
@@ -429,6 +467,20 @@ def selftest():
             or spec_features("P3 · C3, BMI, 6T, 0.5 sets"):
         print("  FAIL  SPEC.md feature-id reading")
         failures += 1
+    trimmed = trim_ids(CLEAN, FIXTURE_IDS)
+    stale = copy.deepcopy(trimmed)
+    stale["pmids"].pop("26243014")
+    checks = [  # (name, passed)
+        ("trimmed list matches", check_verified(CLEAN, FIXTURE_IDS, trimmed) == []),
+        ("trimmed list alone passes the pack",
+         check_pack(copy.deepcopy(CLEAN), Ids([trimmed]), FIXTURE_FEATURES, FIXTURE_REPORTS) == []),
+        ("trimmed list keeps only public fields", set(trimmed["pmids"]["19204579"]) == {"year", "first_author", "doi"}),
+        ("stale trimmed list caught", any("missing: 26243014" in f for f in check_verified(CLEAN, FIXTURE_IDS, stale))),
+        ("missing trimmed list caught", bool(check_verified(CLEAN, FIXTURE_IDS, None))),
+    ]
+    for name, ok in checks:
+        print(f"  {'PASS' if ok else 'FAIL'}  {name}")
+        failures += not ok
     print(f"selftest: {len(DEFECTS)} defect classes + clean case, {failures} failure(s)")
     return 1 if failures else 0
 
@@ -441,10 +493,15 @@ def main(argv=None):
     ap.add_argument("--reports", help="the folder holding the two report .md files (default <research>/reports)")
     ap.add_argument("--skip-content", action="store_true",
                     help="do not check claims against the report text (reported, never a full pass)")
+    ap.add_argument("--write-ids", action="store_true",
+                    help=f"rewrite evidence/{VERIFIED.name} from the full local id lists, then check")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args(argv)
     if a.selftest:
         return selftest()
+    if a.write_ids and a.ids:
+        print("evidence_check: --write-ids needs the full local id lists (--research), not --ids", file=sys.stderr)
+        return 2
     research = pathlib.Path(a.research or os.environ.get("SISYPHUS_RESEARCH_DIR") or ROOT / "research")
     if a.ids:
         lists = [pathlib.Path(p) for p in a.ids]
@@ -478,7 +535,18 @@ def main(argv=None):
                   "or --skip-content to check everything else", file=sys.stderr)
             return 2
     ids = Ids.load(lists)
+    if a.write_ids:
+        VERIFIED.write_text(json.dumps(trim_ids(pack, ids), ensure_ascii=False, indent=1) + "\n",
+                            encoding="utf-8", newline="\n")
+        print(f"evidence_check: wrote {VERIFIED.relative_to(ROOT).as_posix()}")
     findings = check_pack(pack, ids, features, reports)
+    if not a.ids:  # full local lists: the committed list must match them
+        try:
+            committed = json.loads(VERIFIED.read_text(encoding="utf-8")) if VERIFIED.is_file() else None
+        except json.JSONDecodeError as e:
+            committed = {}
+            findings.append(f"{VERIFIED.name}: not valid JSON ({e})")
+        findings += check_verified(pack, ids, committed)
     claims = pack.get("claims", []) if isinstance(pack, dict) else []
     n_src = sum(len(c.get("sources", [])) for c in claims if isinstance(c, dict))
     n_held = sum(1 for c in claims if isinstance(c, dict) and "held" in c)

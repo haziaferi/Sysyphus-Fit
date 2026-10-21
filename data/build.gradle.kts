@@ -46,6 +46,8 @@ kotlin {
             implementation(kotlin("test"))
             implementation(libs.kotlinx.coroutines.test)
         }
+        // JVM-only test helpers (the schema-1 builder) for both the desktop and the Robolectric tests.
+        listOf("desktopTest", "androidHostTest").forEach { getByName(it).kotlin.srcDir("src/jvmTestShared/kotlin") }
         getByName("androidHostTest").dependencies {
             implementation(libs.junit)
             implementation(libs.robolectric)

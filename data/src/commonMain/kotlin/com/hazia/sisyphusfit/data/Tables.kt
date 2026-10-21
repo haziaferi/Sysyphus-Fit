@@ -7,12 +7,17 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /*
- * Schema version 1 (SPEC §4): designed for the whole 50-point scope, so no package needs a
- * migration of logged data. Integers only: epoch milliseconds UTC plus the recording zone, seconds,
- * grams, metres, 1e-7 degrees. Ids are ULIDs from :core.
+ * Schema version 2 (SPEC §4): schema 1, designed for the whole 50-point scope, plus the additive
+ * parts of stage 1a (module tags, labels, body measures, power and partial reps). Integers only:
+ * epoch milliseconds UTC plus the recording zone, seconds, grams, millimetres, metres, 1e-7 degrees.
+ * Ids are ULIDs from :core. A column added by a later schema goes LAST in its entity, with a SQL
+ * default: ALTER TABLE appends, so a migrated table then matches a fresh one column for column.
  */
 
-/** kind: DYNAMIC, ISOMETRIC, TIMED, DISTANCE. sided: counted per side (harvest CM2). */
+/**
+ * kind: DYNAMIC, ISOMETRIC, TIMED, DISTANCE. sided: counted per side (harvest CM2).
+ * show_partial_reps (schema 2, 0.33): the partial-reps count is offered on this exercise.
+ */
 @Entity(tableName = "exercise")
 data class ExerciseEntity(
     @PrimaryKey val id: String,
@@ -20,6 +25,19 @@ data class ExerciseEntity(
     val kind: String,
     val sided: Boolean,
     val archived: Boolean,
+    @ColumnInfo(name = "show_partial_reps", defaultValue = "0") val showPartialReps: Boolean = false,
+)
+
+/** Schema 2 (0.23): a module tag on an exercise, several per exercise. module: a :core Module name. */
+@Entity(
+    tableName = "exercise_module",
+    foreignKeys = [ForeignKey(ExerciseEntity::class, ["id"], ["exercise_id"], onDelete = ForeignKey.CASCADE)],
+    indices = [Index(value = ["exercise_id", "module"], unique = true)],
+)
+data class ExerciseModuleEntity(
+    @PrimaryKey val id: String,
+    @ColumnInfo(name = "exercise_id") val exerciseId: String,
+    val module: String,
 )
 
 /** weekdays: bit 0 = Monday ... bit 6 = Sunday, 0 = unscheduled (harvest CM3, KA6). */
@@ -75,7 +93,11 @@ data class SessionEntity(
     val note: String?,
 )
 
-/** A done set; skipped sets are never written (KA2). rpe is RPE x10 (BC1). side: L, R or null. */
+/**
+ * A done set; skipped sets are never written (KA2). rpe is RPE x10 (BC1). side: L, R or null.
+ * Schema 2: power is "move fast" (0.19); partial_reps is its own count beside reps, never converted
+ * into reps (0.33: 7 full and 1 partial is reps 7, partial_reps 1).
+ */
 @Entity(
     tableName = "logged_set",
     foreignKeys = [
@@ -97,6 +119,8 @@ data class LoggedSetEntity(
     val rpe: Int?,
     val rir: Int?,
     @ColumnInfo(name = "done_at") val doneAt: Long,
+    @ColumnInfo(defaultValue = "0") val power: Boolean = false,
+    @ColumnInfo(name = "partial_reps", defaultValue = "0") val partialReps: Int = 0,
 )
 
 /** LL5: add this after a session where every set hit its target. when: ALL_SETS_HIT. */
@@ -166,6 +190,48 @@ data class SettingEntity(
     val value: String,
 )
 
+/** Schema 2 (0.23): a label from the person's reusable list; archived hides it from the list. */
+@Entity(tableName = "label")
+data class LabelEntity(
+    @PrimaryKey val id: String,
+    val name: String,
+    val position: Int,
+    val archived: Boolean,
+)
+
+/** Schema 2 (0.23): a label on a session, several per session. */
+@Entity(
+    tableName = "session_label",
+    foreignKeys = [
+        ForeignKey(SessionEntity::class, ["id"], ["session_id"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(LabelEntity::class, ["id"], ["label_id"], onDelete = ForeignKey.CASCADE),
+    ],
+    indices = [Index(value = ["session_id", "label_id"], unique = true), Index("label_id")],
+)
+data class SessionLabelEntity(
+    @PrimaryKey val id: String,
+    @ColumnInfo(name = "session_id") val sessionId: String,
+    @ColumnInfo(name = "label_id") val labelId: String,
+)
+
+/**
+ * Schema 2, the body-measures module (OS1, 0.10): the person's own measure, an integer [value] in
+ * the stated [unit] (G for WEIGHT, MM for a girth such as WAIST), so a new kind needs no migration.
+ * [day] follows the session rule: the local date of taken_at in zone. No BMI, BMR or forecast is
+ * stored or derived.
+ */
+@Entity(tableName = "body_measure", indices = [Index(value = ["kind", "taken_at"]), Index("day")])
+data class BodyMeasureEntity(
+    @PrimaryKey val id: String,
+    val kind: String,
+    val value: Long,
+    val unit: String,
+    @ColumnInfo(name = "taken_at") val takenAt: Long,
+    val zone: String,
+    val day: String,
+    val note: String?,
+)
+
 /**
  * Every table in dependency order: a parent before its children. Restore inserts in this order and
  * deletes in reverse; a table missing here would be missing from every backup, so a test pins this
@@ -174,4 +240,6 @@ data class SettingEntity(
 val TABLES = listOf(
     "exercise", "routine", "routine_item", "session", "logged_set",
     "progression_rule", "interval_preset", "track_point", "goal", "setting",
+    // Schema 2, appended so a schema-1 backup's tables keep their place.
+    "exercise_module", "label", "session_label", "body_measure",
 )

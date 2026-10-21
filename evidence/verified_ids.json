@@ -1,0 +1,255 @@
+{
+ "_doc": "Written by tools/evidence_check.py --write-ids from the reports' local verified id lists: only the PMIDs and DOIs evidence/claims.json cites, with PubMed's year, first author and DOI. Do not edit.",
+ "pmids": {
+  "11832527": {
+   "year": "2002",
+   "first_author": "Knowler WC",
+   "doi": "10.1056/NEJMoa012512"
+  },
+  "15616242": {
+   "year": "2005",
+   "first_author": "Boulé NG",
+   "doi": "10.2337/diacare.28.1.108"
+  },
+  "16936160": {
+   "year": "2006",
+   "first_author": "Hamman RF",
+   "doi": "10.2337/dc06-0560"
+  },
+  "19204579": {
+   "year": "2009",
+   "first_author": "American College of Sports Medicine",
+   "doi": "10.1249/MSS.0b013e3181915670"
+  },
+  "19916637": {
+   "year": "2009",
+   "first_author": "Michie S",
+   "doi": "10.1037/a0016136"
+  },
+  "20829298": {
+   "year": "2010",
+   "first_author": "Cooper R",
+   "doi": "10.1136/bmj.c4467"
+  },
+  "21205966": {
+   "year": "2011",
+   "first_author": "Studenski S",
+   "doi": "10.1001/jama.2010.1923"
+  },
+  "23803893": {
+   "year": "2013",
+   "first_author": "Peddie MC",
+   "doi": "10.3945/ajcn.112.051763"
+  },
+  "24648017": {
+   "year": "2014",
+   "first_author": "French DP",
+   "doi": "10.1007/s12160-014-9593-z"
+  },
+  "24704421": {
+   "year": "2015",
+   "first_author": "Bailey DP",
+   "doi": "10.1016/j.jsams.2014.03.008"
+  },
+  "26243014": {
+   "year": "2015",
+   "first_author": "Milanović Z",
+   "doi": "10.1007/s40279-015-0365-0"
+  },
+  "26280652": {
+   "year": "2016",
+   "first_author": "Damas F",
+   "doi": "10.1007/s00421-015-3243-4"
+  },
+  "27219125": {
+   "year": "2016",
+   "first_author": "Damas F",
+   "doi": "10.1113/JP272472"
+  },
+  "27904925": {
+   "year": "2017",
+   "first_author": "Duvivier BM",
+   "doi": "10.1007/s00125-016-4161-7"
+  },
+  "28133739": {
+   "year": "2017",
+   "first_author": "Montero D",
+   "doi": "10.1113/JP273480"
+  },
+  "29190761": {
+   "year": "2017",
+   "first_author": "Kerr J",
+   "doi": "10.1371/journal.pone.0188544"
+  },
+  "29324578": {
+   "year": "2018",
+   "first_author": "Colquhoun RJ",
+   "doi": "10.1519/JSC.0000000000002414"
+  },
+  "29470825": {
+   "year": "2018",
+   "first_author": "Grgic J",
+   "doi": "10.1007/s40279-018-0872-x"
+  },
+  "29506209": {
+   "year": "2019",
+   "first_author": "Howlett N",
+   "doi": "10.1093/tbm/iby010"
+  },
+  "29567764": {
+   "year": "2018",
+   "first_author": "Saint-Maurice PF",
+   "doi": "10.1161/JAHA.117.007678"
+  },
+  "30363041": {
+   "year": "2019",
+   "first_author": "Saric J",
+   "doi": "10.1519/JSC.0000000000002909"
+  },
+  "30558493": {
+   "year": "2019",
+   "first_author": "Schoenfeld BJ",
+   "doi": "10.1080/02640414.2018.1555906"
+  },
+  "30703272": {
+   "year": "2019",
+   "first_author": "Sherrington C",
+   "doi": "10.1002/14651858.CD012424.pub2"
+  },
+  "31104484": {
+   "year": "2019",
+   "first_author": "Saeidifard F",
+   "doi": "10.1177/2047487319850718"
+  },
+  "3126668": {
+   "year": "1988",
+   "first_author": "Mikines KJ",
+   "doi": "10.1152/ajpendo.1988.254.3.E248"
+  },
+  "33239019": {
+   "year": "2020",
+   "first_author": "Sherrington C",
+   "doi": "10.1186/s12966-020-01041-3"
+  },
+  "33239350": {
+   "year": "2020",
+   "first_author": "Bull FC",
+   "doi": "10.1136/bjsports-2020-102955"
+  },
+  "34525088": {
+   "year": "2021",
+   "first_author": "Millard LAC",
+   "doi": "10.1371/journal.pmed.1003757"
+  },
+  "34623696": {
+   "year": "2022",
+   "first_author": "Murphy C",
+   "doi": "10.1111/sms.14075"
+  },
+  "35029593": {
+   "year": "2022",
+   "first_author": "Kanaley JA",
+   "doi": "10.1249/MSS.0000000000002800"
+  },
+  "35038063": {
+   "year": "2022",
+   "first_author": "Hickmott LM",
+   "doi": "10.1186/s40798-021-00404-9"
+  },
+  "35147898": {
+   "year": "2022",
+   "first_author": "Buffey AJ",
+   "doi": "10.1007/s40279-022-01649-4"
+  },
+  "35191588": {
+   "year": "2022",
+   "first_author": "Lopez P",
+   "doi": "10.1111/obr.13428"
+  },
+  "35228201": {
+   "year": "2022",
+   "first_author": "Momma H",
+   "doi": "10.1136/bjsports-2021-105061"
+  },
+  "35788615": {
+   "year": "2022",
+   "first_author": "Dos Santos M",
+   "doi": "10.1001/jamainternmed.2022.2488"
+  },
+  "36307098": {
+   "year": "2023",
+   "first_author": "Correia IR",
+   "doi": "10.1123/japa.2022-0124"
+  },
+  "37491419": {
+   "year": "2023",
+   "first_author": "Edwards JJ",
+   "doi": "10.1136/bjsports-2022-106503"
+  },
+  "38831478": {
+   "year": "2024",
+   "first_author": "Shailendra P",
+   "doi": "10.1093/ije/dyae074"
+  },
+  "39324186": {
+   "year": "2024",
+   "first_author": "Kany S",
+   "doi": "10.1161/CIRCULATIONAHA.124.068669"
+  },
+  "39630056": {
+   "year": "2024",
+   "first_author": "Yin M",
+   "doi": "10.1111/sms.14769"
+  },
+  "40803369": {
+   "year": "2025",
+   "first_author": "Rowlands AV",
+   "doi": "10.1016/j.jshs.2025.101078"
+  },
+  "41067094": {
+   "year": "2025",
+   "first_author": "Kim YS",
+   "doi": "10.1016/j.puhe.2025.105977"
+  },
+  "41343037": {
+   "year": "2026",
+   "first_author": "Pelland JC",
+   "doi": "10.1007/s40279-025-02344-w"
+  },
+  "41843416": {
+   "year": "2026",
+   "first_author": "Currier BS",
+   "doi": "10.1249/MSS.0000000000003897"
+  },
+  "41920954": {
+   "year": "2026",
+   "first_author": "Vanherle J",
+   "doi": "10.1093/eurjpc/zwag079"
+  },
+  "42070794": {
+   "year": "2026",
+   "first_author": "Gale JT",
+   "doi": "10.1111/obr.70152"
+  },
+  "42586449": {
+   "year": "2026",
+   "first_author": "Gong J",
+   "doi": "10.1016/j.ctim.2026.103416"
+  },
+  "42701500": {
+   "year": "2026",
+   "first_author": "Li Y",
+   "doi": "10.1016/j.jesf.2026.200511"
+  },
+  "7713807": {
+   "year": "1995",
+   "first_author": "King DS",
+   "doi": "10.1152/jappl.1995.78.1.17"
+  }
+ },
+ "dois": {
+  "10.1002/ejsp.674": true
+ },
+ "bad_pmids": [],
+ "bad_dois": []
+}

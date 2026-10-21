@@ -25,7 +25,8 @@ import kotlinx.serialization.json.longOrNull
  */
 
 const val BACKUP_FORMAT = "sisyphusfit-backup"
-const val BACKUP_VERSION = 1
+/** 2 since schema 2 (four more tables, three more columns); a version-1 file still restores. */
+const val BACKUP_VERSION = 2
 
 class BackupException(message: String) : Exception(message)
 

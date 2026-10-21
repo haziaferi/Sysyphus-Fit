@@ -1,0 +1,151 @@
+{
+    "format": "sisyphusfit-backup",
+    "version": 1,
+    "schema": 1,
+    "tables": {
+        "exercise": [
+            {
+                "id": "E1",
+                "name": "Bench press",
+                "kind": "DYNAMIC",
+                "sided": 0,
+                "archived": 0
+            },
+            {
+                "id": "E2",
+                "name": "Side plank",
+                "kind": "ISOMETRIC",
+                "sided": 1,
+                "archived": 0
+            }
+        ],
+        "routine": [
+            {
+                "id": "R1",
+                "name": "Monday",
+                "weekdays": 1,
+                "position": 0
+            }
+        ],
+        "routine_item": [
+            {
+                "id": "RI1",
+                "routine_id": "R1",
+                "exercise_id": "E1",
+                "position": 0,
+                "target_sets": 3,
+                "target_reps": 5,
+                "target_weight_g": 60000,
+                "target_seconds": null,
+                "target_distance_m": null,
+                "rest_seconds": 90
+            }
+        ],
+        "session": [
+            {
+                "id": "S1",
+                "routine_id": "R1",
+                "activity": null,
+                "started_at": 1000,
+                "ended_at": 2000,
+                "zone": "Europe/Rome",
+                "day": "2026-10-19",
+                "state": "FINISHED",
+                "intensity": 3,
+                "note": "felt good"
+            },
+            {
+                "id": "S2",
+                "routine_id": null,
+                "activity": "Walk",
+                "started_at": null,
+                "ended_at": null,
+                "zone": "Europe/Rome",
+                "day": "2026-10-19",
+                "state": "FINISHED",
+                "intensity": null,
+                "note": null
+            }
+        ],
+        "logged_set": [
+            {
+                "id": "L1",
+                "session_id": "S1",
+                "exercise_id": "E1",
+                "position": 0,
+                "side": null,
+                "reps": 5,
+                "weight_g": 60000,
+                "seconds": null,
+                "distance_m": null,
+                "rpe": 80,
+                "rir": 2,
+                "done_at": 1100
+            },
+            {
+                "id": "L2",
+                "session_id": "S1",
+                "exercise_id": "E2",
+                "position": 1,
+                "side": "L",
+                "reps": null,
+                "weight_g": null,
+                "seconds": 30,
+                "distance_m": null,
+                "rpe": null,
+                "rir": null,
+                "done_at": 1200
+            }
+        ],
+        "progression_rule": [
+            {
+                "id": "P1",
+                "routine_item_id": "RI1",
+                "add_weight_g": 2500,
+                "add_reps": 0,
+                "when": "ALL_SETS_HIT"
+            }
+        ],
+        "interval_preset": [
+            {
+                "id": "I1",
+                "name": "Tabata",
+                "prepare_s": 10,
+                "work_s": 20,
+                "rest_s": 10,
+                "rounds": 8,
+                "sets": 1,
+                "set_rest_s": 0,
+                "last_used_at": null
+            }
+        ],
+        "track_point": [
+            {
+                "id": "T1",
+                "session_id": "S2",
+                "t": 1500,
+                "lat_e7": 419028000,
+                "lon_e7": 124964000,
+                "alt_dm": null,
+                "accuracy_m": 5,
+                "segment": 0
+            }
+        ],
+        "goal": [
+            {
+                "id": "G1",
+                "exercise_id": null,
+                "period": "WEEK",
+                "target": 4,
+                "unit": "SESSIONS"
+            }
+        ],
+        "setting": [
+            {
+                "id": "K1",
+                "key": "backup.folder",
+                "value": "content://x"
+            }
+        ]
+    }
+}

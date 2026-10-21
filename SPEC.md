@@ -65,7 +65,7 @@ Sections 7-11 are new in 0.2 and are a DRAFT: marked **[decided]** where the own
 
 | Module | Kind | Holds | May depend on |
 |---|---|---|---|
-| `:core` | Kotlin Multiplatform (android, desktop JVM) | pure rules: ids, which day a session counts on, a day's total, progression | kotlinx-datetime only |
+| `:core` | Kotlin Multiplatform (android, desktop JVM) | pure rules: ids, which day a session counts on, a day's total, progression, the week per module | kotlinx-datetime only |
 | `:data` | Kotlin Multiplatform with Room KMP | the database, DAOs, the backup format, the safe open | `:core`, Room, androidx.sqlite |
 | `:app` | Android application | the Android entry points (empty until screens are decided) | `:data` |
 
@@ -132,27 +132,32 @@ shared base is caught before four modules depend on it):
 Standing rule from the harvest: before building a row, read it against the code; its effort and
 frequency were estimated before any code existed.
 
-## 4. Data model, schema version 1
+## 4. Data model, schema version 2
 
-Designed for the whole scope now, so that no package needs a migration of logged data. Units are
-integers: time in epoch milliseconds (UTC) plus the zone it was recorded in, durations in seconds,
-weight in grams, distance in metres, coordinates in 1e-7 degrees.
+Schema 1 was designed for the whole scope, so that no package needs a migration of logged data;
+schema 2 (stage 1a, 0.23, 0.33) only adds to it. Units are integers: time in epoch milliseconds
+(UTC) plus the zone it was recorded in, durations in seconds, weight in grams, girths in
+millimetres, distance in metres, coordinates in 1e-7 degrees.
 
 Ids are text ULIDs (`:core` `Ids`), so a restored or imported row never collides with a local one
 and a later Windows copy can merge. Every table has `id TEXT PRIMARY KEY`.
 
 | Table | Columns (beyond id) | Serves |
 |---|---|---|
-| `exercise` | name, kind (DYNAMIC, ISOMETRIC, TIMED, DISTANCE), sided (0/1, counted per side), archived | floor; CM2 |
+| `exercise` | name, kind (DYNAMIC, ISOMETRIC, TIMED, DISTANCE), sided (0/1, counted per side), archived, show_partial_reps (0/1, default 0; schema 2) | floor; CM2; 0.33 |
 | `routine` | name, weekdays (bit 0 = Monday … bit 6 = Sunday; 0 = unscheduled), position | floor; CM3, KA6 |
 | `routine_item` | routine_id, exercise_id, position, target_sets, target_reps, target_weight_g, target_seconds, target_distance_m, rest_seconds | floor; LO4-style rest, GM6 |
 | `session` | routine_id?, activity (free type, e.g. "Walk"), started_at?, ended_at?, zone, day (local date it counts on), state (OPEN, FINISHED, STOPPED_EARLY), intensity? (1-5), note? | floor; FT2, GR4, FA13, KA2, GL1-style resume (OPEN = in progress) |
-| `logged_set` | session_id, exercise_id, position, side? (L, R), reps?, weight_g?, seconds?, distance_m?, rpe? (×10), rir?, done_at | floor; LL2, GM2, BC1 |
+| `logged_set` | session_id, exercise_id, position, side? (L, R), reps?, weight_g?, seconds?, distance_m?, rpe? (×10), rir?, done_at, power (0/1, "move fast", default 0; schema 2), partial_reps (default 0; schema 2) | floor; LL2, GM2, BC1; 0.19, 0.33 |
 | `progression_rule` | routine_item_id, add_weight_g, add_reps, when (ALL_SETS_HIT) | LL5, GM6 |
 | `interval_preset` | name, prepare_s, work_s, rest_s, rounds, sets, set_rest_s, last_used_at? | TX1, FA1, SH1 |
 | `track_point` | session_id, t, lat_e7, lon_e7, alt_dm?, accuracy_m?, segment | OT1, OT5 |
 | `goal` | exercise_id? (null = all training), period (DAY, WEEK, MONTH), target, unit (SESSIONS, MINUTES, METRES, SETS) | FA9 |
-| `setting` | key, value | OS8 (backup folder, schedule) and later preferences |
+| `setting` | key, value | OS8 (backup folder, schedule) and later preferences; module on/off, evidence-note level |
+| `exercise_module` *(schema 2)* | exercise_id, module (DAILY_MOVEMENT, STRENGTH, STAMINA, MOBILITY_BALANCE, BODY_MEASURES); unique per pair | 0.23 |
+| `label` *(schema 2)* | name, position, archived | 0.23 |
+| `session_label` *(schema 2)* | session_id, label_id; unique per pair | 0.23 |
+| `body_measure` *(schema 2)* | kind (e.g. WEIGHT, WAIST), value, unit (G, MM), taken_at, zone, day, note? | OS1, 0.10 |
 
 Rules the schema carries:
 - **A session without times is an amount** (FA10's shape): `started_at` and `ended_at` null, `day`
@@ -162,6 +167,20 @@ Rules the schema carries:
   and stored, so a later change of the phone's zone does not move history.
 - **No streak is stored or derived** (FA15). Nothing in the schema counts missed days.
 - `logged_set` rows exist only for sets that were done; an early stop keeps no skipped rows (KA2).
+- **Modules are tags on exercises** (0.23): a session's modules are its exercises' tags, never
+  stored on the session. **"This week" counts a mixed session by its parts** (0.24, `:core`
+  `weekByModule`): each set counts, whole, under every tag of its exercise; a session counts once
+  under each module it touched; totals stay per module and are never combined; an untagged
+  exercise counts nowhere.
+- **A partial rep is its own count** (0.33): `partial_reps` beside `reps`, never converted (7½ is
+  reps 7, partial_reps 1). The exercise's switch only decides whether the count is offered.
+- **A body measure is the person's own number** (0.10): an integer in its stated unit; `day` follows
+  the session rule. No BMI, BMR, verdict or forecast is stored or derived.
+- **Migrations add, never rewrite**: a new column goes last with a SQL default (a fresh table then
+  matches a migrated one column for column); no destructive fallback, so a failed migration stops
+  the open with the file untouched. Proven by a test that builds a schema-1 file from Room's
+  exported `1.json`, fills every table, migrates through the app's own open, and compares every
+  cell (`quote()`) before and after, plus the migrated shape against a fresh one.
 
 ## 5. Safety and gates
 
@@ -170,8 +189,10 @@ Rules the schema carries:
   aside as `<name>.unopenable-<stamp>` and opens a fresh one. Proven by a Robolectric test that
   writes garbage and finds the bytes set aside, with the stock driver as the failing control.
 - **Backup is the first feature** (KA9): one JSON file, every table, `format`
-  `sisyphusfit-backup`, `version` 1. Restore replaces everything in one transaction. The gate is a
-  round trip: export, restore into an empty database, export again, byte-identical.
+  `sisyphusfit-backup`, `version` 2 since schema 2. Restore replaces everything in one transaction. The gate is a
+  round trip: export, restore into an empty database, export again, byte-identical. A version-1
+  backup still restores: its rows unchanged, the new columns at their defaults, the new tables
+  empty (pinned by a version-1 file the schema-1 app exported).
 - **Gates:** `./gradlew --offline check` runs every test and Android lint with warnings as errors
   (the four version-currency ids informational).
 - **Before a push:** `python ~/.claude/tools/publish_check.py .` (also installed as the pre-push hook).
@@ -188,6 +209,15 @@ Next: stage 1 (§3), after the owner's screen decisions for it.
 2026-10-20: screens paused by the owner ("the premises for these screens are flawed": the first
 mockups assumed a set-by-set gym session as the app's centre). Evidence gathered first (§7), the
 structure re-cut into training modules (§8) and screens by purpose (§9). No code changed.
+
+2026-10-21: schema 2 built (branch `schema-2`, not merged): four tables and three columns added
+(§4), migration 1→2 with `2.json` exported, backup version 2, and the `:core` rule "This week
+counts a mixed session by its parts" (`weekByModule`). `./gradlew --offline check` passes: 53
+tests (core 18 on desktop and 18 on Android host, data 14 on desktop and 3 under Robolectric) and
+lint at zero warnings. Six planted mutants each turned the intended test red: the week counting
+only an exercise's first tag; a session counted once per set; a migration that rewrites a schema-1
+cell; a migration missing an index; restore refusing a version-1 backup; a schema-2 table missing
+from the backup list. No screen yet.
 
 ## 7. Foundation: evidence and commentary
 

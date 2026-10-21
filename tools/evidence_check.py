@@ -22,7 +22,8 @@ import unicodedata
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 PACK = ROOT / "evidence" / "claims.json"
 
-LANGS = ("it", "en")
+LANGS = ("en", "it")  # languages a text may carry
+REQUIRED_LANGS = ("en",)  # first draft is English only; add "it" here when the translations land
 MODULES = {"shared", "strength", "stamina", "daily_movement", "mobility_balance", "body_measures"}
 LEVELS = {"high", "moderate", "limited", "consensus"}
 INDEPENDENCE = {"IND", "IND-decl", "UNK", "COMM"}
@@ -108,19 +109,17 @@ def check_bilingual(obj, where, out, extra=()):
             out.append(f"{where}: unknown field '{k}'")
     for lang in LANGS:
         v = obj.get(lang)
-        if not isinstance(v, str) or not v.strip():
+        if (lang in REQUIRED_LANGS or lang in obj) and (not isinstance(v, str) or not v.strip()):
             out.append(f"{where}: missing {lang} text")
 
 
 def check_text(obj, where, out):
-    texts = {lang: obj.get(lang) for lang in LANGS}
-    if not all(isinstance(t, str) for t in texts.values()):
-        return
+    texts = {lang: obj[lang] for lang in LANGS if isinstance(obj.get(lang), str)}
     for lang, t in texts.items():
         for word, rx in BANNED_RE[lang]:
             if rx.search(t):
                 out.append(f"{where}.{lang}: banned word '{word}'")
-    if numbers(texts["it"], "it") != numbers(texts["en"], "en"):
+    if len(texts) == 2 and numbers(texts["it"], "it") != numbers(texts["en"], "en"):
         out.append(f"{where}: numbers differ between it {numbers(texts['it'], 'it')} "
                    f"and en {numbers(texts['en'], 'en')}")
 
@@ -231,8 +230,11 @@ def check_pack(pack, ids):
         if obs_design and c.get("observational") is not True:
             out.append(f"{where}: observational design {codes} without observational: true")
         if c.get("observational") is True:
+            parts = [c[f] for f in ("claim", "body") if isinstance(c.get(f), dict)]
             for lang in LANGS:
-                said = " ".join(c.get(f, {}).get(lang, "") for f in ("claim", "body") if isinstance(c.get(f), dict))
+                if lang not in REQUIRED_LANGS and not any(lang in p for p in parts):
+                    continue
+                said = " ".join(p.get(lang, "") for p in parts if isinstance(p.get(lang, ""), str))
                 if not ASSOC[lang].search(said):
                     out.append(f"{where}: observational, but claim/body.{lang} has no association wording")
         srcs = c.get("sources")
@@ -261,33 +263,30 @@ FIXTURE_IDS = Ids([{
 
 CLEAN = {
     "format": 1, "pack_version": 1,
-    "labels": {"observational": {"it": "Associazione, non causa", "en": "Association, not cause"},
-               "certainty_level": {k: {"it": k, "en": k} for k in sorted(LEVELS)}},
+    "labels": {"observational": {"en": "Association, not cause"},
+               "certainty_level": {k: {"en": k} for k in sorted(LEVELS)}},
     "claims": [
         {"id": "strength.progression.double", "version": 1, "module": "strength", "features": ["LL5"],
          "report_rules": [{"report": 1, "rule": "6"}],
-         # 'shoulder', 'mustard', 'fatigue', 'ditta': banned stems inside longer words must not trip the gate
-         "claim": {"it": "Una linea guida (2009) descrive un aumento del 2–10% del carico, anche per spalle e ditta.",
-                   "en": "A guideline (2009) describes a 2–10% load increase, also for shoulder work and fatigue."},
-         "population": {"it": "Adulti sani", "en": "Healthy adults"},
-         "design": {"codes": ["Guide"], "it": "Linea guida", "en": "Guideline"},
-         "certainty": {"level": "consensus", "it": "Parere di esperti", "en": "Expert opinion"},
+         # 'shoulder', 'mustard', 'fatigue': banned words inside longer words must not trip the gate
+         "claim": {"en": "A guideline (2009) describes a 2–10% load increase, also for shoulder work and fatigue."},
+         "population": {"en": "Healthy adults"},
+         "design": {"codes": ["Guide"], "en": "Guideline"},
+         "certainty": {"level": "consensus", "en": "Expert opinion"},
          "grade": "{Guide (consensus) · P1 · C2}", "status": "Inference", "observational": False,
          "sources": [{"author": "American College of Sports Medicine", "year": 2009, "pmid": "19204579",
                       "doi": "10.1249/mss.0b013e3181915670"}]},
         {"id": "shared.week.totals", "version": 1, "module": "shared", "features": ["X-WEEK"],
          "report_rules": [{"report": 2, "rule": "1-4"}],
-         "claim": {"it": "In 15.827 adulti, l'attività si è associata a 4,7 anni in più.",
-                   "en": "In 15,827 adults, activity was associated with 4.7 more years."},
-         "body": {"it": "Senza mustard.", "en": "No mustard."},
-         "population": {"it": "Adulti", "en": "Adults"},
-         "design": {"codes": ["MA of Obs"], "it": "Meta-analisi di studi osservazionali",
-                    "en": "Meta-analysis of observational studies"},
-         "certainty": {"level": "high", "it": "Buona", "en": "Good"},
+         "claim": {"en": "In 15,827 adults, activity was associated with 4.7 more years."},
+         "body": {"en": "No mustard."},
+         "population": {"en": "Adults"},
+         "design": {"codes": ["MA of Obs"], "en": "Meta-analysis of observational studies"},
+         "certainty": {"level": "high", "en": "Good"},
          "grade": "{MA of Obs · P3 · C3 · M3; Obs}", "status": "Strong", "observational": True,
          "sources": [{"author": "dos Santos", "year": 2022, "pmid": "35788615"},
                      {"author": "Milanović", "year": 2015, "pmid": "26243014", "independence": "IND",
-                      "coi": {"it": "Nessuno", "en": "None"}},
+                      "coi": {"en": "None"}},
                      {"author": "Lally", "year": 2010, "doi": "10.1002/ejsp.674"}]},
     ],
 }
@@ -317,31 +316,33 @@ DEFECTS = [  # (defect class, mutation, a substring the finding must contain)
     ("DOI differs from PubMed's", _set(C0 + ["sources", 0, "doi"], "10.1002/ejsp.674"), "!= PubMed's"),
     ("no sources", _set(C0 + ["sources"], []), "no sources"),
     ("missing en claim", _set(C0 + ["claim", "en"], ...), "missing en text"),
-    ("empty it claim", _set(C0 + ["claim", "it"], "  "), "missing it text"),
+    ("empty en claim", _set(C0 + ["claim", "en"], "  "), "missing en text"),
+    ("empty optional it claim", _set(C0 + ["claim", "it"], "  "), "missing it text"),
+    ("unknown language", _set(C0 + ["claim", "fr"], "Une ligne directrice."), "unknown field 'fr'"),
     ("missing en population", _set(C0 + ["population", "en"], ...), "missing en text"),
     ("missing population", _set(C0 + ["population"], ...), "missing field 'population'"),
     ("missing certainty", _set(C0 + ["certainty"], ...), "missing field 'certainty'"),
-    ("certainty without it text", _set(C0 + ["certainty", "it"], ...), "missing it text"),
+    ("certainty without en text", _set(C0 + ["certainty", "en"], ...), "missing en text"),
     ("invalid certainty level", _set(C0 + ["certainty", "level"], "sure"), "level 'sure'"),
     ("banned it instruction", _set(C0 + ["claim", "it"], "Dovresti aumentare il carico del 2–10% (2009)."),
      "banned word 'dovresti'"),
     ("banned en instruction", _set(C0 + ["claim", "en"], "You should raise the load by 2–10% (2009)."),
      "banned word 'should'"),
-    ("banned en phrase", _set(C0 + ["body"], {"it": "Testo.", "en": "We recommend it."}), "'we recommend'"),
+    ("banned en phrase", _set(C0 + ["body"], {"en": "We recommend it."}), "'we recommend'"),
     ("about the person (it)", _set(C1 + ["body", "it"], "Il tuo glucosio."), "banned word 'tuo'"),
     ("about the person (en)", _set(C1 + ["body", "en"], "Your glucose."), "banned word 'your'"),
     ("weight-judging word", _set(C1 + ["population", "en"], "Obese adults"), "banned word 'obese'"),
     ("banned word in a coi note", _set(C1 + ["sources", 1, "coi", "en"], "You must know"), "banned word"),
-    ("numbers differ it/en", _set(C0 + ["claim", "en"], "A guideline (2009) describes a 2–5% load increase."),
+    ("numbers differ it/en", _set(C0 + ["claim", "it"], "Una linea guida (2009) descrive un aumento del 2–5%."),
      "numbers differ"),
     ("claim without id", _set(C0 + ["id"], ...), "missing or malformed id"),
     ("malformed id", _set(C0 + ["id"], "Strength progression"), "malformed id"),
     ("duplicate id", _set(C1 + ["id"], "strength.progression.double"), "duplicate id"),
-    ("text outside a claim field", _set(C0 + ["note"], {"it": "x", "en": "x"}), "unknown field 'note'"),
-    ("text outside the claims", _set(["notes"], [{"it": "x", "en": "x"}]), "unknown field 'notes'"),
+    ("text outside a claim field", _set(C0 + ["note"], {"en": "x"}), "unknown field 'note'"),
+    ("text outside the claims", _set(["notes"], [{"en": "x"}]), "unknown field 'notes'"),
     ("observational design without flag", _set(C1 + ["observational"], False), "without observational: true"),
     ("observational without association wording",
-     _set(C1 + ["claim"], {"it": "In 15.827 adulti, 4,7 anni in più.", "en": "In 15,827 adults, 4.7 more years."}),
+     _set(C1 + ["claim"], {"en": "In 15,827 adults, 4.7 more years."}),
      "no association wording"),
     ("missing observational label", _set(["labels", "observational"], ...), "missing 'observational'"),
     ("wrong type", _set(C0 + ["version"], "1"), "'version' must be int"),

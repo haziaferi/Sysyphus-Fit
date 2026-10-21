@@ -14,6 +14,15 @@ dependencyResolutionManagement {
     }
 }
 
+// CodeQL reads Kotlin by watching the compiler run; a build-cache hit compiles nothing and leaves it no
+// code to scan. The CodeQL action exports CODEQL_ACTION_INIT_HAS_RUN to its later steps, so only its build
+// skips the cache.
+buildCache {
+    local {
+        isEnabled = System.getenv("CODEQL_ACTION_INIT_HAS_RUN") == null
+    }
+}
+
 rootProject.name = "sisyphusfit"
 
 // SPEC §1: pure rules, the database, the Android app. A Windows app would join as :windows.

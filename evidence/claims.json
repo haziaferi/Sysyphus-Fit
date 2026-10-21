@@ -251,7 +251,7 @@
         "level": "limited",
         "en": "Limited for the habit finding (one small study); good for weekly totals"
       },
-      "grade": "{Obs · P1 · C2; MA of Obs · P3 · C3}",
+      "grade": "{Obs · P1 · C2; MA of Obs · P3 · C3; RCT · P1}",
       "status": "Strong that daily pressure has no physiological basis; Inference for the design choice itself",
       "observational": true,
       "sources": [
@@ -437,7 +437,7 @@
         "level": "limited",
         "en": "Limited: small trials lasting a few days"
       },
-      "grade": "{XO · P1-P2 · C2}",
+      "grade": "XO · P1-P2 · C2",
       "status": "Holds for glucose. Triglycerides need longer or harder bouts (Vanherle 2026)",
       "observational": false,
       "sources": [

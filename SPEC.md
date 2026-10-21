@@ -171,7 +171,10 @@ Rules the schema carries:
   stored on the session. **"This week" counts a mixed session by its parts** (0.24, `:core`
   `weekByModule`): each set counts, whole, under every tag of its exercise; a session counts once
   under each module it touched; totals stay per module and are never combined; an untagged
-  exercise counts nowhere.
+  exercise counts nowhere. **[open, to refine]** It counts logged sets and their time only: a
+  session without sets (a walk, a quick amount) counts nowhere yet, and steps and distance (km)
+  are units of measurement but not in the way sets are (owner, 2026-10-21), so how they enter
+  "This week" is still to be decided.
 - **A partial rep is its own count** (0.33): `partial_reps` beside `reps`, never converted (7½ is
   reps 7, partial_reps 1). The exercise's switch only decides whether the count is offered.
 - **A body measure is the person's own number** (0.10): an integer in its stated unit; `day` follows
@@ -180,7 +183,11 @@ Rules the schema carries:
   matches a migrated one column for column); no destructive fallback, so a failed migration stops
   the open with the file untouched. Proven by a test that builds a schema-1 file from Room's
   exported `1.json`, fills every table, migrates through the app's own open, and compares every
-  cell (`quote()`) before and after, plus the migrated shape against a fresh one.
+  cell (`quote()`) before and after, plus the migrated shape against a fresh one; on desktop and,
+  under Robolectric, on the phone's path (`KeepFileOnCorruptionDriver`). **A failed migration
+  leaves the file as it was** (§5): a migration statement that throws, a migration Room's check
+  refuses, and a file a newer app wrote each stop the open with every cell, table shape and the
+  version unchanged, nothing set aside and nothing wiped.
 
 ## 5. Safety and gates
 
@@ -212,12 +219,14 @@ structure re-cut into training modules (§8) and screens by purpose (§9). No co
 
 2026-10-21: schema 2 built (branch `schema-2`, not merged): four tables and three columns added
 (§4), migration 1→2 with `2.json` exported, backup version 2, and the `:core` rule "This week
-counts a mixed session by its parts" (`weekByModule`). `./gradlew --offline check` passes: 53
-tests (core 18 on desktop and 18 on Android host, data 14 on desktop and 3 under Robolectric) and
-lint at zero warnings. Six planted mutants each turned the intended test red: the week counting
+counts a mixed session by its parts" (`weekByModule`). `./gradlew --offline check` passes: 56
+tests (core 18 on desktop and 18 on Android host, data 15 on desktop and 5 under Robolectric) and
+lint at zero warnings. Ten planted mutants each turned the intended test red: the week counting
 only an exercise's first tag; a session counted once per set; a migration that rewrites a schema-1
 cell; a migration missing an index; restore refusing a version-1 backup; a schema-2 table missing
-from the backup list. No screen yet.
+from the backup list; the open adding no migrations; a destructive fallback beside or instead of
+the migrations (caught by the Robolectric test only: on desktop the open still failed and kept the
+file); every failed open treated as corruption and set aside. No screen yet.
 
 ## 7. Foundation: evidence and commentary
 
@@ -343,7 +352,9 @@ and the round-1/2 scoring (`research/screens-2026-10-20/`):
 
 **Deferred by the owner [open]:** the shape of Today (by purpose with a Start sheet, or a card per
 module); where suggestions stop (record and comment only / one editable "next time" proposal after
-a session / a per-set proposal). The evidence note's form is decided (0.30).
+a session / a per-set proposal). The evidence note's form is decided (0.30). How sessions without
+sets, steps and distance count in "This week" (§4; owner 2026-10-21: units of measurement, but not
+in the way sets are; to refine).
 
 **Workshop agenda [proposed order]:**
 1. Commentary rules (§7) and the evidence pack.

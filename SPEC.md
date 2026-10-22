@@ -40,7 +40,7 @@ Sections 7-11 are new in 0.2 and are a DRAFT: marked **[decided]** where the own
 | 0.25 | Until Today exists, the app opens on "Start or log". | 2026-10-20 (workshop) |
 | 0.26 | Daily movement gains steps (entered, and counted by the phone's step sensor), movement reminders the person schedules, and sitting-break prompts in hours the person chooses. | 2026-10-20 (workshop) |
 | 0.27 | Backup (one file and scheduled to a folder) and resuming a session after the app is killed stay in the first stage: nothing logged may be lost. | 2026-10-20 (workshop) |
-| 0.28 | Set input is the hybrid: − and + change a value by 1 at a time; tapping the number opens a keypad; weight accepts up to two decimals (e.g. 61,25 kg; stored in grams, no schema change). | 2026-10-20 (stage 1a mockups) |
+| 0.28 | Set input is the hybrid: − and + change a value by 1 at a time; tapping the number opens a keypad (replaced by the phone's own keyboard, 0.38); weight accepts up to two decimals (e.g. 61,25 kg; stored in grams, no schema change). | 2026-10-20 (stage 1a mockups) |
 | 0.29 | Navigation: a bottom tab bar, Inizia · Questa settimana · Storico · Altro. | 2026-10-20 (stage 1a mockups) |
 | 0.30 | Evidence notes open brief (claim and certainty); who was studied, study type and sources sit under "Dettagli". | 2026-10-20 (stage 1a mockups) |
 | 0.31 | Screens that show things (This week, Settings, Altro) have no main action button; screens for doing things keep one, and its form is chosen by scoring a few variations. | 2026-10-20 (stage 1a mockups) |
@@ -50,6 +50,8 @@ Sections 7-11 are new in 0.2 and are a DRAFT: marked **[decided]** where the own
 | 0.35 | Main action on doing screens: a full-width bar at the bottom (scored best on the owner's five button axes: same place and easy reach, mis-tap risk, content covered, same place everywhere, label visible; 0.973 vs floating 0.942 vs bar with a secondary 0.821). While something is running (e.g. a timer), a floating button appears for it (e.g. stop); it never sits beside the main bar and stopping keeps the held press (FA4). | 2026-10-21 (polish round) |
 | 0.36 | Typeface: IBM Plex Sans (variable, `IBMPlexSans[wdth,wght].ttf`, SIL OFL 1.1) for all text and numbers, bundled in the app (offline). Set numbers use its tabular figures (checked: equal widths). Seven faces scored within 0.002 of each other, so the owner chose by eye. "Plex" is a Reserved Font Name: a subset or modified copy must be renamed. | 2026-10-21 (polish round) |
 | 0.37 | Icons: our own set of 28, drawn in VectorCraft on a 24 grid with a 2 dp stroke, round caps and no fill. Module icons: one shoe print (Daily movement), a pocket tape case with its tail and tab (Body measures), a figure on one leg with the other reaching back (Mobility & balance, clear of Android's Accessibility figure), a heart with a pulse line (Stamina), a dumbbell (Strength). Backup is a floppy disk; restore is the floppy inside an arrow turning back. The session clock is a wristwatch and the Start tab a play sign in a rounded square, so neither can be taken for the circled "i" at 24 px. Holds and partial reps are shown as text, not markers. Chosen by the owner after scoring variants on legibility at 1x and distinctness (research/screens-2026-10-20/polish/icons/review-2026-10-21). | 2026-10-21 (icon review) |
+| 0.38 | Number entry: tapping a number opens the phone's own numeric keyboard; the app draws no keypad of its own. The −/+ steps and the two-decimal weight of 0.28 stay. | 2026-10-22 (final stage 1a mockups) |
+| 0.39 | Language: the app's text is written in English first, and the mockups are in English. Italian comes later as a translation pass [deferred]; numbers then follow the phone's locale (57.5 / 57,5). The evidence pack's Italian pass is deferred with it. | 2026-10-22 (final stage 1a mockups) |
 
 **Not decided, and not to be decided by the code:** screens, layout, wording, navigation, palette
 (owner rule: discuss frontend before building). The skeleton therefore has no screen.
@@ -355,7 +357,7 @@ and the round-1/2 scoring (`research/screens-2026-10-20/`):
 module); where suggestions stop (record and comment only / one editable "next time" proposal after
 a session / a per-set proposal). The evidence note's form is decided (0.30). How sessions without
 sets, steps and distance count in "This week" (§4; owner 2026-10-21: units of measurement, but not
-in the way sets are; to refine).
+in the way sets are; to refine). The Italian translation of the app and of the evidence pack (0.39).
 
 **Workshop agenda [proposed order]:**
 1. Commentary rules (§7) and the evidence pack.

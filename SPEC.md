@@ -48,10 +48,11 @@ Sections 7-11 are new in 0.2 and are a DRAFT: marked **[decided]** where the own
 | 0.33 | Partial reps are a separate count from full reps, never converted (7½ = 7 + 1 partial; five half-reps = 0 + 5 partials). The partial count appears only on exercises where the person switches it on. Schema 2 adds `partial_reps` to a logged set and a per-exercise switch. | 2026-10-20 (stage 1a mockups) |
 | 0.34 | Density: balanced by default; compact is a user option, as in the polish round's compact preview. | 2026-10-21 (polish round) |
 | 0.35 | Main action on doing screens: a full-width bar at the bottom (scored best on the owner's five button axes: same place and easy reach, mis-tap risk, content covered, same place everywhere, label visible; 0.973 vs floating 0.942 vs bar with a secondary 0.821). While something is running (e.g. a timer), a floating button appears for it (e.g. stop); it never sits beside the main bar and stopping keeps the held press (FA4). | 2026-10-21 (polish round) |
-| 0.36 | Typeface: IBM Plex Sans (variable, `IBMPlexSans[wdth,wght].ttf`, SIL OFL 1.1) for all text and numbers, bundled in the app (offline). Set numbers use its tabular figures (checked: equal widths). Seven faces scored within 0.002 of each other, so the owner chose by eye. "Plex" is a Reserved Font Name: a subset or modified copy must be renamed. | 2026-10-21 (polish round) |
+| 0.36 | Typeface: IBM Plex Sans (variable, `IBMPlexSans[wdth,wght].ttf`, SIL OFL 1.1) for all text and numbers, bundled in the app (offline). Set numbers use its tabular figures (checked: equal widths). Seven faces scored within 0.002 of each other, so the owner chose by eye. "Plex" is a Reserved Font Name: a subset or modified copy must be renamed. Replaced by Sisifo (0.40). | 2026-10-21 (polish round) |
 | 0.37 | Icons: our own set of 28, drawn in VectorCraft on a 24 grid with a 2 dp stroke, round caps and no fill. Module icons: one shoe print (Daily movement), a pocket tape case with its tail and tab (Body measures), a figure on one leg with the other reaching back (Mobility & balance, clear of Android's Accessibility figure), a heart with a pulse line (Stamina), a dumbbell (Strength). Backup is a floppy disk; restore is the floppy inside an arrow turning back. The session clock is a wristwatch and the Start tab a play sign in a rounded square, so neither can be taken for the circled "i" at 24 px. Holds and partial reps are shown as text, not markers. Chosen by the owner after scoring variants on legibility at 1x and distinctness (research/screens-2026-10-20/polish/icons/review-2026-10-21). | 2026-10-21 (icon review) |
 | 0.38 | Number entry: tapping a number opens the phone's own numeric keyboard; the app draws no keypad of its own. The −/+ steps and the two-decimal weight of 0.28 stay. | 2026-10-22 (final stage 1a mockups) |
 | 0.39 | Language: the app's text is written in English first, and the mockups are in English. Italian comes later as a translation pass [deferred]; numbers then follow the phone's locale (57.5 / 57,5). The evidence pack's Italian pass is deferred with it. | 2026-10-22 (final stage 1a mockups) |
+| 0.40 | Typeface: Sisifo (github.com/haziaferi/sisifo, SIL OFL 1.1), carved from Ortica Linear for this app, replaces IBM Plex Sans (0.36). Two variable files are bundled (offline): `Sisifo[CARV,wght].ttf` and its 12° oblique `Sisifo-Italic[CARV,wght].ttf`, with weight 300-700 and Carve 0-100. Carve follows text size, stepped: 0 up to 16 dp, 100 above (type tokens, §10). Numbers that change in place use tabular figures (`tnum`); titles set in capitals may use the inscriptional capitals (`ss01`); the italic is for emphasis in text, notes and hints, and display accents. Blind panel against the font search's finalists on ten axes: Sisifo 0.880, next Libertinus Sans 0.739, IBM Plex Sans 0.531. The stepped and ramped carve mappings tied (0.885 / 0.873) and the owner chose stepped. The app takes Sisifo's released files and does not build them. | 2026-10-23 (Sisifo stage 6 sign-off) |
 
 **Not decided, and not to be decided by the code:** screens, layout, wording, navigation, palette
 (owner rule: discuss frontend before building). The skeleton therefore has no screen.
@@ -348,6 +349,21 @@ and the round-1/2 scoring (`research/screens-2026-10-20/`):
    axes: harmony, density, visual and functional hierarchy, reach and legibility, taps per set,
    at-a-glance clarity, consistency (equal weights; a plateau is shown as a plateau).
 7. Greyscale until the palette is discussed.
+8. **[decided 0.40]** Type follows the tokens below: every text element takes one role. Sizes are in dp,
+   balanced / compact (0.34), from the polish round's type scale. Carve is stepped by size: 0 up to 16 dp, 100 above.
+
+| Role | Used for (stage 1a mockups) | Size dp | Line height dp | Weight | Carve | Features |
+|---|---|---|---|---|---|---|
+| label | secondary text, values beside a row | 13 / 12 | 20 / 16 | 400 | 0 | |
+| eyebrow | section heads, dates, column heads, a note's fact names: tracked capitals | 13 / 12 | 16 / 16 | 500 | 0 | |
+| body | running text and rows | 16 / 14 | 24 / 20 | 400 | 0 | |
+| row title | names in rows, weekly amounts, the running timer | 19 / 17 | 24 / 24 | 500 | 100 | `tnum` on numbers |
+| heading | screen titles, large secondary values | 23 / 20 | 28 / 24 | 500 | 100 | |
+| exercise | the exercise's name on its own screen | 28 / 24 | 32 / 28 | 500 | 100 | |
+| set number | the set's weight, reps and partials | 40 / 34 | 44 / 40 | 500 | 100 | `tnum` |
+
+The polish round's largest size (48 / 40 dp) was the app's own keypad readout, removed by 0.38; it is not a token.
+Italic (the oblique file) keeps its role's size, weight and carve. `ss01` applies only to titles set in capitals.
 
 ## 11. Decided, deferred, and the workshop agenda
 

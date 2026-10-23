@@ -376,7 +376,7 @@ Italic (the oblique file) keeps its role's size, weight and carve. `ss01` applie
 module); where suggestions stop (record and comment only / one editable "next time" proposal after
 a session / a per-set proposal). The evidence note's form is decided (0.30). How sessions without
 sets, steps and distance count in "This week" (§4; owner 2026-10-21: units of measurement, but not
-in the way sets are; to refine). The Italian translation of the app and of the evidence pack (0.39).
+in the way sets are; to refine). The Italian translation of the app and of the evidence pack (0.39). The default rest length in Settings (0.42).
 
 **Workshop agenda [proposed order]:**
 1. Commentary rules (§7) and the evidence pack.

@@ -4,7 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.semantics.getOrNull
+import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -75,8 +77,14 @@ class GalleryScreenshotTest {
 
     /** Each piece's visual bounds (dp) at balanced 1.0, for compose_check.py to compare with the mockups. */
     @Test @Config(sdk = [36], qualifiers = "w384dp-h2400dp-xhdpi")
-    fun exportBounds() {
-        rule.setContent { Gallery(startSheet = true) }
+    fun exportBounds() = export(sheet = false, name = "bounds")
+
+    /** The sheet open, for its grab handle (the scrim would grey every other piece). */
+    @Test @Config(sdk = [36], qualifiers = "w384dp-h2400dp-xhdpi")
+    fun exportSheetBounds() = export(sheet = true, name = "bounds-sheet")
+
+    private fun export(sheet: Boolean, name: String) {
+        rule.setContent { Gallery(startSheet = sheet) }
         rule.waitForIdle()
         val d = rule.density.density
         val rows = rule.onRoot(useUnmergedTree = true).fetchSemanticsNode().let { root ->
@@ -85,7 +93,7 @@ class GalleryScreenshotTest {
                     val tag = n.config.getOrNull(SemanticsProperties.TestTag)
                     if (tag != null && (tag.startsWith("piece:") || tag == "header" || tag == "tabbar")) {
                         val b = n.boundsInRoot
-                        add("""{"tag":"$tag","w":${b.width / d},"h":${b.height / d}}""")
+                        add("""{"tag":"$tag","x":${b.left / d},"y":${b.top / d},"w":${b.width / d},"h":${b.height / d}}""")
                     }
                     n.children.forEach(::walk)
                 }
@@ -93,6 +101,10 @@ class GalleryScreenshotTest {
             }
         }
         File("build/compose-check").mkdirs()
-        File("build/compose-check/bounds.json").writeText("[\n" + rows.joinToString(",\n") + "\n]\n")
+        File("build/compose-check/$name.json").writeText("[\n" + rows.joinToString(",\n") + "\n]\n")
+        // The same composition as a picture (not a golden), for compose_check.py's side-by-side crops.
+        File("build/compose-check/$name.png").outputStream().use {
+            rule.onRoot().captureToImage().asAndroidBitmap().compress(android.graphics.Bitmap.CompressFormat.PNG, 100, it)
+        }
     }
 }

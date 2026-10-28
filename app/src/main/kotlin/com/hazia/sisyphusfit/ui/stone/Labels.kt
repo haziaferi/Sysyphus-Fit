@@ -15,8 +15,9 @@ import com.hazia.sisyphusfit.ui.theme.StoneText
 import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 
-// The chip's height and padding in the decided mockups (".chipv": 32px, 0 12 0 8); it grows with its text (0.49).
-private val CHIP_HEIGHT = 32.dp
+// The chip as decided in 0.47 (".cmp .chipv": 28 high, padding 0 10 0 7, gap 6, a 13 dp icon); it grows with its text (0.49).
+private val CHIP_HEIGHT = 28.dp
+private val CHIP_ICON = 13.dp
 
 /** The evidence-note chip (SPEC 0.16, 0.47): the circled "i" and the note's title between two carved lines. */
 @Composable
@@ -28,11 +29,11 @@ fun Chip(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
                 .heightIn(min = CHIP_HEIGHT)
                 .carvedLine(CarvedEdge.Top)
                 .carvedLine(CarvedEdge.Bottom)
-                .padding(start = 8.dp, end = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                .padding(start = 7.dp, end = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            StoneIcon(R.drawable.ic_info, tint = Tokens.Colors.inkSecondary, size = 16.dp)
+            StoneIcon(R.drawable.ic_info, tint = Tokens.Colors.inkSecondary, size = CHIP_ICON)
             StoneText(text, style = Theme.type.chip)
         }
     }

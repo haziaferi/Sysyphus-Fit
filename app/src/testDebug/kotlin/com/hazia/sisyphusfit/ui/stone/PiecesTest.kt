@@ -103,6 +103,14 @@ class PiecesTest {
         assertTrue("unit under the value: unit.top ${unit.top} >= value.bottom ${value.bottom}", unit.top >= value.bottom - 1.dp)
     }
 
+    // Found by compose_check.py: the decided chip is 0.47's (".cmp .chipv": 28 high, a 13 dp icon), not the older 32.
+    @Test
+    fun chipIsTheDecidedChip() {
+        rule.setContent { SisyphusTheme { Chip("Training frequency", onClick = {}) } }
+        val chip = rule.onNodeWithTag("piece:chip", useUnmergedTree = true).getUnclippedBoundsInRoot()
+        assertEquals(28f, chip.h().value, 0.5f)
+    }
+
     // §10 type: the eyebrow role is set in capitals, tracked 0.08 em, in ink.secondary (".eyebrow" in the mockups).
     @Test
     fun eyebrowIsInCapitals() {

@@ -8,6 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -86,7 +88,11 @@ fun Gallery(startDensity: DensityMode = DensityMode.Balanced, startSheet: Boolea
                         PieceSamples()
                         Pill("Open a note", onClick = { sheet = true }, icon = R.drawable.ic_info)
                     }
-                    BottomZone { MainBar("Done · set 2", onClick = {}, icon = R.drawable.ic_check) }
+                    // The tab bar below takes the navigation bar's inset; a doing screen's bottom zone, lowest on its
+                    // screen, takes it itself.
+                    BottomZone(Modifier.consumeWindowInsets(WindowInsets.navigationBars)) {
+                        MainBar("Done · set 2", onClick = {}, icon = R.drawable.ic_check)
+                    }
                     TabBar(GalleryTabs, tab, { tab = it })
                 }
                 BottomSheet(sheet, onDismiss = { sheet = false }) {

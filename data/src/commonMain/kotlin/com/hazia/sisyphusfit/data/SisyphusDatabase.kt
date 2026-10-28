@@ -25,6 +25,7 @@ const val DATABASE_NAME = "sisyphusfit.db"
 abstract class SisyphusDatabase : RoomDatabase() {
     abstract fun floorDao(): FloorDao
     abstract fun settingDao(): SettingDao
+    abstract fun exerciseDao(): ExerciseDao
 }
 
 // The Room compiler generates the actual implementations.

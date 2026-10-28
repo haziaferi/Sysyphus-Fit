@@ -10,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.SemanticsActions
@@ -49,8 +50,9 @@ class ReviewFixesTest {
         var big by mutableStateOf(false)
         rule.setContent {
             val ctx = LocalContext.current
+            val config = LocalConfiguration.current
             val base = LocalDensity.current
-            val d = if (!big) base else Density(ctx.createConfigurationContext(android.content.res.Configuration(ctx.resources.configuration).apply { fontScale = 2f }))
+            val d = if (!big) base else Density(ctx.createConfigurationContext(android.content.res.Configuration(config).apply { fontScale = 2f }))
             CompositionLocalProvider(LocalDensity provides d) { SisyphusTheme { TabBar(GalleryTabs, 0, {}) } }
         }
         val before = rule.onNodeWithText("This week", useUnmergedTree = true).getUnclippedBoundsInRoot()

@@ -26,6 +26,7 @@ abstract class SisyphusDatabase : RoomDatabase() {
     abstract fun floorDao(): FloorDao
     abstract fun settingDao(): SettingDao
     abstract fun exerciseDao(): ExerciseDao
+    abstract fun sessionDao(): SessionDao
 }
 
 // The Room compiler generates the actual implementations.

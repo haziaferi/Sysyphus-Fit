@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group android:name="icon_module_mobility">
+        <path
+            android:pathData="M 12 6 L 12.59 4.59 L 14.00 4.00 L 15.41 4.59 L 16.00 6.00 L 15.41 7.41 L 14.00 8.00 L 12.59 7.41 L 12.00 6.00 Z"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="2" />
+        <path
+            android:pathData="M 7 12 L 14 11 L 19 10"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="2" />
+        <path
+            android:pathData="M 14 11 L 12 16 L 12 21"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="2" />
+        <path
+            android:pathData="M 12 16 L 4 15"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="2" />
+    </group>
+</vector>

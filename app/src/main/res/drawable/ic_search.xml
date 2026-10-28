@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <group android:name="icon_search">
+        <path
+            android:pathData="M 5 11 L 6.76 6.76 L 11.00 5.00 L 15.24 6.76 L 17.00 11.00 L 15.24 15.24 L 11.00 17.00 L 6.76 15.24 L 5.00 11.00 Z"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="2" />
+        <path
+            android:pathData="M 15.5 15.5 L 20 20"
+            android:strokeColor="#FF000000"
+            android:strokeWidth="2"
+            android:strokeLineCap="butt"
+            android:strokeLineJoin="miter"
+            android:strokeMiterLimit="2" />
+    </group>
+</vector>

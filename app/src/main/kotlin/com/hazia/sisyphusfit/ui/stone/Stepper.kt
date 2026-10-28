@@ -80,7 +80,7 @@ fun Stepper(
                 val unitWidth = if (unit == null) 0.dp else measurer.measure(unit, unitStyle).size.width.toDp()
                 stepperFit(
                     role.fontSize, min, maxWidth,
-                    { s -> measurer.measure(value, role.copy(fontSize = s)).size.width.toDp() + 2 * VALUE_PAD },
+                    { s -> maxOf(VALUE_MIN, measurer.measure(value, role.copy(fontSize = s)).size.width.toDp() + 2 * VALUE_PAD) },
                     unitWidth,
                 )
             }
@@ -105,7 +105,7 @@ fun Stepper(
 @Composable
 private fun TappableValue(value: String, style: TextStyle, onTap: () -> Unit) {
     Box(
-        Modifier.sizeIn(minWidth = VALUE_MIN, minHeight = VALUE_MIN).press(onTap, label = "type a value").padding(horizontal = VALUE_PAD),
+        Modifier.testTag("piece:value").sizeIn(minWidth = VALUE_MIN, minHeight = VALUE_MIN).press(onTap, label = "type a value").padding(horizontal = VALUE_PAD),
         contentAlignment = Alignment.Center,
     ) {
         StoneText(
@@ -125,6 +125,7 @@ private fun StepPebble(icon: Int, label: String, onClick: () -> Unit, size: Dp, 
     val shape = remember(radii) { PebbleShape(radii) }
     Box(
         Modifier
+            .testTag("piece:pebble")
             .size(size)
             .elevation(Tokens.Elevation.step, shape)
             .background(Tokens.Colors.surfaceCard, shape)

@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ fun CheckBox(checked: Boolean, onChange: (Boolean) -> Unit, modifier: Modifier =
     Box(modifier.minHit().toggleable(checked, role = Role.Checkbox, onValueChange = onChange), contentAlignment = Alignment.Center) {
         Box(
             Modifier
+                .testTag("piece:box")
                 .size(BOX)
                 .then(
                     if (checked) Modifier.background(Tokens.Colors.fillDark, shape)
@@ -54,7 +56,7 @@ fun CheckBox(checked: Boolean, onChange: (Boolean) -> Unit, modifier: Modifier =
 @Composable
 fun Switch(checked: Boolean, onChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
     Box(modifier.minHit().toggleable(checked, role = Role.Switch, onValueChange = onChange), contentAlignment = Alignment.Center) {
-        Box(Modifier.size(TRACK_W, TRACK_H).background(if (checked) Tokens.Colors.fillDark else Tokens.Colors.lineEdge, CircleShape)) {
+        Box(Modifier.testTag("piece:switch").size(TRACK_W, TRACK_H).background(if (checked) Tokens.Colors.fillDark else Tokens.Colors.lineEdge, CircleShape)) {
             Box(
                 Modifier
                     .offset(x = if (checked) TRACK_W - KNOB - KNOB_INSET else KNOB_INSET, y = KNOB_INSET)
@@ -75,6 +77,7 @@ fun Segmented(options: List<String>, selected: Int, onSelect: (Int) -> Unit, mod
             val body = Theme.type.body
             Box(
                 Modifier
+                    .testTag("piece:segment")
                     .weight(1f)
                     .heightIn(min = SEGMENT_HEIGHT)
                     .then(

@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.R
 import com.hazia.sisyphusfit.ui.stone.CarvedEdge
 import com.hazia.sisyphusfit.ui.stone.CheckBox
+import com.hazia.sisyphusfit.ui.stone.Eyebrow
 import com.hazia.sisyphusfit.ui.stone.Chip
 import com.hazia.sisyphusfit.ui.stone.FlatRow
 import com.hazia.sisyphusfit.ui.stone.HeaderRow
@@ -47,7 +48,7 @@ fun PieceSamples(modifier: Modifier = Modifier) {
             Stepper("$weight", "kg", onMinus = { weight-- }, onPlus = { weight++ }, onTapValue = {})
             Stepper("$reps", "reps", onMinus = { reps-- }, onPlus = { reps++ }, onTapValue = {}, pebble = Tokens.Radius.pebbleA)
             Stepper("$partials", "partials", onMinus = { partials-- }, onPlus = { partials++ }, onTapValue = {}, small = true)
-            StoneText("Modules", Modifier.padding(top = Theme.space.section - Theme.space.gap), style = Theme.type.eyebrow.copy(color = Tokens.Colors.inkSecondary))
+            Eyebrow("Modules", Modifier.padding(top = Theme.space.section - Theme.space.gap))
             WornCard(onClick = {}) {
                 StoneIcon(R.drawable.ic_module_strength)
                 Column(Modifier.weight(1f)) {

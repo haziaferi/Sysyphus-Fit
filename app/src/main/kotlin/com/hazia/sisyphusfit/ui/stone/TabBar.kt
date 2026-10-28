@@ -167,18 +167,21 @@ fun TabBar(
             val words = tabs[i].label.split(" ").maxOf { measurer.measure(it, style(on), softWrap = false).size.width }
             measurer.measure(tabs[i].label, style(on), constraints = Constraints(maxWidth = words))
         }
+        val linePx = with(density) { TAB_LINE.toPx() }
+        fun labelHeight(wrap: Boolean, i: Int, on: Boolean) = layoutFor(wrap, i, on).lineCount * linePx
         fun boxes(wrap: Boolean, on: Int): List<Rect> = tabs.indices.flatMap { i ->
             val l = layoutFor(wrap, i, i == on).size
+            val lh = labelHeight(wrap, i, i == on)
             val c = centre(i)
             val labelTop = (TAB_PAD + DOT_H + LABEL_GAP) * d
             listOf(
                 Rect(c - ICON * d / 2, (TAB_PAD + (DOT_H - ICON) / 2) * d, c + ICON * d / 2, (TAB_PAD + (DOT_H + ICON) / 2) * d),
-                Rect(c - l.width / 2f, labelTop, c + l.width / 2f, labelTop + l.height),
+                Rect(c - l.width / 2f, labelTop, c + l.width / 2f, labelTop + lh),
             )
         }
         fun target(wrap: Boolean, i: Int): Valley {
             val l = layoutFor(wrap, i, true).size
-            return valleyTarget(centre(i), l.width.toFloat(), (TAB_PAD + DOT_H + LABEL_GAP) * d + l.height, d)
+            return valleyTarget(centre(i), l.width.toFloat(), (TAB_PAD + DOT_H + LABEL_GAP) * d + labelHeight(wrap, i, true), d)
         }
         val wrap = remember(tabs, width, base, d) {
             tabs.indices.any { i ->
@@ -186,7 +189,7 @@ fun TabBar(
                     clearance(valleyPoints(target(false, i), d), boxes(false, i), d) < CLEAR * d
             }
         }
-        val labelH = tabs.indices.maxOf { layoutFor(wrap, it, it == selected).size.height }
+        val labelH = tabs.indices.maxOf { labelHeight(wrap, it, it == selected) }
         val barH = max(Theme.size.tabBar.value * d, (TAB_PAD + DOT_H + LABEL_GAP + TAB_PAD) * d + labelH)
         val goal = target(wrap, selected)
 

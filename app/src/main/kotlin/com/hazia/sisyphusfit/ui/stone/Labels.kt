@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.R
 import com.hazia.sisyphusfit.ui.theme.StoneText
@@ -23,6 +24,7 @@ fun Chip(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(modifier.press(onClick, label = "open the note"), contentAlignment = Alignment.Center) {
         Row(
             Modifier
+                .testTag("piece:chip")
                 .heightIn(min = CHIP_HEIGHT)
                 .carvedLine(CarvedEdge.Top)
                 .carvedLine(CarvedEdge.Bottom)
@@ -40,4 +42,11 @@ fun Chip(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun Tags(tags: List<String>, modifier: Modifier = Modifier) {
     StoneText(tags.joinToString(" · "), modifier, style = Theme.type.label.copy(color = Tokens.Colors.inkSecondary))
+}
+
+/** A section head (§10 type, eyebrow role): capitals, tracked, in `ink.secondary`. */
+@Composable
+fun Eyebrow(text: String, modifier: Modifier = Modifier) {
+    val role = Theme.type.roles.eyebrow
+    StoneText(if (role.upper) text.uppercase() else text, modifier, style = Theme.type.eyebrow.copy(color = Tokens.Colors.inkSecondary))
 }

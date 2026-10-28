@@ -29,7 +29,7 @@ android {
             it.systemProperty("roborazzi.test.record", record.toString())
             it.systemProperty("roborazzi.test.verify", (!record).toString())
             it.systemProperty("roborazzi.record.filePathStrategy", "relativePathFromRoborazziContextOutputDirectory")
-            it.systemProperty("roborazzi.outputDir", file("src/test/screenshots").path)
+            it.systemProperty("roborazzi.output.dir", file("src/test/screenshots").path)
         }
     }
 

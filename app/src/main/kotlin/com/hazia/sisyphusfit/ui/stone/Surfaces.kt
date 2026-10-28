@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.ui.theme.Theme
@@ -31,6 +32,7 @@ fun WornCard(
 ) {
     Row(
         modifier
+            .testTag("piece:worn-card")
             .fillMaxWidth()
             .heightIn(min = minHeight)
             .worn()
@@ -47,6 +49,7 @@ fun WornCard(
 fun FlatRow(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, content: @Composable RowScope.() -> Unit) {
     Row(
         modifier
+            .testTag("piece:flat-row")
             .fillMaxWidth()
             .heightIn(min = Theme.size.row)
             .elevation(Tokens.Elevation.edgeInset, WornShape)

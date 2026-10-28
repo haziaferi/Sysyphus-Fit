@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
@@ -71,6 +72,7 @@ fun MainBar(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @
     )
     Row(
         modifier
+            .testTag("piece:main-bar")
             .fillMaxWidth()
             .heightIn(min = Theme.size.button)
             .background(Tokens.Colors.fillDark, DipShape)
@@ -111,6 +113,7 @@ fun MainBar(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @
 fun BottomZone(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
     Row(
         modifier
+            .testTag("piece:bottom-zone")
             .fillMaxWidth()
             .background(Tokens.Colors.surfaceSunk)
             .windowInsetsPadding(WindowInsets.navigationBars)

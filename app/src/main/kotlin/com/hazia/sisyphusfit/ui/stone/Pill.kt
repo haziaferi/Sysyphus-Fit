@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.ui.theme.StoneText
@@ -32,6 +33,7 @@ fun Pill(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @Dra
     Box(modifier.press(onClick), contentAlignment = Alignment.Center) {
         Row(
             Modifier
+                .testTag(if (quiet) "piece:pill-quiet" else "piece:pill")
                 .heightIn(min = PILL_HEIGHT)
                 .then(if (quiet) Modifier else Modifier.elevation(Tokens.Elevation.ground, shape).background(Tokens.Colors.surfaceSunk, shape))
                 .padding(horizontal = 12.dp),

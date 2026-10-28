@@ -97,6 +97,7 @@ fun BottomSheet(visible: Boolean, onDismiss: () -> Unit, modifier: Modifier = Mo
                     Modifier
                         .align(Alignment.CenterHorizontally)
                         .padding(top = 4.dp, bottom = 8.dp)
+                        .testTag("piece:grab")
                         .size(GRAB_W, GRAB_H)
                         .background(Tokens.Colors.lineEdge, CircleShape),
                 )

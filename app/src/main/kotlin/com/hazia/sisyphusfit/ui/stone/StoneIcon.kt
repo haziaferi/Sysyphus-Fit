@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.ui.theme.Tokens
 
@@ -21,16 +22,17 @@ private val LIT_DROP = 0.7.dp
  * 0.7 dp lower (0.53). Decorative unless [contentDescription] is given by the caller's semantics.
  */
 @Composable
-fun StoneIcon(@DrawableRes icon: Int, modifier: Modifier = Modifier, tint: Color = Tokens.Colors.inkPrimary) {
+fun StoneIcon(@DrawableRes icon: Int, modifier: Modifier = Modifier, tint: Color = Tokens.Colors.inkPrimary, size: Dp = 24.dp) {
     val painter = painterResource(icon)
     Layout(
         modifier = modifier
-            .size(24.dp)
+            .size(size)
             .drawBehind {
+                val box = this.size
                 translate(top = LIT_DROP.toPx()) {
-                    with(painter) { draw(size, colorFilter = ColorFilter.tint(Tokens.Colors.lineCarvedLight)) }
+                    with(painter) { draw(box, colorFilter = ColorFilter.tint(Tokens.Colors.lineCarvedLight)) }
                 }
-                with(painter) { draw(size, colorFilter = ColorFilter.tint(tint)) }
+                with(painter) { draw(box, colorFilter = ColorFilter.tint(tint)) }
             },
     ) { _, c -> layout(c.minWidth, c.minHeight) {} }
 }

@@ -43,3 +43,7 @@ jobs:
       # The report-content check runs locally (python tools/evidence_check.py with research/ present).
       - name: Pack against the committed verified ids
         run: python tools/evidence_check.py --ids evidence/verified_ids.json --skip-content
+      - name: Design tokens selftest (every defect class must fail)
+        run: python tools/tokens.py --selftest
+      - name: Design tokens and SPEC's token tables
+        run: python tools/tokens.py

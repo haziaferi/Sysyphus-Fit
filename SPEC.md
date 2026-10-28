@@ -67,6 +67,7 @@ Sections 7-11 are new in 0.2 and are a DRAFT: marked **[decided]** where the own
 | 0.52 | Compact density (0.34) on the rest screen: the rest round, the figure and the comparison card keep their balanced sizes, so they are the same objects in both densities; only the screen around them is denser. At the normal font size the boulder stays 80 dp over the 72 dp control (0.45) and the figure about 5 dp per head (about 37 dp standing, 0.44), turning at the same pace; at larger font sizes both grow as 0.51. The round sits on the centre of the band between the card and the steppers, as at balanced (0.41), measured on the rest screen and kept on every exercise screen of the density; compact's band is taller (on the 6T the round's top is 378 dp down the app area on both rest screens). The card keeps 0.47's balanced text: "Set N" and the column heads 14 sp, the values 16 sp on 24 sp rows, the evidence-note chip 11 sp, gaps 8 dp, outer columns 53 dp. The time inside the round follows the row-title token (19 / 17 sp). Blind panels on the 6T's app area at its own pixels (owner's axes: actual size .3, harmony .25, hierarchy .25, same screen as balanced .2, compact .2, figure .2, digits .15, seven measured axes .1): size and height, balanced sizes on the band centre 0.894 against 0.770 for the next (scaled stone with the figure kept; balanced sizes under the card), 0.750 for scaled 0.89 on the centre, 0.586 for 0.78, the plain-round control 0.533 (last); the band centre beat "under the card" at every size. Card: balanced kept 0.783 (first on actual size and same screen, last on compact), tokens + 1 0.758, plain tokens 0.738, control 0.531 (last). The measured axes were a plateau (0.752-0.755). With 0.50-0.51 and 0.53 the compact exercise screens pass G1-G5 at 360-412 dp and font sizes 1.0-2.0. | 2026-10-27 (compact rest screen) |
 | 0.53 | Visual language: the app's elements take the stone's idea from Sisifo's carving: surfaces cut on one side and worn on the other, worn pebble shapes for things you press, and lines carved into the surface. Still greyscale (§10 rule 7); every dark fill of the interface is one grey, #2b2b2b (text keeps #1c1c1c, secondary text #575757; the figure's near leg and the ring's track keep #4a4a4a, 0.46; the boulder and the figure keep #1e1e1e, as drawn and judged). **Main bar:** square corners; its top edge sinks 8 dp across the middle third in one soft dip, lit faintly inside the dip. **Secondary buttons** (pills): worn pebbles (each corner a slightly different radius) standing on a 2 dp ground shadow. **Steppers (−/+):** borderless light pebbles (#fafafa), − and + with different outlines, on a 1 dp shadow; the number you tap to type is underlined 1.5 dp in #6b6b6b. **Module cards, week sections, the resume card and rows:** cut on the left (square), worn on the right (8 dp corners), #f0f0f0 lit softly toward the right. **Comparison card:** 4 dp corners and no vein; its column heads sit on a carved line (3 dp: dark over light); the current set is circled by a 1.5 dp pebble outline. **History's date dividers:** a carved 5 dp spindle that fades out over its first and last fifth. **Icons:** the object icons are faceted (each curve drawn as two straight cuts, square ends and mitred corners) with a 0.7 dp light below them; the path icons (navigation, chevrons, play, stop, timer, tabs) and −/+ keep 0.37's round caps. **Tags:** plain secondary text joined by a middle dot, no box: they sit lowest (§10 rule 4). **Evidence-note chip:** no outline; a carved 3 dp line above and below it, otherwise as 0.47. **Tab bar:** no top hairline; its top line (1.5 dp, #2b2b2b) dips under the current tab into a valley whose floor runs 3 dp above the screen's bottom edge, a 4 dp rounded underline on that floor; the current tab's label stays where it is. The valley is 172 dp wide at the top and 60 dp at the floor at the normal font size; at the first tab its outer wall runs off the screen. **At larger font sizes** the tab bar fits its labels: the floor is as wide as the current label, never under 60 dp, and runs 7 dp below it; the walls reach 32 dp across (56 dp gave the same at 1.0 but ran over the next label at 1.5 and 2.0). The bar grows with its labels, 10 dp above the icon and below the label, so it is 72 dp at 1.0, about 77 at 1.3, 80 at 1.5, and 87 to 120 at 2.0. A label wraps to two lines ("This / week") when on one line it would come within 4 dp of its tab's edges, or when any tab's valley would come within 2 dp of an icon or a label; the rule is the same for every tab, so the bar keeps one height when the tab changes. This happens at 2.0 on 360 and 384 dp screens, not at 412. Measured on the four tab screens at both densities, 360, 384 and 412 dp and font sizes 1.0 to 2.0 (96 pages): no label or icon within 5.9 dp of the line; checked on the 6T. When the tab changes, the valley and its underline slide along the line to the new tab in 250 ms, widening or narrowing to the new label on the way, easing to a stop (cubic-bezier(0.2, 0, 0, 1)); the screen itself changes at once; with reduced motion the valley jumps (owner's pick on the 6T from slide, fill and sink, slide with the underline behind, none). Scored in three stages from the owner's per-element picks (69 designs, gates G1-G4 pass on all 20 screens): 0.785 on the eleven axes of `results_vl/axes2.json`, next the same with relief rows 0.783 and with the hill tab bar 0.773; the valley drawn as a sunken surface 0.74; the current design and stock Material 0.592 (last, tied). Judged blind on 3× renders, then checked on the 6T at true size: clean. Set aside: the vein on the comparison card, from its corner (passes a few dp from "TODAY") or as a crack down its middle gap (within 6 dp of text on 36 of 144 pages, the exercise screen at normal size among them); the hill tab bar (the current tab on a crest), the sunken-surface valley (the current tab read too quietly), relief rows. At compact the forms are the same, in the same dp (G1-G5 pass on the exercise screens at 360-412 dp and font sizes 1.0-2.0; 0.53 adds no failure on the 20 compact screens). The tab screens at larger font sizes: 0.54. | 2026-10-27/28 (visual-language rounds) |
 | 0.54 | The tab screens (Start, This week, History, More) at larger font sizes follow 0.49: no text has a fixed height (rows, buttons, pills and their hit boxes take their sizes as minimums), the main bar wraps, and the body scrolls between the header and the fixed bottom. The tab bar stays fixed while the body scrolls (0.53's fitted bar; owner's pick on the 6T over hiding it while scrolling down). When any module card's or history card's name would wrap beside its pill, every card on that screen puts its pill under its text, right-aligned, and the name takes the card's width (one form per screen, §10 rule 3). "Log afterwards" stays the last item of Start's list and scrolls with it. Gated on the four tab screens at both densities, 360, 384 and 412 dp, font sizes 1.0-2.0 and long names ("Start Wednesday afternoon", "Single-leg Romanian deadlift · Plank · Walk"): G1-G5 pass on all 144 pages, where the tab pages as they were failed G1, G2 and G4 from 1.3. Owner's axes, equal weights: text grows as asked and hierarchy kept (measured: 1.0 for every option), layout holds, reads at true size and harmony with 0.53 (blind panel of three on the 6T's own pixels): the pill under, "Log afterwards" in the list 0.864; the pill under with "Log afterwards" fixed above the main bar 0.823; the whole card as the target, with a chevron, 0.823 (best layout, lowest harmony); the pill beside, as now, 0.772; the tab pages as they were 0.419 (last). | 2026-10-28 (tab screens at larger font sizes) |
+| 0.55 | Design tokens: `design/tokens.json` is the one source of the app's visual values, in two layers: raw values (a grey ramp named by CIE L*, black at four alphas) and the roles screens use (colour: surface, fill, ink, line, shadow, rest; space, size, radius, stroke, elevation, motion, type). A screen never uses a raw value. Greyscale until the palette is discussed (§10 rule 7): colour later changes only the roles' references. `tools/tokens.py` checks the file (every reference resolves, every raw value is used by a role, density pairs, SPEC §10's tables match it; CI runs it) and writes SPEC §10's tables and the mockups' CSS from it; how it reaches Compose is decided at the foundation step. Taken from the decided screens (0.47-0.54) as drawn: rebuilt from the file, all 40 (20 per density) matched them pixel for pixel. Then the owner merged #6a6a6a into #6b6b6b (the carved lines' cut and the edge grey, 0.4 L* apart), drew History's date spindle in the edge grey instead of a grey of its own, and dropped the note's facts hairline; only those change (the carved lines by one grey level). Compact's list gap stays 8 dp, as drawn and judged (the base compact scale had 4). Kept apart though close: text #1c1c1c and the stone #1e1e1e, secondary text #575757 and the main bar's dip light #5a5a5a, the page #ebebeb and worn cards #f0f0f0, cards #fafafa and white. Contrast (WCAG 2.2, every text and icon on every surface it sits on, both densities): all pass, the lowest secondary text on the page at 6.1:1 (text needs 4.5:1, icons 3:1). | 2026-10-28 (design tokens) |
 
 **Not decided, and not to be decided by the code:** screens, layout, wording, navigation, palette
 (owner rule: discuss frontend before building). The skeleton therefore has no screen.
@@ -385,6 +386,90 @@ Italic (the oblique file) keeps its role's size, weight and carve. `ss01` applie
 **[decided 0.47]** In the comparison card, label ("Set N") and eyebrow (the column heads) are 14 sp and the values body (16 sp); the
 evidence-note chip is 11 sp, line height 16 sp, in the secondary grey, on every screen it appears (rule 3). At compact they keep these
 sizes (0.52). At larger font sizes the card reflows (0.50).
+
+9. **[decided 0.55]** Design tokens: every visual value comes from `design/tokens.json` through a role; a screen
+   never uses a raw value. The tables below are written from the file (`python tools/tokens.py md --write`) and
+   checked against it, as is the type table above.
+
+<!-- tokens:begin (tools/tokens.py md --write) -->
+Colour roles (screens use these; raw greys are named by CIE L*):
+
+| Role | Raw | Value | Used for |
+|---|---|---|---|
+| surface.page | grey.93 | `#ebebeb` | the screen behind everything |
+| surface.card | grey.98 | `#fafafa` | comparison card, facts, light pebbles (steppers, the rest round's control), the tab bar |
+| surface.worn | grey.94 | `#f0f0f0` | module cards, week sections, the resume card and rows: cut left, worn right (0.53) |
+| surface.worn-light | grey.100 | `#ffffff` | the soft light toward their worn right side |
+| surface.sunk | grey.88 | `#dfdfdf` | the bottom zone behind the main bar; secondary pills |
+| fill.dark | grey.17 | `#2b2b2b` | every dark fill of the interface: main bar, tab bar line and underline, selected states (0.53) |
+| fill.dark-light | grey.38 | `#5a5a5a` | the faint light inside the main bar's dip |
+| fill.on-dark | grey.100 | `#ffffff` | text and icons on fill.dark |
+| ink.primary | grey.10 | `#1c1c1c` | text, icons, the current set's pebble outline |
+| ink.secondary | grey.37 | `#575757` | secondary text, the evidence-note chip, tags |
+| line.edge | grey.45 | `#6b6b6b` | outlines (flat rows), the 1.5 dp underline of a number you tap to type, the sheet's grab handle, switches |
+| line.carved-dark | grey.45 | `#6b6b6b` | a carved line's cut: column heads, the chip's lines (3 dp, dark over light) |
+| line.carved-light | grey.100 | `#ffffff` | a carved line's lit edge; the 0.7 dp light under object icons |
+| line.spindle | grey.45 | `#6b6b6b` | History's carved date divider (owner 2026-10-28: the edge grey, not a grey of its own) |
+| shadow.ground | grey.79 | `#c4c4c4` | the 2 dp ground under a pill |
+| shadow.step | black.18 | `#0000002e` | the 1 dp shadow under light pebbles |
+| shadow.float-near | black.14 | `#00000024` | a sheet's near shadow |
+| shadow.float-far | black.20 | `#00000033` | a sheet's far shadow |
+| shadow.scrim | black.42 | `#0000006b` | behind a sheet |
+| rest.stone | grey.11 | `#1e1e1e` | the boulder and the figure (0.44, 0.45) |
+| rest.near-leg | grey.31 | `#4a4a4a` | the figure's near leg (0.44) |
+| rest.ring-track | rest.near-leg | `#4a4a4a` | the white ring's track before it fills: the near leg's grey (0.46) |
+| rest.ring | grey.100 | `#ffffff` | the ring and the time are the only white in the round (0.44) |
+
+Space and size, dp, balanced / compact:
+
+| Token | dp | Used for |
+|---|---|---|
+| space.gutter | 16 / 12 | screen side margin |
+| space.pad | 16 / 12 | inside a card or row |
+| space.gap | 8 / 8 | between items in a list; compact keeps 8 as drawn and judged (the base compact scale had 4) |
+| space.section | 24 / 16 | between sections |
+| space.eyebrow | 8 / 4 | under a section head |
+| space.foot | 16 / 12 | around the main bar in the bottom zone |
+| size.row | 56 / 48 | minimum height of a row (0.49: text may make it taller) |
+| size.card | 72 / 56 | minimum height of a module card |
+| size.button | 56 / 48 | minimum height of the main bar and buttons |
+| size.hit | 48 / 44 | minimum touch target (G4 asks 42) |
+| size.stepper | 56 / 48 | the − / + pebbles beside a set value |
+| size.stepper-small | 48 / 44 | the smaller − / + pebbles (partials) |
+| size.float | 64 / 56 | height of the floating running control as a pill (0.35) |
+| size.float-round | 72 / 64 | the floating running control as a round (0.35: recordings, the interval timer) |
+| size.rest-control | 72 / 72 | the rest round's touch target (0.45); the boulder is 80 at font size 1.0 and grows with the time (0.51) |
+| size.tab-bar | 72 / 72 | the tab bar at font size 1.0; it grows with its labels (0.53) |
+
+Shape, line, elevation and motion (the same at both densities):
+
+| Token | Value | Used for |
+|---|---|---|
+| radius.worn | 0 8 8 0 | cut on the left, worn on the right (0.53) |
+| radius.card | 14 dp | facts, segmented choices, label chips |
+| radius.comparison | 4 dp | the comparison card (0.53) |
+| radius.box | 8 dp | a checkbox |
+| radius.sheet | 22 dp | a sheet's top corners |
+| radius.full | 999 dp | round ends: the grab handle, close and note chips |
+| radius.pebble-pill | 52% 48% 50% 46% / 50% 54% 46% 50% | secondary buttons (0.53) |
+| radius.pebble-a | 49% 51% 56% 44% / 52% 46% 54% 48% | light pebbles: the reps steppers, the rest round's control, the current set's outline |
+| radius.pebble-b | 55% 45% 52% 48% / 46% 52% 48% 54% | light pebbles: the weight and partials steppers |
+| stroke.hair | 1 dp | unselected choices' outlines |
+| stroke.selected | 2 dp | a selected box, segment or chip |
+| stroke.line | 1.5 dp | the tab bar's line, the tap-to-type underline, the current set's pebble outline |
+| stroke.icon | 2 dp | icons on the 24 grid (0.37) |
+| stroke.carved | 3 dp | a carved line, dark over light (0.53) |
+| stroke.underline | 4 dp | the current tab's underline on the valley floor (0.53) |
+| stroke.ring | 2.6 dp | the rest round's white ring and its track |
+| elevation.ground | 0 2 0 0 #c4c4c4 | a pill standing on the ground |
+| elevation.step | 0 1 0 0 #0000002e | a light pebble |
+| elevation.edge-inset | inset 0 0 0 1 #6b6b6b | a flat row's outline |
+| elevation.float | 0 6 16 0 #00000033, 0 1 4 0 #00000024 | a sheet |
+| motion.valley | duration 250 ms, easing cubic-bezier(0.2, 0, 0, 1) | the tab valley sliding to the new tab (0.53) |
+| motion.step | duration 1000 ms | one push step of the figure (0.44) |
+| motion.stone-turn | duration 23000 ms | about one turn of the stone (0.44) |
+| motion.reduced | nothing turns or slides; the figure holds still; the ring and the time move once a second; the valley jumps (0.44, 0.53) |  |
+<!-- tokens:end -->
 
 ## 11. Decided, deferred, and the workshop agenda
 

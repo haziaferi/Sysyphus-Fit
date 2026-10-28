@@ -49,8 +49,9 @@ abstract class SessionDao {
     @Query("SELECT * FROM logged_set WHERE session_id = :sessionId ORDER BY position, id")
     abstract fun sets(sessionId: String): Flow<List<LoggedSetEntity>>
 
-    @Query("SELECT count(*) FROM session WHERE state = 'OPEN'")
-    protected abstract suspend fun openCount(): Int
+    // The same session open() resumes, should a restored backup have brought two.
+    @Query("SELECT id FROM session WHERE state = 'OPEN' ORDER BY started_at DESC, id DESC LIMIT 1")
+    protected abstract suspend fun openId(): String?
 
     @Query("SELECT state FROM session WHERE id = :sessionId")
     protected abstract suspend fun stateOf(sessionId: String): String?
@@ -64,12 +65,9 @@ abstract class SessionDao {
     @Query("UPDATE session SET ended_at = :endedAt, state = :state WHERE id = :sessionId")
     protected abstract suspend fun close(sessionId: String, endedAt: Long, state: String)
 
-    /** Starts [row] unless a session is already open: resume (GL1) must never choose between two. */
+    /** Starts [row] unless a session is already open, and returns the open one: resume (GL1) never chooses between two. */
     @Transaction
-    open suspend fun start(row: SessionEntity) {
-        check(openCount() == 0) { "a session is already open" }
-        insert(row)
-    }
+    open suspend fun start(row: SessionEntity): String = openId() ?: row.id.also { insert(row) }
 
     /** Adds a done set at the next position in its session, which must be open. */
     @Transaction
@@ -89,14 +87,13 @@ abstract class SessionDao {
 }
 
 class SessionStore(private val db: Db, private val clock: WallClock) {
-    /** Starts a session now; it counts on the local day it starts, in the zone it starts in (FA13). */
+    /** Starts a session now, or returns the one already open; it counts on the local day it starts, in the zone it starts in (FA13). */
     suspend fun start(routineId: String? = null, activity: String? = null): String {
         val now = clock.now()
         val zone = clock.zone()
         val id = Ids.ulid(now)
         val row = SessionEntity(id, routineId, activity, now, null, zone, countingDay(now, zone).toString(), "OPEN", null, null)
-        db().sessionDao().start(row)
-        return id
+        return db().sessionDao().start(row)
     }
 
     fun open(): Flow<OpenSession?> = flow { emitAll(db().sessionDao().open()) }.map { found ->

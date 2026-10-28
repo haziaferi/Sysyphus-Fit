@@ -18,6 +18,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.R
@@ -34,11 +36,14 @@ private val KNOB = 18.dp
 private val KNOB_INSET = 3.dp
 private val SEGMENT_HEIGHT = 44.dp
 
-/** A checkbox: a 2 dp `line.edge` box with `radius.box`; checked, filled `fill.dark` with a white check. */
+/** A checkbox: a 2 dp `line.edge` box with `radius.box`; checked, filled `fill.dark` with a white check. [label] names it. */
 @Composable
-fun CheckBox(checked: Boolean, onChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
+fun CheckBox(checked: Boolean, onChange: (Boolean) -> Unit, label: String, modifier: Modifier = Modifier) {
     val shape = RoundedCornerShape(Tokens.Radius.box)
-    Box(modifier.minHit().toggleable(checked, role = Role.Checkbox, onValueChange = onChange), contentAlignment = Alignment.Center) {
+    Box(
+        modifier.minHit().semantics { contentDescription = label }.toggleable(checked, role = Role.Checkbox, onValueChange = onChange),
+        contentAlignment = Alignment.Center,
+    ) {
         Box(
             Modifier
                 .testTag("piece:box")
@@ -52,10 +57,13 @@ fun CheckBox(checked: Boolean, onChange: (Boolean) -> Unit, modifier: Modifier =
     }
 }
 
-/** A switch: the track in `line.edge`, `fill.dark` when on; the knob in `surface.card`. */
+/** A switch: the track in `line.edge`, `fill.dark` when on; the knob in `surface.card`. [label] names it. */
 @Composable
-fun Switch(checked: Boolean, onChange: (Boolean) -> Unit, modifier: Modifier = Modifier) {
-    Box(modifier.minHit().toggleable(checked, role = Role.Switch, onValueChange = onChange), contentAlignment = Alignment.Center) {
+fun Switch(checked: Boolean, onChange: (Boolean) -> Unit, label: String, modifier: Modifier = Modifier) {
+    Box(
+        modifier.minHit().semantics { contentDescription = label }.toggleable(checked, role = Role.Switch, onValueChange = onChange),
+        contentAlignment = Alignment.Center,
+    ) {
         Box(Modifier.testTag("piece:switch").size(TRACK_W, TRACK_H).background(if (checked) Tokens.Colors.fillDark else Tokens.Colors.lineEdge, CircleShape)) {
             Box(
                 Modifier

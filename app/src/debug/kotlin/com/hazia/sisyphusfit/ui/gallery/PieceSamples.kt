@@ -63,8 +63,8 @@ fun PieceSamples(modifier: Modifier = Modifier) {
             }
             StoneText("Last time · Today", Modifier.carvedLine(CarvedEdge.Bottom).padding(bottom = 6.dp), style = Theme.type.label)
             StoneText("27 October", Modifier.carvedLine(CarvedEdge.Top, faded = true, cut = Tokens.Colors.lineSpindle).padding(top = 8.dp), style = Theme.type.label)
-            CheckBox(checked, { checked = it })
-            Switch(on, { on = it })
+            CheckBox(checked, { checked = it }, label = "Show partial reps")
+            Switch(on, { on = it }, label = "Scheduled backup")
             Segmented(listOf("Balanced", "Compact"), segment, { segment = it })
             Pill("Add a note", onClick = {}, icon = R.drawable.ic_edit)
         }

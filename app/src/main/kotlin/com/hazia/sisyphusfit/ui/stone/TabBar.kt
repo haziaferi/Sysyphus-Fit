@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsPropertyKey
@@ -153,12 +154,17 @@ fun TabBar(
     fun style(on: Boolean): TextStyle = if (on) {
         base.copy(color = Tokens.Colors.inkPrimary, fontWeight = FontWeight(500), fontFamily = sisifo(500, carve))
     } else base.copy(color = Tokens.Colors.inkSecondary)
+    // The bar keeps clear of the navigation bar at the bottom and, in landscape with three buttons, at a side.
+    val direction = LocalLayoutDirection.current
     val bottomInset = insets.getBottom(density)
+    val leftInset = insets.getLeft(density, direction)
+    val rightInset = insets.getRight(density, direction)
+    val insetsKey = Triple(bottomInset, leftInset, rightInset)
 
     BoxWithConstraints(modifier.fillMaxWidth()) {
         val width = constraints.maxWidth.toFloat()
-        val tabW = (width - 2 * BAR_SIDE * d) / tabs.size
-        fun centre(i: Int) = BAR_SIDE * d + tabW * (i + 0.5f)
+        val tabW = (width - leftInset - rightInset - 2 * BAR_SIDE * d) / tabs.size
+        fun centre(i: Int) = leftInset + BAR_SIDE * d + tabW * (i + 0.5f)
 
         // One line each, then the wrap test of vl_tabfit; wrapped labels take their widest word's width ("This / week").
         fun layoutFor(wrap: Boolean, i: Int, on: Boolean) = if (!wrap) {
@@ -183,7 +189,7 @@ fun TabBar(
             val l = layoutFor(wrap, i, true).size
             return valleyTarget(centre(i), l.width.toFloat(), (TAB_PAD + DOT_H + LABEL_GAP) * d + labelHeight(wrap, i, true), d)
         }
-        val wrap = remember(tabs, width, base, d) {
+        val wrap = remember(tabs, width, base, density, insetsKey) {
             tabs.indices.any { i ->
                 layoutFor(false, i, true).size.width > tabW - 2 * EDGE * d ||
                     clearance(valleyPoints(target(false, i), d), boxes(false, i), d) < CLEAR * d
@@ -216,7 +222,11 @@ fun TabBar(
                 .testTag("tabbar")
                 .semantics { this[ValleyCentre] = now.centre }
                 .drawBehind { drawValley(now, size.width, size.height, d) }
-                .padding(start = BAR_SIDE.dp, end = BAR_SIDE.dp, bottom = with(density) { bottomInset.toDp() }),
+                .padding(
+                    start = with(density) { leftInset.toDp() } + BAR_SIDE.dp,
+                    end = with(density) { rightInset.toDp() } + BAR_SIDE.dp,
+                    bottom = with(density) { bottomInset.toDp() },
+                ),
         ) {
             tabs.forEachIndexed { i, tab ->
                 val on = i == selected

@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
@@ -108,15 +110,18 @@ fun MainBar(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @
     }
 }
 
-/** The bottom zone behind the main bar (SPEC 0.35): `surface.sunk`, reaching under the navigation bar (edge to edge). */
+/**
+ * The bottom zone behind the main bar (SPEC 0.35): `surface.sunk`, reaching under the navigation bar (edge to edge) and
+ * keeping its content clear of it, below or (landscape, three buttons) at a side.
+ */
 @Composable
-fun BottomZone(modifier: Modifier = Modifier, content: @Composable RowScope.() -> Unit) {
+fun BottomZone(modifier: Modifier = Modifier, insets: WindowInsets = WindowInsets.navigationBars, content: @Composable RowScope.() -> Unit) {
     Row(
         modifier
             .testTag("piece:bottom-zone")
             .fillMaxWidth()
             .background(Tokens.Colors.surfaceSunk)
-            .windowInsetsPadding(WindowInsets.navigationBars)
+            .windowInsetsPadding(insets.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal))
             .padding(start = Theme.space.gutter, end = Theme.space.gutter, top = Theme.space.foot, bottom = Theme.space.foot + 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         content = content,

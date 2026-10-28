@@ -44,7 +44,7 @@ fun HeaderRow(title: String, clock: String?, onBack: (() -> Unit)?, onFinish: ((
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (onBack != null) {
-            Box(Modifier.press(onBack, label = "back"), contentAlignment = Alignment.Center) { StoneIcon(R.drawable.ic_back) }
+            Box(Modifier.press(onBack, description = "Back"), contentAlignment = Alignment.Center) { StoneIcon(R.drawable.ic_back) }
         }
         Box(
             Modifier.weight(1f).heightIn(min = Theme.size.hit).clickable(onClickLabel = "show the full title") { full = !full },

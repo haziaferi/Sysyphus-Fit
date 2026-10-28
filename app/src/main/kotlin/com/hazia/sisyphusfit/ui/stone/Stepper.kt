@@ -54,7 +54,8 @@ fun stepperFit(full: TextUnit, min: TextUnit, room: Dp, valueWidth: (TextUnit) -
 /**
  * A set value with its − / + pebbles (SPEC 0.28, 0.53): borderless light pebbles on the 1 dp step shadow, the number you
  * tap to type underlined 1.5 dp in `line.edge`, its unit beside it. [small] is the partials row (smaller pebbles and
- * value); [pebble] is `radius.pebble-b` for weight and partials, `radius.pebble-a` for reps.
+ * value); [pebble] is `radius.pebble-b` for weight and partials, `radius.pebble-a` for reps. [name] names the
+ * pebbles for TalkBack ("Decrease kg").
  */
 @Composable
 fun Stepper(
@@ -66,6 +67,7 @@ fun Stepper(
     modifier: Modifier = Modifier,
     small: Boolean = false,
     pebble: PebbleRadii = Tokens.Radius.pebbleB,
+    name: String = unit ?: "value",
 ) {
     val pebbleSize = if (small) Theme.size.stepperSmall else Theme.size.stepper
     val role = if (small) Theme.type.heading else Theme.type.setNumber
@@ -74,7 +76,7 @@ fun Stepper(
     val measurer = rememberTextMeasurer()
     val density = LocalDensity.current
     Row(modifier.fillMaxWidth().padding(horizontal = ROW_PAD), verticalAlignment = Alignment.CenterVertically) {
-        StepPebble(R.drawable.ic_minus, "minus", onMinus, pebbleSize, pebble)
+        StepPebble(R.drawable.ic_minus, "Decrease $name", onMinus, pebbleSize, pebble)
         BoxWithConstraints(Modifier.weight(1f), contentAlignment = Alignment.Center) {
             val fit = with(density) {
                 val unitWidth = if (unit == null) 0.dp else measurer.measure(unit, unitStyle).size.width.toDp()
@@ -98,7 +100,7 @@ fun Stepper(
                 }
             }
         }
-        StepPebble(R.drawable.ic_plus, "plus", onPlus, pebbleSize, pebble)
+        StepPebble(R.drawable.ic_plus, "Increase $name", onPlus, pebbleSize, pebble)
     }
 }
 
@@ -129,7 +131,7 @@ private fun StepPebble(icon: Int, label: String, onClick: () -> Unit, size: Dp, 
             .size(size)
             .elevation(Tokens.Elevation.step, shape)
             .background(Tokens.Colors.surfaceCard, shape)
-            .press(onClick, label = label),
+            .press(onClick, description = label),
         contentAlignment = Alignment.Center,
     ) { StoneIcon(icon) }
 }

@@ -9,6 +9,7 @@ import com.hazia.sisyphusfit.data.SisyphusDatabase
 import com.hazia.sisyphusfit.data.WallClock
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -25,9 +26,11 @@ class AppContainer(
     private val lock = Mutex()
     @Volatile private var opened: DatabaseOpen<SisyphusDatabase>? = null
 
+    // NonCancellable: a screen left during a slow first open must not throw its result away (a leaked database, and a
+    // second open that no longer knows a corrupt file was set aside).
     private val db: Db = {
         opened?.database ?: lock.withLock {
-            opened?.database ?: withContext(io) { open() }.also { opened = it }.database
+            opened?.database ?: withContext(io + NonCancellable) { open().also { opened = it } }.database
         }
     }
 

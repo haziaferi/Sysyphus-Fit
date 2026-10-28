@@ -63,7 +63,7 @@ abstract class ExerciseDao {
 }
 
 class ExerciseStore(private val db: Db, private val clock: WallClock) {
-    fun active(): Flow<List<Exercise>> = flow { emitAll(db().exerciseDao().active()) }.map { rows -> rows.map(::toExercise) }
+    fun active(): Flow<List<Exercise>> = flow { emitAll(db().exerciseDao().active()) }.map { rows -> rows.mapNotNull(::toExercise) }
 
     suspend fun add(name: String, kind: ExerciseKind, sided: Boolean, modules: Set<Module>): String {
         val id = Ids.ulid(clock.now())
@@ -92,11 +92,12 @@ class ExerciseStore(private val db: Db, private val clock: WallClock) {
     private fun tags(exerciseId: String, modules: Set<Module>) =
         Module.entries.filter { it in modules }.map { ExerciseModuleEntity(Ids.ulid(clock.now()), exerciseId, it.name) }
 
-    // A tag this build does not know (a backup from a newer one) is skipped.
-    private fun toExercise(row: ExerciseWithModules) = Exercise(
+    // A name this build does not know (a backup from a newer one) is skipped: a tag drops from its exercise, a kind
+    // leaves that exercise out of the list (its sets stay), rather than failing the whole list.
+    private fun toExercise(row: ExerciseWithModules): Exercise? = Exercise(
         id = row.exercise.id,
         name = row.exercise.name,
-        kind = ExerciseKind.valueOf(row.exercise.kind),
+        kind = ExerciseKind.entries.firstOrNull { it.name == row.exercise.kind } ?: return null,
         sided = row.exercise.sided,
         showPartialReps = row.exercise.showPartialReps,
         modules = row.modules.mapNotNull { name -> Module.entries.firstOrNull { it.name == name } }.toSet(),

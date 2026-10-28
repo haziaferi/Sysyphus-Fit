@@ -11,17 +11,26 @@ import com.hazia.sisyphusfit.data.SessionStore
 import com.hazia.sisyphusfit.data.Settings
 import com.hazia.sisyphusfit.ui.container
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-/** What "Start or log" (0.25) shows: a session to resume (GL1, 0.27) and the modules the person chose. */
-data class StartState(val loading: Boolean = true, val resume: OpenSession? = null, val modules: Set<Module> = emptySet())
+/**
+ * What "Start or log" (0.25) shows: a session to resume (GL1, 0.27) and the modules the person chose; [failed] when
+ * the database could not be read, for the screen to say so.
+ */
+data class StartState(
+    val loading: Boolean = true,
+    val resume: OpenSession? = null,
+    val modules: Set<Module> = emptySet(),
+    val failed: Boolean = false,
+)
 
 class StartViewModel(sessions: SessionStore, settings: Settings) : ViewModel() {
     val state: StateFlow<StartState> = combine(sessions.open(), settings.modules()) { open, modules ->
         StartState(loading = false, resume = open, modules = modules.orEmpty())
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), StartState())
+    }.catch { emit(StartState(loading = false, failed = true)) }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), StartState())
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

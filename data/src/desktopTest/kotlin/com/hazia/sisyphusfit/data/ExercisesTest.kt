@@ -55,4 +55,11 @@ class ExercisesTest {
         db.floorDao().addExerciseModules(listOf(ExerciseModuleEntity("X", id, "JUGGLING")))
         assertEquals(setOf(Module.STRENGTH), store.active().first().single().modules)
     }
+
+    // Review I1: a kind a newer build wrote must not take the whole list down; that exercise is left out.
+    @Test fun unknownKindLeavesThatExerciseOut() = runBlocking {
+        store.add("Squat", ExerciseKind.DYNAMIC, false, setOf(Module.STRENGTH))
+        db.floorDao().addExercise(ExerciseEntity("X", "Assisted pull-up", "ASSISTED", sided = false, archived = false))
+        assertEquals(listOf("Squat"), store.active().first().map { it.name })
+    }
 }

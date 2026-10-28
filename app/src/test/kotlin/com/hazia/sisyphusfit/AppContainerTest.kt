@@ -8,8 +8,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.hazia.sisyphusfit.data.DATABASE_NAME
 import com.hazia.sisyphusfit.data.DatabaseOpen
 import com.hazia.sisyphusfit.data.SisyphusDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+import java.util.concurrent.CountDownLatch
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -49,6 +53,24 @@ class AppContainerTest {
         val c = AppContainer({ onMain = Looper.myLooper() == Looper.getMainLooper(); DatabaseOpen(db, recovered = false) })
         runBlocking { c.settings.modules().first() }
         assertEquals(false, onMain)
+    }
+
+    // Review I2: the person backs out while a slow first open runs; its result (and its recovered flag) is kept,
+    // not thrown away and opened a second time.
+    @Test fun aCancelledFirstOpenIsKept() {
+        val started = CountDownLatch(1)
+        val release = CountDownLatch(1)
+        var opens = 0
+        val c = AppContainer({ opens++; started.countDown(); release.await(); DatabaseOpen(db, recovered = false) })
+        runBlocking {
+            val asking = launch(Dispatchers.Default) { c.settings.modules().first() }
+            withContext(Dispatchers.IO) { started.await() }
+            asking.cancel()
+            release.countDown()
+            asking.join()
+            c.settings.modules().first()
+        }
+        assertEquals(1, opens)
     }
 
     @Test fun appStartsWithTheRealFileUntouched() {

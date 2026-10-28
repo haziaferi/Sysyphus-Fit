@@ -71,6 +71,14 @@ class StartViewModelTest {
         assertEquals(setOf(Module.STRENGTH), waitFor { vm.state.first { it.modules.isNotEmpty() } }.modules)
     }
 
+    // Review I3: a database that will not open (a full disk, a file that cannot be set aside) gives a state the
+    // screen can show, not a crash at every launch.
+    @Test fun aFailedOpenIsAStateNotACrash() {
+        val broken = AppContainer({ throw IllegalStateException("could not set aside") })
+        val vm = StartViewModel(broken.sessions, broken.settings)
+        assertEquals(StartState(loading = false, failed = true), waitFor { vm.state.first { !it.loading } })
+    }
+
     @Test fun factoryTakesTheStoresFromTheApp() {
         app.container = container
         waitFor { container.sessions.start() }

@@ -3,7 +3,6 @@ package com.hazia.sisyphusfit.ui.gallery
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,12 +41,13 @@ import com.hazia.sisyphusfit.ui.theme.SisyphusTheme
 import com.hazia.sisyphusfit.ui.theme.StoneText
 import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
+import com.hazia.sisyphusfit.ui.theme.stoneEdgeToEdge
 
 /** Debug only: every shared piece on one screen, to judge on the phone at true size (SPEC 0.48). */
 class GalleryActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        stoneEdgeToEdge()
         setContent { Gallery() }
     }
 }

@@ -32,4 +32,5 @@ android {
 
 dependencies {
     implementation(project(":data"))
+    testImplementation(libs.junit)
 }

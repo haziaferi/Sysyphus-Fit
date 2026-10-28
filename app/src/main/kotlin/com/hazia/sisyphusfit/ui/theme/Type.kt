@@ -47,4 +47,5 @@ class AppType(val roles: Tokens.Type) {
     val comparisonEyebrow = roles.comparisonEyebrow.toTextStyle()
     val comparisonBody = roles.comparisonBody.toTextStyle()
     val chip = roles.chip.toTextStyle().copy(color = Tokens.Colors.inkSecondary)
+    val noteClaim = roles.noteClaim.toTextStyle()
 }

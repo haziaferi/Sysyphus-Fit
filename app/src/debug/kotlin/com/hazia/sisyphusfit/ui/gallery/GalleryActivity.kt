@@ -6,10 +6,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
@@ -97,11 +99,13 @@ fun Gallery(startDensity: DensityMode = DensityMode.Balanced, startSheet: Boolea
                 }
                 BottomSheet(sheet, onDismiss = { sheet = false }) {
                     Eyebrow("Evidence note")
+                    Spacer(Modifier.height(Theme.space.noteHead))
                     StoneText(
                         "At equal weekly sets, 25 studies in adults, including trained people, found no difference in muscle " +
                             "growth between training more or less often.",
-                        style = Theme.type.rowTitle,
+                        style = Theme.type.noteClaim,
                     )
+                    Spacer(Modifier.height(Theme.space.section))
                     BottomZone { MainBar("Close", onClick = { sheet = false }) }
                 }
             }

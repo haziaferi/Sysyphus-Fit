@@ -76,10 +76,10 @@ object Tokens {
         val restRing = Color(0xFFFFFFFF)
     }
 
-    class Space(val gutter: Dp, val pad: Dp, val gap: Dp, val section: Dp, val eyebrow: Dp, val foot: Dp) {
+    class Space(val gutter: Dp, val pad: Dp, val gap: Dp, val section: Dp, val eyebrow: Dp, val foot: Dp, val noteHead: Dp) {
         companion object {
-            val Balanced = Space(16.dp, 16.dp, 8.dp, 24.dp, 8.dp, 16.dp)
-            val Compact = Space(12.dp, 12.dp, 8.dp, 16.dp, 4.dp, 12.dp)
+            val Balanced = Space(16.dp, 16.dp, 8.dp, 24.dp, 8.dp, 16.dp, 12.dp)
+            val Compact = Space(12.dp, 12.dp, 8.dp, 16.dp, 4.dp, 12.dp, 12.dp)
         }
     }
 
@@ -150,7 +150,7 @@ object Tokens {
     }
 
     /** Type roles in sp (SPEC 0.49); comparison and chip roles keep their sizes at both densities (0.47, 0.52). */
-    class Type(val label: TypeRole, val eyebrow: TypeRole, val body: TypeRole, val rowTitle: TypeRole, val heading: TypeRole, val exercise: TypeRole, val setNumber: TypeRole, val comparisonLabel: TypeRole, val comparisonEyebrow: TypeRole, val comparisonBody: TypeRole, val chip: TypeRole) {
+    class Type(val label: TypeRole, val eyebrow: TypeRole, val body: TypeRole, val rowTitle: TypeRole, val heading: TypeRole, val exercise: TypeRole, val setNumber: TypeRole, val comparisonLabel: TypeRole, val comparisonEyebrow: TypeRole, val comparisonBody: TypeRole, val chip: TypeRole, val noteClaim: TypeRole) {
         companion object {
             val Balanced = Type(
                 TypeRole(13.sp, 20.sp, 400, 0f),
@@ -164,6 +164,7 @@ object Tokens {
                 TypeRole(14.sp, 16.sp, 500, 0f, upper = true, tracking = 0.08f),
                 TypeRole(16.sp, 24.sp, 400, 0f),
                 TypeRole(11.sp, 16.sp, 400, 0f),
+                TypeRole(19.sp, 28.sp, 500, 100f, features = "tnum"),
             )
             val Compact = Type(
                 TypeRole(12.sp, 16.sp, 400, 0f),
@@ -177,6 +178,7 @@ object Tokens {
                 TypeRole(14.sp, 16.sp, 500, 0f, upper = true, tracking = 0.08f),
                 TypeRole(16.sp, 24.sp, 400, 0f),
                 TypeRole(11.sp, 16.sp, 400, 0f),
+                TypeRole(17.sp, 24.sp, 500, 100f, features = "tnum"),
             )
         }
     }

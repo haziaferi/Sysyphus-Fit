@@ -277,8 +277,10 @@ def kotlin(t):
     derived = {}
     for r, over in roles["comparison"].items():
         derived["comparison-" + r] = {**base[r], "size": over["size"], "line": over.get("line", [base[r]["line"][0]] * 2)}
-    chip = roles["chip"]
-    derived["chip"] = {**base[chip["role"]], "size": chip["size"], "line": chip["line"]}
+    # a role derived from another ("role": its base) keeps the base's values except the sizes it gives
+    for r, v in roles.items():
+        if isinstance(v, dict) and "role" in v:
+            derived[r] = {**base[v["role"]], **{k: v[k] for k in ("size", "line") if k in v}}
     allr = {**base, **derived}
     fields = ", ".join(f"val {camel(r)}: TypeRole" for r in allr)
     o += ["", "    /** Type roles in sp (SPEC 0.49); comparison and chip roles keep their sizes at both densities (0.47, 0.52). */",

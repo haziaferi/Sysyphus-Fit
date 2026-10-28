@@ -56,6 +56,18 @@ class ThemeTest {
         assertEquals(16.sp, body)
     }
 
+    // Owner's walk 2026-10-28 ("More"): the note's claim on 28 sp lines with 12 dp under its eyebrow; compact keeps 24.
+    @Test
+    fun noteClaimIsLooserThanARowTitle() {
+        val (claim, head) = read { Theme.type.noteClaim to Theme.space.noteHead }
+        assertEquals(19.sp, claim.fontSize)
+        assertEquals(28.sp, claim.lineHeight)
+        assertEquals(12.dp, head)
+        val (compact, compactHead) = Tokens.Type.Compact.noteClaim to Tokens.Space.Compact.noteHead
+        assertEquals(24.sp, compact.line)
+        assertEquals(12.dp, compactHead)
+    }
+
     @Test
     fun rowTitleHasTnumAndCarve100() {
         val style = read { Theme.type.rowTitle }

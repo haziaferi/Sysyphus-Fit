@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import com.hazia.sisyphusfit.R
+import com.hazia.sisyphusfit.ui.AppTabs
 import com.hazia.sisyphusfit.ui.stone.BottomSheet
 import com.hazia.sisyphusfit.ui.stone.BottomZone
 import com.hazia.sisyphusfit.ui.stone.Eyebrow
@@ -53,11 +54,6 @@ class GalleryActivity : ComponentActivity() {
         setContent { Gallery() }
     }
 }
-
-val GalleryTabs = listOf(
-    TabItem("Start", R.drawable.ic_tab_start), TabItem("This week", R.drawable.ic_tab_week),
-    TabItem("History", R.drawable.ic_tab_history), TabItem("More", R.drawable.ic_tab_more),
-)
 
 private val FONT_SCALES = listOf(1f, 1.3f, 2f)
 
@@ -95,7 +91,7 @@ fun Gallery(startDensity: DensityMode = DensityMode.Balanced, startSheet: Boolea
                     BottomZone(Modifier.consumeWindowInsets(WindowInsets.navigationBars)) {
                         MainBar("Done · set 2", onClick = {}, icon = R.drawable.ic_check)
                     }
-                    TabBar(GalleryTabs, tab, { tab = it })
+                    TabBar(AppTabs, tab, { tab = it })
                 }
                 BottomSheet(sheet, onDismiss = { sheet = false }) {
                     Eyebrow("Evidence note")

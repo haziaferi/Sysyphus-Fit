@@ -26,7 +26,7 @@ import androidx.compose.ui.test.swipeDown
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.hazia.sisyphusfit.ui.gallery.GalleryTabs
+import com.hazia.sisyphusfit.ui.AppTabs
 import com.hazia.sisyphusfit.ui.gallery.PieceSamples
 import com.hazia.sisyphusfit.ui.theme.DensityMode
 import com.hazia.sisyphusfit.ui.theme.SisyphusTheme
@@ -53,7 +53,7 @@ class ReviewFixesTest {
             val config = LocalConfiguration.current
             val base = LocalDensity.current
             val d = if (!big) base else Density(ctx.createConfigurationContext(android.content.res.Configuration(config).apply { fontScale = 2f }))
-            CompositionLocalProvider(LocalDensity provides d) { SisyphusTheme { TabBar(GalleryTabs, 0, {}) } }
+            CompositionLocalProvider(LocalDensity provides d) { SisyphusTheme { TabBar(AppTabs, 0, {}) } }
         }
         val before = rule.onNodeWithText("This week", useUnmergedTree = true).getUnclippedBoundsInRoot()
         big = true
@@ -90,7 +90,7 @@ class ReviewFixesTest {
     // Important 4: with navigation on the side (landscape, three buttons) the tab bar keeps clear of it.
     @Test
     fun tabBarKeepsClearOfASideNavigationBar() {
-        rule.setContent { SisyphusTheme { TabBar(GalleryTabs, 3, {}, insets = WindowInsets(right = 48.dp, bottom = 0.dp)) } }
+        rule.setContent { SisyphusTheme { TabBar(AppTabs, 3, {}, insets = WindowInsets(right = 48.dp, bottom = 0.dp)) } }
         val bar = rule.onNodeWithTag("tabbar").getUnclippedBoundsInRoot()
         val more = rule.onNodeWithText("More", useUnmergedTree = true).getUnclippedBoundsInRoot()
         assertTrue("More (${more.right}) left of the inset (${bar.right - 48.dp})", more.right <= bar.right - 48.dp)

@@ -19,6 +19,7 @@ import com.hazia.sisyphusfit.ui.theme.DensityMode
 import com.hazia.sisyphusfit.ui.theme.SisyphusTheme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 import java.io.File
+import com.hazia.sisyphusfit.ui.AppTabs
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -47,7 +48,7 @@ class GalleryScreenshotTest {
                 Column(Modifier.background(Tokens.Colors.surfacePage)) {
                     PieceSamples()
                     BottomZone { MainBar("Done · set 2", onClick = {}) }
-                    TabBar(GalleryTabs, 0, {})
+                    TabBar(AppTabs, 0, {})
                 }
             }
         }

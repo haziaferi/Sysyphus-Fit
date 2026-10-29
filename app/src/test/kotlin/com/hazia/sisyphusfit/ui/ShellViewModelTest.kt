@@ -1,5 +1,9 @@
 package com.hazia.sisyphusfit.ui
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
+import androidx.lifecycle.ViewModelStore
+import androidx.lifecycle.viewmodel.MutableCreationExtras
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -69,5 +73,16 @@ class ShellViewModelTest {
         val broken = AppContainer({ throw IllegalStateException("could not set aside") })
         val vm = ShellViewModel(broken.settings)
         assertEquals(ShellState.Ready, waitFor { vm.state.first { it != ShellState.Loading } })
+    }
+
+    // Back right after "Step forward" ends the ViewModel before the write lands; the choice must still be recorded.
+    @Test fun aChoiceSurvivesLeavingAtOnce() {
+        val store = ViewModelStore()
+        val extras = MutableCreationExtras().apply { set(APPLICATION_KEY, app) }
+        app.container = container
+        val vm = ViewModelProvider.create(store, ShellViewModel.Factory, extras)[ShellViewModel::class]
+        vm.choose(setOf(Module.STRENGTH))
+        store.clear()
+        assertEquals(setOf(Module.STRENGTH), waitFor { container.settings.modules().first { it != null } })
     }
 }

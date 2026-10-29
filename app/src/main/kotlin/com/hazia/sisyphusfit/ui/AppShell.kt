@@ -59,7 +59,7 @@ private val roots = listOf(StartRoot, WeekRoot, HistoryRoot, MoreRoot)
 
 /**
  * The app's frame. Until a module choice is recorded it shows the choice (0.18), without the tab bar; while the setting
- * loads, only the page. Then the current tab's screen above the fixed tab bar (0.54), which shows on the four roots. The
+ * loads, only the page; when the data cannot be opened, a screen that says so (0.60). Then the current tab's screen above the fixed tab bar (0.54), which shows on the four roots. The
  * app opens on Start (0.25). Changing tab keeps each tab's place (the documented multiple-back-stacks pattern); Back from
  * another tab's root returns to Start, and from Start leaves the app. The screen changes at once (0.53): only the
  * valley moves.
@@ -78,6 +78,10 @@ fun AppShell(gate: ShellViewModel = viewModel(factory = ShellViewModel.Factory))
                 Modifier.background(Tokens.Colors.surfacePage).windowInsetsPadding(screenInsets),
             )
             ShellState.Ready -> Tabs(nav)
+            ShellState.Failed -> CantOpenScreen(
+                onRetry = gate::retry,
+                Modifier.background(Tokens.Colors.surfacePage).windowInsetsPadding(screenInsets),
+            )
         }
     }
 }

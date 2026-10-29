@@ -68,11 +68,21 @@ class ShellViewModelTest {
         assertEquals(setOf(Module.STAMINA), waitFor { container.settings.modules().first() })
     }
 
-    // Planned ruling: a read that fails opens the tabs, where Start's own failed state (0.58) shows it.
-    @Test fun aFailedReadOpensTheTabs() {
+    // Owner's call (b): a database that will not open says so, in place of the choice or the tabs.
+    @Test fun aFailedReadSaysSo() {
         val broken = AppContainer({ throw IllegalStateException("could not set aside") })
         val vm = ShellViewModel(broken.settings)
-        assertEquals(ShellState.Ready, waitFor { vm.state.first { it != ShellState.Loading } })
+        assertEquals(ShellState.Failed, waitFor { vm.state.first { it != ShellState.Loading } })
+    }
+
+    @Test fun tryingAgainAfterARecoveryGoesOn() {
+        var fail = true
+        val flaky = AppContainer({ check(!fail) { "not yet" }; DatabaseOpen(db, recovered = false) })
+        val vm = ShellViewModel(flaky.settings)
+        waitFor { vm.state.first { it == ShellState.Failed } }
+        fail = false
+        vm.retry()
+        assertEquals(ShellState.Choose, waitFor { vm.state.first { it != ShellState.Failed && it != ShellState.Loading } })
     }
 
     // Back right after "Step forward" ends the ViewModel before the write lands; the choice must still be recorded.

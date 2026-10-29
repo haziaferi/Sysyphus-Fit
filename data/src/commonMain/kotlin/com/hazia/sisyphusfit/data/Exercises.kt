@@ -43,8 +43,9 @@ abstract class ExerciseDao {
     @Update protected abstract suspend fun update(row: ExerciseEntity)
     @Insert protected abstract suspend fun insertModules(rows: List<ExerciseModuleEntity>)
 
-    @Query("DELETE FROM exercise_module WHERE exercise_id = :exerciseId")
-    protected abstract suspend fun clearModules(exerciseId: String)
+    // Only the tags this build knows: one a newer build wrote stays (M4).
+    @Query("DELETE FROM exercise_module WHERE exercise_id = :exerciseId AND module IN (:known)")
+    protected abstract suspend fun clearModules(exerciseId: String, known: List<String>)
 
     @Query("SELECT * FROM exercise WHERE id = :id")
     abstract suspend fun byId(id: String): ExerciseEntity?
@@ -53,11 +54,11 @@ abstract class ExerciseDao {
     @Query("UPDATE exercise SET archived = 1 WHERE id = :id")
     abstract suspend fun archive(id: String)
 
-    /** Writes [row] and replaces its tags whole, in one transaction. */
+    /** Writes [row] and replaces its known tags whole, in one transaction. */
     @Transaction
     open suspend fun save(row: ExerciseEntity, modules: List<ExerciseModuleEntity>, isNew: Boolean) {
         if (isNew) insert(row) else update(row)
-        clearModules(row.id)
+        clearModules(row.id, Module.entries.map { it.name })
         insertModules(modules)
     }
 }

@@ -1,6 +1,8 @@
 package com.hazia.sisyphusfit.data
 
+import androidx.room.execSQL
 import androidx.room.useReaderConnection
+import androidx.room.useWriterConnection
 import java.io.File
 import java.nio.file.Files
 
@@ -24,3 +26,6 @@ class TestClock(var now: Long = 1_000, var zone: String = "Europe/Rome") {
 
 suspend fun SisyphusDatabase.count(sql: String): Long =
     useReaderConnection { c -> c.usePrepared(sql) { s -> s.step(); s.getLong(0) } }
+
+/** Writes raw rows a newer build might have written, past the DAOs. */
+suspend fun SisyphusDatabase.execute(sql: String) = useWriterConnection { c -> c.execSQL(sql) }

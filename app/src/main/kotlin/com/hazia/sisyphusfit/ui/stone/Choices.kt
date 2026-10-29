@@ -39,22 +39,26 @@ private val SEGMENT_HEIGHT = 44.dp
 /** A checkbox: a 2 dp `line.edge` box with `radius.box`; checked, filled `fill.dark` with a white check. [label] names it. */
 @Composable
 fun CheckBox(checked: Boolean, onChange: (Boolean) -> Unit, label: String, modifier: Modifier = Modifier) {
-    val shape = RoundedCornerShape(Tokens.Radius.box)
     Box(
         modifier.minHit().semantics { contentDescription = label }.toggleable(checked, role = Role.Checkbox, onValueChange = onChange),
         contentAlignment = Alignment.Center,
-    ) {
-        Box(
-            Modifier
-                .testTag("piece:box")
-                .size(BOX)
-                .then(
-                    if (checked) Modifier.background(Tokens.Colors.fillDark, shape)
-                    else Modifier.border(Tokens.Stroke.selected, Tokens.Colors.lineEdge, shape),
-                ),
-            contentAlignment = Alignment.Center,
-        ) { if (checked) StoneIcon(R.drawable.ic_check, tint = Tokens.Colors.fillOnDark, size = 16.dp) }
-    }
+    ) { CheckMark(checked) }
+}
+
+/** The checkbox's box alone, for a surface that is itself the toggle (a module card): no target of its own. */
+@Composable
+fun CheckMark(checked: Boolean, modifier: Modifier = Modifier) {
+    val shape = RoundedCornerShape(Tokens.Radius.box)
+    Box(
+        modifier
+            .testTag("piece:box")
+            .size(BOX)
+            .then(
+                if (checked) Modifier.background(Tokens.Colors.fillDark, shape)
+                else Modifier.border(Tokens.Stroke.selected, Tokens.Colors.lineEdge, shape),
+            ),
+        contentAlignment = Alignment.Center,
+    ) { if (checked) StoneIcon(R.drawable.ic_check, tint = Tokens.Colors.fillOnDark, size = 16.dp) }
 }
 
 /** A switch: the track in `line.edge`, `fill.dark` when on; the knob in `surface.card`. [label] names it. */

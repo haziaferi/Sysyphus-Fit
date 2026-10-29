@@ -32,7 +32,10 @@ fun StoneText(
         modifier.layout { measurable, constraints ->
             val p = measurable.measure(constraints.copy(minHeight = 0, maxHeight = Int.MAX_VALUE))
             // onTextLayout ran during measure(), so the line count belongs to this layout.
-            val box = if (style.lineHeight.isSp) (count.lines * style.lineHeight.toPx()).roundToInt() else p.height
+            // Android scales sp on a nonlinear curve at large font sizes; Compose keeps the line in proportion to the
+            // text (line / size), so the box does the same rather than scaling the line height on its own.
+            val line = if (style.fontSize.isSp) style.fontSize.toPx() * style.lineHeight.value / style.fontSize.value else style.lineHeight.toPx()
+            val box = if (style.lineHeight.isSp) (count.lines * line).roundToInt() else p.height
             val h = box.coerceIn(constraints.minHeight, constraints.maxHeight)
             layout(p.width, h) { p.place(0, (h - p.height) / 2) }
         },

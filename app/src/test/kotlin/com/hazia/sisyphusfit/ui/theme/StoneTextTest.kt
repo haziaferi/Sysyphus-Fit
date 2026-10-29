@@ -1,6 +1,7 @@
 package com.hazia.sisyphusfit.ui.theme
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
@@ -11,6 +12,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
@@ -38,5 +40,20 @@ class StoneTextTest {
         assertEquals(32f, height("ex"), 0.5f)
         assertEquals(24f, height("body"), 0.5f)
         assertEquals(56f, height("two"), 0.5f)
+    }
+
+    // At a large font size Android scales sp on a nonlinear curve; Compose keeps each line in proportion to its text
+    // (line / size), so the box must too, or wrapped lines overlap the text below (found on the module choice at 2.0).
+    @Test
+    fun lineBoxFollowsTheTextAtLargeFontSizes() {
+        RuntimeEnvironment.setFontScale(2f)
+        val t = AppType(Tokens.Type.Balanced)
+        rule.setContent {
+            Column {
+                StoneText("Creating mindful\ninterludes", Modifier.testTag("stone"), t.body)
+                BasicText("Creating mindful\ninterludes", Modifier.testTag("plain"), style = t.body)
+            }
+        }
+        assertEquals(height("plain"), height("stone"), 0.5f)
     }
 }

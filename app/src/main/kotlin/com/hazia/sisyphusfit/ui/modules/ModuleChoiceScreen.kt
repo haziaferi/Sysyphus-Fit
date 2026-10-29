@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,12 +29,14 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
-import com.hazia.sisyphusfit.R
 import com.hazia.sisyphusfit.core.Module
 import com.hazia.sisyphusfit.ui.stone.BottomZone
 import com.hazia.sisyphusfit.ui.stone.CarvedEdge
@@ -50,27 +53,25 @@ import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 import kotlin.math.roundToInt
 
-/** The mark that opens what a module includes; the circled "i" stays the evidence notes' (0.16). Picked on the 6T. */
-enum class IncludesMark { Star, Lozenge, InfoChip }
-
-private val MARK_ICON = 20.dp
-
 /**
- * First launch (SPEC 0.18): the five modules, none ticked; a tap on a card ticks it, its mark opens what it includes
- * in a small card in place. "Step forward" records the choice, none ticked included.
+ * First launch (SPEC 0.18): the five modules, none ticked, each with its icon before its name (owner's pick on the 6T);
+ * a tap on a card ticks it, its "info" chip opens what it
+ * includes in a small card in place (the circled "i" stays the evidence notes', 0.16). "Step forward" records the
+ * choice, none ticked included.
  */
 @Composable
 fun ModuleChoiceScreen(
     onStepForward: (Set<Module>) -> Unit,
     modifier: Modifier = Modifier,
-    mark: IncludesMark = IncludesMark.Star,
-    moduleIcons: Boolean = true,
 ) {
     var ticked by rememberSaveable { mutableStateOf(listOf<String>()) }
     var open by remember { mutableStateOf<Module?>(null) }
     val cards = remember { mutableStateMapOf<Module, Rect>() }
     val marks = remember { mutableStateMapOf<Module, Rect>() }
     var origin by remember { mutableStateOf(Offset.Zero) }
+    // 0.54: when any name would wrap beside its chip, every card puts the chip and box under its text (one form per
+    // screen); kept until the font size or the width changes, so the wider names cannot flip it back.
+    var stacked by remember(LocalDensity.current.fontScale, LocalConfiguration.current.screenWidthDp) { mutableStateOf(false) }
     BackHandler(enabled = open != null) { open = null }
 
     Box(modifier.fillMaxSize().onGloballyPositioned { origin = it.positionInRoot() }) {
@@ -89,11 +90,11 @@ fun ModuleChoiceScreen(
                             module = m,
                             checked = m.name in ticked,
                             onChange = { on -> ticked = if (on) ticked + m.name else ticked - m.name },
-                            mark = mark,
-                            icon = moduleIcons,
                             onMark = { open = m },
                             onCard = { cards[m] = it },
                             onMarkPlaced = { marks[m] = it },
+                            stacked = stacked,
+                            onNameWraps = { stacked = true },
                         )
                     }
                 }
@@ -116,13 +117,31 @@ private fun ModuleCard(
     module: Module,
     checked: Boolean,
     onChange: (Boolean) -> Unit,
-    mark: IncludesMark,
-    icon: Boolean,
     onMark: () -> Unit,
     onCard: (Rect) -> Unit,
     onMarkPlaced: (Rect) -> Unit,
+    stacked: Boolean,
+    onNameWraps: () -> Unit,
 ) {
     val text = ModuleTexts.getValue(module)
+    val title = Theme.type.rowTitle
+    val oneLine = with(LocalDensity.current) { title.fontSize.toPx() * title.lineHeight.value / title.fontSize.value }
+    val controls: @Composable () -> Unit = {
+        Box(
+            Modifier
+                .testTag("includes:${module.name}")
+                .onGloballyPositioned { onMarkPlaced(it.boundsInRoot()) }
+                .press(onMark, label = "show what it includes", description = "What ${text.name} includes"),
+            contentAlignment = Alignment.Center,
+        ) {
+            StoneText(
+                "info",
+                Modifier.carvedLine(CarvedEdge.Top).carvedLine(CarvedEdge.Bottom).padding(horizontal = 8.dp, vertical = 4.dp),
+                style = Theme.type.chip,
+            )
+        }
+        Box(Modifier.testTag("box:${module.name}")) { CheckMark(checked) }
+    }
     Box(
         Modifier
             .testTag("module:${module.name}")
@@ -130,9 +149,15 @@ private fun ModuleCard(
             .toggleable(checked, role = Role.Checkbox, onValueChange = onChange),
     ) {
         WornCard {
-            if (icon) StoneIcon(text.icon)
             Column(Modifier.weight(1f)) {
-                StoneText(text.name, style = Theme.type.rowTitle)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                    StoneIcon(text.icon)
+                    StoneText(
+                        text.name,
+                        Modifier.weight(1f, fill = false).onSizeChanged { if (!stacked && it.height > oneLine * 1.5f) onNameWraps() },
+                        style = title,
+                    )
+                }
                 StoneText(text.line, style = Theme.type.body.copy(color = Tokens.Colors.inkSecondary))
                 if (module !in BuiltModules) {
                     StoneText(
@@ -141,25 +166,15 @@ private fun ModuleCard(
                         style = Theme.type.label.copy(color = Tokens.Colors.inkSecondary),
                     )
                 }
-            }
-            Box(
-                Modifier
-                    .testTag("includes:${module.name}")
-                    .onGloballyPositioned { onMarkPlaced(it.boundsInRoot()) }
-                    .press(onMark, label = "show what it includes", description = "What ${text.name} includes"),
-                contentAlignment = Alignment.Center,
-            ) {
-                when (mark) {
-                    IncludesMark.Star -> StoneIcon(R.drawable.ic_includes_star, tint = Tokens.Colors.inkSecondary, size = MARK_ICON)
-                    IncludesMark.Lozenge -> StoneIcon(R.drawable.ic_includes_lozenge, tint = Tokens.Colors.inkSecondary, size = MARK_ICON)
-                    IncludesMark.InfoChip -> StoneText(
-                        "info",
-                        Modifier.carvedLine(CarvedEdge.Top).carvedLine(CarvedEdge.Bottom).padding(horizontal = 8.dp, vertical = 4.dp),
-                        style = Theme.type.chip,
-                    )
+                if (stacked) {
+                    Row(
+                        Modifier.align(Alignment.End),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) { controls() }
                 }
             }
-            Box(Modifier.testTag("box:${module.name}")) { CheckMark(checked) }
+            if (!stacked) controls()
         }
     }
 }

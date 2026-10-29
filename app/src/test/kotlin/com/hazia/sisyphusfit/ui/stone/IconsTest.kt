@@ -7,10 +7,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.w3c.dom.Element
 
-/** SPEC 0.37: our own set of 28 (30 while the module choice's mark is picked), a 24 grid, 2 dp strokes, no fill; object icons faceted from 0.53. */
+/** SPEC 0.37: our own set of 28, a 24 grid, 2 dp strokes, no fill; object icons faceted from 0.53. */
 class IconsTest {
     private val names = listOf(
-        "back", "backspace", "backup", "caret", "check", "chevron", "clock", "close", "edit", "includes_lozenge", "includes_star", "info", "label", "minus",
+        "back", "backspace", "backup", "caret", "check", "chevron", "clock", "close", "edit", "info", "label", "minus",
         "module_daily", "module_measures", "module_mobility", "module_stamina", "module_strength", "play", "plus",
         "restore", "search", "settings", "stop", "tab_history", "tab_more", "tab_start", "tab_week", "timer",
     )
@@ -25,7 +25,7 @@ class IconsTest {
 
     @Test
     fun all28IconsExist() {
-        assertEquals(30, names.size)
+        assertEquals(28, names.size)
         names.forEach { assertTrue("ic_$it.xml", File(drawables, "ic_$it.xml").exists()) }
         assertEquals(names.map { "ic_$it.xml" }.sorted(), drawables.list()!!.filter { it.startsWith("ic_") }.sorted())
     }

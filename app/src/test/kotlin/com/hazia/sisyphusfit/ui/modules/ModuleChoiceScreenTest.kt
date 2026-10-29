@@ -1,9 +1,6 @@
 package com.hazia.sisyphusfit.ui.modules
 
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
@@ -40,8 +37,7 @@ class ModuleChoiceScreenTest {
 
     private var chosen: Set<Module>? = null
 
-    private fun show(mark: IncludesMark = IncludesMark.Star) =
-        rule.setContent { SisyphusTheme { ModuleChoiceScreen(onStepForward = { chosen = it }, mark = mark) } }
+    private fun show() = rule.setContent { SisyphusTheme { ModuleChoiceScreen(onStepForward = { chosen = it }) } }
 
     private fun card(m: Module) = rule.onNodeWithTag("module:${m.name}")
 
@@ -133,18 +129,13 @@ class ModuleChoiceScreenTest {
     }
 
     @Test fun markAndCheckboxKeepTheirDistance() {
-        var current by mutableStateOf(IncludesMark.Star)
-        rule.setContent { SisyphusTheme { ModuleChoiceScreen(onStepForward = {}, mark = current) } }
-        IncludesMark.entries.forEach { mark ->
-            current = mark
-            rule.waitForIdle()
-            Module.entries.forEach { m ->
-                val markBox = rule.onNodeWithTag("includes:${m.name}").getUnclippedBoundsInRoot()
-                val box = rule.onNodeWithTag("box:${m.name}", useUnmergedTree = true).getUnclippedBoundsInRoot()
-                assertTrue("$mark ${m.name} mark width", markBox.width >= 42.dp)
-                assertTrue("$mark ${m.name} mark height", markBox.height >= 42.dp)
-                assertTrue("$mark ${m.name} gap", box.left - markBox.right >= 5.dp)
-            }
+        show()
+        Module.entries.forEach { m ->
+            val markBox = rule.onNodeWithTag("includes:${m.name}").getUnclippedBoundsInRoot()
+            val box = rule.onNodeWithTag("box:${m.name}", useUnmergedTree = true).getUnclippedBoundsInRoot()
+            assertTrue("${m.name} mark width", markBox.width >= 42.dp)
+            assertTrue("${m.name} mark height", markBox.height >= 42.dp)
+            assertTrue("${m.name} gap", box.left - markBox.right >= 5.dp)
         }
     }
 }

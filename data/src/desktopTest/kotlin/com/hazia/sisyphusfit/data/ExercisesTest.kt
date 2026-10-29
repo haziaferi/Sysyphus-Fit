@@ -62,4 +62,13 @@ class ExercisesTest {
         db.floorDao().addExercise(ExerciseEntity("X", "Assisted pull-up", "ASSISTED", sided = false, archived = false))
         assertEquals(listOf("Squat"), store.active().first().map { it.name })
     }
+
+    // M4: a tag a newer build wrote stays when this build replaces the exercise's tags.
+    @Test fun unknownTagsSurviveAnUpdate() = runBlocking {
+        val id = store.add("Squat", ExerciseKind.DYNAMIC, false, setOf(Module.STRENGTH))
+        db.execute("INSERT INTO exercise_module (id, exercise_id, module) VALUES ('t', '$id', 'CLIMBING')")
+        store.update(store.active().first().single().copy(modules = setOf(Module.MOBILITY_BALANCE)))
+        assertEquals(1L, db.count("SELECT count(*) FROM exercise_module WHERE module = 'CLIMBING'"))
+        assertEquals(setOf(Module.MOBILITY_BALANCE), store.active().first().single().modules)
+    }
 }

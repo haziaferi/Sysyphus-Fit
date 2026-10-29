@@ -54,4 +54,19 @@ class SettingsTest {
         assertEquals(setOf(Module.STRENGTH), withTimeout(5_000) { seen.receive() })
         watch.cancel()
     }
+
+    // M4: a name a newer build wrote stays when this build rewrites the choice.
+    @Test fun unknownModuleNamesSurviveARewrite() = runBlocking {
+        db.settingDao().put("x", "modules", "STRENGTH,CLIMBING")
+        settings.chooseModules(setOf(Module.STAMINA))
+        assertEquals("STAMINA,CLIMBING", db.settingDao().value("modules").first())
+        assertEquals(setOf(Module.STAMINA), settings.modules().first())
+    }
+
+    @Test fun choosingNoneStillKeepsUnknownNames() = runBlocking {
+        db.settingDao().put("x", "modules", "CLIMBING")
+        settings.chooseModules(emptySet())
+        assertEquals("CLIMBING", db.settingDao().value("modules").first())
+        assertEquals(emptySet<Module>(), settings.modules().first())
+    }
 }

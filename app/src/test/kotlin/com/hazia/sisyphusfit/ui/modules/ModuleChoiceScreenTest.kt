@@ -1,7 +1,9 @@
 package com.hazia.sisyphusfit.ui.modules
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
@@ -9,6 +11,8 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.getUnclippedBoundsInRoot
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
@@ -137,5 +141,17 @@ class ModuleChoiceScreenTest {
             assertTrue("${m.name} mark height", markBox.height >= 42.dp)
             assertTrue("${m.name} gap", box.left - markBox.right >= 5.dp)
         }
+    }
+
+    // TalkBack: the card is announced when it opens, the list behind it is out of reach, and the scrim is silent.
+    @Test fun includesIsAnnouncedAndHidesTheListBehind() {
+        show()
+        rule.onNodeWithTag("includes:STRENGTH").performClick()
+        rule.onNodeWithTag("includes-card")
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.LiveRegion, LiveRegionMode.Polite))
+            .assert(SemanticsMatcher.expectValue(SemanticsProperties.PaneTitle, "What Strength includes"))
+        rule.onNode(hasTestTag("module:STAMINA") and hasAnyAncestor(SemanticsMatcher.keyIsDefined(SemanticsProperties.HideFromAccessibility)))
+            .assertExists()
+        rule.onNodeWithTag("includes-scrim").assert(SemanticsMatcher.keyNotDefined(SemanticsActions.OnClick))
     }
 }

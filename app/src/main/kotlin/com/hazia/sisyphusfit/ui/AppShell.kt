@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +50,10 @@ val AppTabs = listOf(
     TabItem("History", R.drawable.ic_tab_history), TabItem("More", R.drawable.ic_tab_more),
 )
 
+// Above, the status bar; at the sides, three-button navigation in landscape and any cutout. The bottom belongs to
+// the bottom zone or the tab bar.
+private val screenInsets @Composable get() = WindowInsets.safeDrawing.only(WindowInsetsSides.Top + WindowInsetsSides.Horizontal)
+
 private val graphs = listOf(StartTab, WeekTab, HistoryTab, MoreTab)
 private val roots = listOf(StartRoot, WeekRoot, HistoryRoot, MoreRoot)
 
@@ -69,7 +75,7 @@ fun AppShell(gate: ShellViewModel = viewModel(factory = ShellViewModel.Factory))
             ShellState.Loading -> Box(Modifier.fillMaxSize().background(Tokens.Colors.surfacePage))
             ShellState.Choose -> ModuleChoiceScreen(
                 onStepForward = gate::choose,
-                Modifier.background(Tokens.Colors.surfacePage).windowInsetsPadding(WindowInsets.statusBars),
+                Modifier.background(Tokens.Colors.surfacePage).windowInsetsPadding(screenInsets),
             )
             ShellState.Ready -> Tabs(nav)
         }
@@ -86,7 +92,7 @@ private fun Tabs(nav: NavHostController) {
         NavHost(
             nav,
             startDestination = StartTab,
-            modifier = Modifier.weight(1f).windowInsetsPadding(WindowInsets.statusBars),
+            modifier = Modifier.weight(1f).windowInsetsPadding(screenInsets),
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
             popEnterTransition = { EnterTransition.None },

@@ -34,7 +34,13 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.paneTitle
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.core.Module
@@ -75,7 +81,8 @@ fun ModuleChoiceScreen(
     BackHandler(enabled = open != null) { open = null }
 
     Box(modifier.fillMaxSize().onGloballyPositioned { origin = it.positionInRoot() }) {
-        Column(Modifier.fillMaxSize()) {
+        // While a card is open, TalkBack reaches only it; the list behind waits.
+        Column(Modifier.fillMaxSize().semantics { if (open != null) hideFromAccessibility() }) {
             Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(Theme.space.gutter)) {
                 StoneText("Start your journey", style = Theme.type.heading)
                 Spacer(Modifier.height(Theme.space.gap))
@@ -107,7 +114,8 @@ fun ModuleChoiceScreen(
         val card = shown?.let { cards[it] }
         val at = shown?.let { marks[it] }
         if (shown != null && card != null && at != null) {
-            Includes(ModuleTexts.getValue(shown).includes, card.translate(-origin), at.translate(-origin), onClose = { open = null })
+            val text = ModuleTexts.getValue(shown)
+            Includes("What ${text.name} includes", text.includes, card.translate(-origin), at.translate(-origin), onClose = { open = null })
         }
     }
 }
@@ -184,12 +192,15 @@ private fun ModuleCard(
  * card's padding, above the mark instead when there is no room below. A tap anywhere else, or Back, closes it.
  */
 @Composable
-private fun Includes(text: String, card: Rect, mark: Rect, onClose: () -> Unit) {
+private fun Includes(title: String, text: String, card: Rect, mark: Rect, onClose: () -> Unit) {
     Box(
         Modifier
             .fillMaxSize()
             .testTag("includes-scrim")
-            .clickable(interactionSource = null, indication = null, onClickLabel = "close", onClick = onClose),
+            // For touch only: TalkBack closes the card with Back, and the scrim says nothing (cleared before the click,
+            // whose semantics sit inside it).
+            .clearAndSetSemantics {}
+            .clickable(interactionSource = null, indication = null, onClick = onClose),
     )
     val inset = Theme.space.pad
     Box(
@@ -205,6 +216,10 @@ private fun Includes(text: String, card: Rect, mark: Rect, onClose: () -> Unit) 
         Box(
             Modifier
                 .testTag("includes-card")
+                .semantics {
+                    paneTitle = title
+                    liveRegion = LiveRegionMode.Polite
+                }
                 .fillMaxWidth()
                 .elevation(Tokens.Elevation.float, WornShape)
                 .background(Tokens.Colors.surfaceCard, WornShape)

@@ -12,12 +12,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!-- Debug only, until the owner picks: the module choice's look variants (adb: am start -n
-             com.hazia.sisyphusfit/.ui.gallery.ModuleChoiceGalleryActivity). -->
-        <activity
-            android:name=".ui.gallery.ModuleChoiceGalleryActivity"
-            android:label="Module choice"
-            android:exported="true"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
     </application>
 </manifest>

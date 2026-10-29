@@ -55,18 +55,7 @@ class GalleryActivity : ComponentActivity() {
     }
 }
 
-internal val FONT_SCALES = listOf(1f, 1.3f, 2f)
-
-/** The density at [FONT_SCALES]`[scale]` on Android's own nonlinear font curve; a negative [scale] follows the phone. */
-@Composable
-internal fun rememberGalleryDensity(scale: Int): Density {
-    val context = LocalContext.current
-    val config = LocalConfiguration.current
-    // Density(context) applies Android 14's nonlinear font curve, as the phone's own setting does.
-    return if (scale < 0) LocalDensity.current else remember(scale, config) {
-        Density(context.createConfigurationContext(android.content.res.Configuration(config).apply { fontScale = FONT_SCALES[scale] }))
-    }
-}
+private val FONT_SCALES = listOf(1f, 1.3f, 2f)
 
 /**
  * The gallery: density and font size switches over the pieces, a main bar in its bottom zone and the tab bar.
@@ -78,7 +67,12 @@ fun Gallery(startDensity: DensityMode = DensityMode.Balanced, startSheet: Boolea
     var scale by remember { mutableIntStateOf(-1) }
     var tab by remember { mutableIntStateOf(0) }
     var sheet by remember { mutableStateOf(startSheet) }
-    val scaled = rememberGalleryDensity(scale)
+    val context = LocalContext.current
+    val config = LocalConfiguration.current
+    // Density(context) applies Android 14's nonlinear font curve, as the phone's own setting does.
+    val scaled = if (scale < 0) LocalDensity.current else remember(scale, config) {
+        Density(context.createConfigurationContext(android.content.res.Configuration(config).apply { fontScale = FONT_SCALES[scale] }))
+    }
     CompositionLocalProvider(LocalDensity provides scaled) {
         SisyphusTheme(density) {
             Box(Modifier.fillMaxSize().background(Tokens.Colors.surfacePage)) {

@@ -37,9 +37,13 @@ class SessionsTest {
         assertEquals("2025-10-29", db.floorDao().sessionsBetween("2025-10-01", "2025-10-31").single().day)
     }
 
-    @Test fun onlyOneSessionOpenAtATime() {
-        runBlocking { store.start() }
-        assertFailsWith<IllegalStateException> { runBlocking { store.start() } }
+    // M3 (a): a second start (a double tap, a race with resume) resumes the open session instead of failing.
+    @Test fun startingWhileOneIsOpenResumesIt() = runBlocking {
+        val first = store.start()
+        time.now += 60_000
+        assertEquals(first, store.start(activity = "walk"))
+        assertEquals(1L, db.count("SELECT count(*) FROM session"))
+        assertNull(store.open().first()!!.session.activity)
     }
 
     @Test fun setsTakeTheNextPositionInTheSession() = runBlocking {

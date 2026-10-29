@@ -7,6 +7,7 @@ import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.v2.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,7 @@ import com.hazia.sisyphusfit.MainActivity
 import com.hazia.sisyphusfit.TestContainerRule
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -32,6 +34,12 @@ class AppShellTest {
     private fun tab(label: String) = rule.onNode(hasText(label) and isSelectable())
     private fun tap(label: String) = tab(label).performClick().also { rule.waitForIdle() }
     private fun shows(root: Int) = rule.onNodeWithTag("root:$root").assertIsDisplayed()
+
+    // The shell shows only the page while it reads the module choice off the main thread (0.18), which Compose's idling
+    // does not wait for.
+    private fun ready() = rule.waitUntil(5_000) { rule.onAllNodesWithTag("root:0").fetchSemanticsNodes().isNotEmpty() }
+
+    @Before fun opened() = ready()
 
     private fun back() {
         rule.runOnUiThread { rule.activity.onBackPressedDispatcher.onBackPressed() }
@@ -68,6 +76,7 @@ class AppShellTest {
     @Test fun rotationKeepsTheTab() {
         tap("History")
         rule.activityRule.scenario.recreate()
+        rule.waitUntil(5_000) { rule.onAllNodesWithTag("root:2").fetchSemanticsNodes().isNotEmpty() }
         shows(2)
         tab("History").assertIsSelected()
     }
@@ -88,12 +97,15 @@ class AppShellTest {
         scenario.moveToState(Lifecycle.State.DESTROYED)
 
         val controller = Robolectric.buildActivity(MainActivity::class.java).setup(restored)
-        rule.waitForIdle()
+        rule.waitUntil(5_000) { rule.onAllNodesWithTag("root:2").fetchSemanticsNodes().isNotEmpty() }
         shows(2)
         tab("History").assertIsSelected()
         controller.get().onBackPressedDispatcher.onBackPressed()
         rule.waitForIdle()
         shows(0)
+        // M1: and from Start, out of the app.
+        controller.get().onBackPressedDispatcher.onBackPressed()
+        assertTrue(controller.get().isFinishing)
         controller.pause().stop().destroy()
     }
 

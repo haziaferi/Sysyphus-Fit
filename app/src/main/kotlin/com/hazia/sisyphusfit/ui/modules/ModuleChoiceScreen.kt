@@ -31,8 +31,8 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Constraints
@@ -71,7 +71,7 @@ fun ModuleChoiceScreen(
     var origin by remember { mutableStateOf(Offset.Zero) }
     // 0.54: when any name would wrap beside its chip, every card puts the chip and box under its text (one form per
     // screen); kept until the font size or the width changes, so the wider names cannot flip it back.
-    var stacked by remember(LocalDensity.current.fontScale, LocalConfiguration.current.screenWidthDp) { mutableStateOf(false) }
+    var stacked by remember(LocalDensity.current.fontScale, LocalWindowInfo.current.containerSize.width) { mutableStateOf(false) }
     BackHandler(enabled = open != null) { open = null }
 
     Box(modifier.fillMaxSize().onGloballyPositioned { origin = it.positionInRoot() }) {

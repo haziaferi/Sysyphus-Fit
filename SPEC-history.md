@@ -149,7 +149,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-21 · R01 · kind · Q → D · owner
 - 2026-11-21 · R01 · changed · one person; nine jobs, daily movement most often · owner
 - 2026-11-21 · R11 · kind · Q → D · owner
-- 2026-11-21 · R11 · changed · nothing to cloud, device transfer carries all · owner
+- 2026-11-21 · R11 · changed · as built: no cloud backup; device transfer carries all from Android 12, nothing on 11 · owner
 - 2026-11-21 · R12 · changed · left for its own design round · owner
 - 2026-11-21 · R13 · kind · Q → D · owner
 - 2026-11-21 · R13 · changed · default debug key per machine · owner
@@ -164,8 +164,8 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-21 · R43 · changed · one next-time proposal from the person's rule, a setting off by default · owner
 - 2026-11-21 · R72 · kind · Q → D · owner
 - 2026-11-21 · R72 · changed · 2 min · owner
-- 2026-11-21 · R100 · changed · tags are modules and categories, never labels · owner
-- 2026-11-21 · R101 · changed · locked → editable with a warning · owner
+- 2026-11-21 · R100 · changed · tags are modules and categories, never labels; a typed word matches names and categories · owner
+- 2026-11-21 · R101 · changed · locked → editable with a warning; renamed Changing an exercise's type · owner
 - 2026-11-21 · R110 · retired · answered in R101 · owner
 - 2026-11-21 · R113 · kind · Q → D · owner
 - 2026-11-21 · R113 · changed · no mode · owner

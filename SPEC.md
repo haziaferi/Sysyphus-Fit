@@ -111,7 +111,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R98 | Exercises before routines | 16. Exercises and routines |
 | D-R99 | Where exercises are made and managed | 16. Exercises and routines |
 | D-R100 | The add sheet | 16. Exercises and routines |
-| D-R101 | Exercise type and its lock | 16. Exercises and routines |
+| D-R101 | Changing an exercise's type | 16. Exercises and routines |
 | D-R102 | Editing an exercise | 16. Exercises and routines |
 | D-R103 | Exercise editor fields | 16. Exercises and routines |
 | Q-R104 | How the type is chosen in the editor | 16. Exercises and routines |
@@ -135,7 +135,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | Term | Meaning |
 |---|---|
 | Module | One of the five training areas of R19 (Daily movement, Strength, Stamina, Mobility and balance, Body measures); the person chooses which are on. |
-| Tag | A module attached to an exercise; an exercise may carry several (R23). |
+| Tag | A module or one of the person's categories attached to an exercise; an exercise may carry several (R23, R114). |
 | Label | A name from the person's own reusable list, attached to a session (R23). |
 | Session | One sitting of activity, counted on one calendar date; it holds logged sets or is an amount. |
 | Amount | A session with no start or end time, only a day and a quantity (R29). |
@@ -290,11 +290,20 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R11 · Android's own backup
 
-**Rule:** Android's own backup sends nothing to a cloud backup, and a device-to-device transfer to a new phone carries everything. The app's own backup (R36) is the way out.
+**Rule:** Android's own backup sends nothing to a cloud backup, and a device-to-device transfer to a new phone carries what the row for the phone's Android version says. The app's own backup (R36) is the way out.
 
 **Why:** Training data never leaves the phone without the person (R07).
 
-**Acceptance:** `app/src/main/res/xml/data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole.
+**Values:**
+
+| Android | Cloud backup | Device-to-device transfer | File |
+|---|---|---|---|
+| 12 and later | nothing | everything | `data_extraction_rules.xml` |
+| 11 (the minimum, `minSdk` 30) | nothing | nothing | `backup_rules.xml` |
+
+**Evidence:** On Android 11 one rule set (`fullBackupContent`) covers both cloud backup and device transfer, and `backup_rules.xml` excludes every domain, so a transfer from an Android 11 phone carries nothing (checked in the files, 2026-11-21).
+
+**Acceptance:** `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` excludes every domain.
 
 **Not:** Android's encrypted cloud backup: the data would leave the device. No device transfer either: a new phone would start empty until a restore.
 
@@ -486,7 +495,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R25 · Each module's own units in This week
 
-**Rule:** "This week" shows each module's totals in its own units, as below, never converted or combined. A session without sets (a walk, a quick amount) counts its time under the module it is logged under, chosen when it is logged.
+**Rule:** "This week" shows each module's totals in its own units, as below, never converted or combined. A session with sets counts as R24 says; a session without sets (a walk, a quick amount) counts its time under the module it is logged under, chosen when it is logged.
 
 **Why:** Steps and distance are units of measurement, but not in the way sets are (owner, 2026-10-21).
 
@@ -1692,7 +1701,7 @@ Shape, line, elevation and motion (the same at both densities):
 | tags offered | the modules, plus the person's own categories (R103), never labels (R114); tags A-Z, exercises A-Z; tags no exercise carries are hidden |
 | several tags | the exercises carrying all of them |
 | no tag and no name | no list |
-| a typed name with no tag | searches every exercise |
+| a typed word with no tag | searches every exercise's name and categories (R113) |
 | "New exercise" | always shown; starts with the picked tags |
 | an exercise already in the session | leaves the list |
 | a row tapped | stays in place, its pill reading "Added" with a tick; a second tap takes it back out; rows never move while the sheet is open |
@@ -1700,11 +1709,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Built into the trial as version 2 and adjusted in round 3 (2026-10-30): the visible line pushed the list down on the first add. With pill shapes whose ends change with width, tapping a row could wrap its details and move 11 of 14 rows below (2026-10-31), see R112.
 
-**Acceptance:** Tapping a row twice leaves every row's position unchanged within 0.5 dp.
+**Acceptance:** Tapping a row twice leaves every row's position unchanged.
 
 **Since:** 2026-11-21 · owner · migrated
 
-### D-R101 · Exercise type and its lock
+### D-R101 · Changing an exercise's type
 
 **Rule:** An exercise's type and its per-side setting stay editable. Once the exercise has logged sets, switching either asks first, with the wording below, and logged sets keep their numbers. The "Show partial reps" switch is offered for Dynamic exercises only.
 
@@ -1876,7 +1885,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R07 · No account, no network: The merged manifest declares no `INTERNET` permission.
 - R09 · Compose Foundation only: No `androidx.compose.material` artifact is on the app's dependency list; the gallery builds only in the debug variant (`GalleryActivity` under `app/src/debug`).
 - R10 · Bundled font files: `FontFilesTest.fontFilesAreTheRelease` matches both hashes.
-- R11 · Android's own backup: `app/src/main/res/xml/data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole.
+- R11 · Android's own backup: `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` excludes every domain.
 - R13 · Signing key: `app/build.gradle.kts` declares no `signingConfig`, and no keystore is in the repository.
 - R14 · Evidence sources: `python tools/evidence_check.py` with the reports present finds every source id in a report's verified id list.
 - R16 · Commentary rules: `python tools/evidence_check.py` passes on the pack; on a note, the brief level shows claim and certainty only, and "Details" opens the rest.
@@ -1953,8 +1962,8 @@ Shape, line, elevation and motion (the same at both densities):
 - R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" leaves the session STOPPED_EARLY.
 - R97 · Start's date line: On 2026-10-20 the line reads "Tuesday 20 October".
 - R99 · Where exercises are made and managed: The add sheet has no edit action; More lists the exercises grouped by module, each opening its editor.
-- R100 · The add sheet: Tapping a row twice leaves every row's position unchanged within 0.5 dp.
-- R101 · Exercise type and its lock: Switching the type of an exercise with logged sets shows the question, and "Keep" leaves the type unchanged; an Isometric exercise offers no partial-reps switch.
+- R100 · The add sheet: Tapping a row twice leaves every row's position unchanged.
+- R101 · Changing an exercise's type: Switching the type of an exercise with logged sets shows the question, and "Keep" leaves the type unchanged; an Isometric exercise offers no partial-reps switch.
 - R102 · Editing an exercise: Saving "plank" beside "Plank" shows the refusal; an archived exercise is gone from the list with its sets kept in History.
 - R103 · Exercise editor fields: Plank can be made with 60 s rest, a note and the category "core", and the session shows its note.
 - R113 · How the add sheet's search reaches categories: Typing "legs" with no tag picked lists every exercise named or categorised with a word starting "legs".

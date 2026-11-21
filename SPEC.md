@@ -799,17 +799,27 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### O-R50 · Touch areas and hierarchy
 
-**Rule:** Visual size follows the function hierarchy, so not every control is visually 48 dp. Touch areas are at least 42 dp, and touch targets at least 5 dp apart.
+**Rule:** Visual size follows the function hierarchy, so not every control is visually 48 dp. Touch areas step up by importance on the ladder below, from its minimum to its maximum, with the main bar and the steppers on the upper steps; touch targets are at least 5 dp apart.
 
 **Why:** 42 dp avoids overlap, or too much empty space, when two lines or buttons are close.
 
-**Evidence:** 42 dp is above WCAG 2.2 AA (24 px) and below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner flags it.
+**Values:**
 
-**Acceptance:** Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp.
+| Step | Balanced / compact | Used for |
+|---|---|---|
+| minimum | 42 dp | never below (gate G4) |
+| 1 | 48 / 44 dp | chips, the smaller steppers (partials), icon buttons |
+| 2 | 56 / 48 dp | rows, the main bar, the set steppers |
+| 3 | 64-72 / 56-72 dp | module cards, the tab bar, the floating control |
+| maximum | 72 dp | the rest round, which grows with font size (R80) |
 
-**Not:** 48 dp for every touch area: it leaves too much empty space between close lines.
+**Evidence:** 42 dp is above WCAG 2.2 AA (24 px) and below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner flags it. The ladder meets `app-register-layout`'s hit-area requirement (a minimum, steps by importance, a maximum, no overlap), checked 2026-11-21; its sizes are the `size` tokens of `design/tokens.json`, not measured on rendered screens.
 
-**Since:** 2026-10-20 · owner · migrated
+**Acceptance:** Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp; every touch target's `size` token sits on one row of the ladder.
+
+**Not:** 48 dp for every touch area: it leaves too much empty space between close lines. Three steps with the rest round as an exception: the owner kept the minimum and maximum as rows of their own.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R51 · Judgement-free
 
@@ -1849,7 +1859,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R47 · Calm before complete: Gate G1-G5 runs pass, and the owner signs the screen off on the 6T.
 - R48 · One home per thing: Every edit action in the app leads to one screen per thing.
 - R49 · One form per element: The stone pieces in `ui/stone` are the only implementations of these elements, and their goldens match on every screen that uses them.
-- R50 · Touch areas and hierarchy: Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp.
+- R50 · Touch areas and hierarchy: Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp; every touch target's `size` token sits on one row of the ladder.
 - R51 · Judgement-free: No screen text praises, blames or counts missed days; the empty state reads "Nothing here."
 - R52 · Gates G1-G5: The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp and font sizes 1.0-2.0.
 - R53 · Greyscale: Every colour role in `design/tokens.json` resolves to a grey or a black alpha.

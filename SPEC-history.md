@@ -142,6 +142,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-21 · R17 · changed · text English first, Italian with the translation pass · owner
 - 2026-11-21 · R34 · changed · confirmed by the owner with its reason · owner
 - 2026-11-21 · R40 · changed · confirmed by the owner with its reason · owner
+- 2026-11-21 · R50 · changed · hit areas on a five-row ladder, 42 to 72 dp; confirmed by the owner · owner
 - 2026-11-21 · R51 · changed · Nothing here. in English; no-judgement wording rules · owner
 - 2026-11-21 · R93 · kind · O → D · owner
 - 2026-11-21 · spec · migrated · from the 0.1-0.60 decision table to numbered rules; old file at 9939e08 · builder

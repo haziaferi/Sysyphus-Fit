@@ -290,7 +290,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R11 · Android's own backup
 
-**Rule:** Android's own backup sends nothing to a cloud backup, and a device-to-device transfer to a new phone carries what the row for the phone's Android version says. The app's own backup (R36) is the way out.
+**Rule:** Android's own backup sends nothing to a cloud backup, and a device-to-device transfer to a new phone carries everything, on every Android version the app runs on. The app's own backup (R36) is the way out.
 
 **Why:** Training data never leaves the phone without the person (R07).
 
@@ -299,13 +299,13 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | Android | Cloud backup | Device-to-device transfer | File |
 |---|---|---|---|
 | 12 and later | nothing | everything | `data_extraction_rules.xml` |
-| 11 (the minimum, `minSdk` 30) | nothing | nothing | `backup_rules.xml` |
+| 11 (the minimum, `minSdk` 30) | nothing | everything | `backup_rules.xml` |
 
-**Evidence:** On Android 11 one rule set (`fullBackupContent`) covers both cloud backup and device transfer, and `backup_rules.xml` excludes every domain, so a transfer from an Android 11 phone carries nothing (checked in the files, 2026-11-21).
+**Evidence:** On Android 11 one rule set (`fullBackupContent`) covers both cloud backup and device transfer, so every `include` in `backup_rules.xml` carries `requireFlags="deviceToDeviceTransfer"` and applies to a transfer only. The app holds no Keystore-bound keys and no device identifiers, so transferred data stays readable (searched the code, 2026-11-21). Not checked: a transfer from a real Android 11 phone, or through a phone maker's own transfer tool.
 
-**Acceptance:** `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` excludes every domain.
+**Acceptance:** `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` includes every domain only with `requireFlags="deviceToDeviceTransfer"`.
 
-**Not:** Android's encrypted cloud backup: the data would leave the device. No device transfer either: a new phone would start empty until a restore.
+**Not:** Android's encrypted cloud backup: the data would leave the device. No device transfer, on any version: a new phone would start empty until a restore.
 
 **Since:** 2026-11-21 · owner · agreed rewording
 
@@ -1885,7 +1885,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R07 · No account, no network: The merged manifest declares no `INTERNET` permission.
 - R09 · Compose Foundation only: No `androidx.compose.material` artifact is on the app's dependency list; the gallery builds only in the debug variant (`GalleryActivity` under `app/src/debug`).
 - R10 · Bundled font files: `FontFilesTest.fontFilesAreTheRelease` matches both hashes.
-- R11 · Android's own backup: `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` excludes every domain.
+- R11 · Android's own backup: `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` includes every domain only with `requireFlags="deviceToDeviceTransfer"`.
 - R13 · Signing key: `app/build.gradle.kts` declares no `signingConfig`, and no keystore is in the repository.
 - R14 · Evidence sources: `python tools/evidence_check.py` with the reports present finds every source id in a report's verified id list.
 - R16 · Commentary rules: `python tools/evidence_check.py` passes on the pack; on a note, the brief level shows claim and certainty only, and "Details" opens the rest.

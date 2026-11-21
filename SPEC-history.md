@@ -149,7 +149,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-21 · R01 · kind · Q → D · owner
 - 2026-11-21 · R01 · changed · one person; nine jobs, daily movement most often · owner
 - 2026-11-21 · R11 · kind · Q → D · owner
-- 2026-11-21 · R11 · changed · as built: no cloud backup; device transfer carries all from Android 12, nothing on 11 · owner
+- 2026-11-21 · R11 · changed · no cloud backup; a device transfer carries everything, Android 11 included · owner
 - 2026-11-21 · R12 · changed · left for its own design round · owner
 - 2026-11-21 · R13 · kind · Q → D · owner
 - 2026-11-21 · R13 · changed · default debug key per machine · owner

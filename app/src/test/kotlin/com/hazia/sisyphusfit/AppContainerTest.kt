@@ -22,7 +22,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-/** The one container, wired by hand (SPEC 0.58): the database opens once, on first use, never on the main thread. */
+/** The one container, wired by hand (SPEC:R84): the database opens once, on first use, never on the main thread. */
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36])
 class AppContainerTest {

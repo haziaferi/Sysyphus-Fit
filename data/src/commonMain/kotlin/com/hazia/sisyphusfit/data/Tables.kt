@@ -7,7 +7,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /*
- * Schema version 2 (SPEC §4): schema 1, designed for the whole 50-point scope, plus the additive
+ * Schema version 2 (SPEC:R28): schema 1, designed for the whole 50-point scope, plus the additive
  * parts of stage 1a (module tags, labels, body measures, power and partial reps). Integers only:
  * epoch milliseconds UTC plus the recording zone, seconds, grams, millimetres, metres, 1e-7 degrees.
  * Ids are ULIDs from :core. A column added by a later schema goes LAST in its entity, with a SQL
@@ -16,7 +16,7 @@ import androidx.room.PrimaryKey
 
 /**
  * kind: DYNAMIC, ISOMETRIC, TIMED, DISTANCE. sided: counted per side (harvest CM2).
- * show_partial_reps (schema 2, 0.33): the partial-reps count is offered on this exercise.
+ * show_partial_reps (schema 2, SPEC:R32): the partial-reps count is offered on this exercise.
  */
 @Entity(tableName = "exercise")
 data class ExerciseEntity(
@@ -28,7 +28,7 @@ data class ExerciseEntity(
     @ColumnInfo(name = "show_partial_reps", defaultValue = "0") val showPartialReps: Boolean = false,
 )
 
-/** Schema 2 (0.23): a module tag on an exercise, several per exercise. module: a :core Module name. */
+/** Schema 2 (SPEC:R23): a module tag on an exercise, several per exercise. module: a :core Module name. */
 @Entity(
     tableName = "exercise_module",
     foreignKeys = [ForeignKey(ExerciseEntity::class, ["id"], ["exercise_id"], onDelete = ForeignKey.CASCADE)],
@@ -95,8 +95,8 @@ data class SessionEntity(
 
 /**
  * A done set; skipped sets are never written (KA2). rpe is RPE x10 (BC1). side: L, R or null.
- * Schema 2: power is "move fast" (0.19); partial_reps is its own count beside reps, never converted
- * into reps (0.33: 7 full and 1 partial is reps 7, partial_reps 1).
+ * Schema 2: power is "move fast" (SPEC:R22); partial_reps is its own count beside reps, never converted
+ * into reps (SPEC:R32: 7 full and 1 partial is reps 7, partial_reps 1).
  */
 @Entity(
     tableName = "logged_set",
@@ -190,7 +190,7 @@ data class SettingEntity(
     val value: String,
 )
 
-/** Schema 2 (0.23): a label from the person's reusable list; archived hides it from the list. */
+/** Schema 2 (SPEC:R23): a label from the person's reusable list; archived hides it from the list. */
 @Entity(tableName = "label")
 data class LabelEntity(
     @PrimaryKey val id: String,
@@ -199,7 +199,7 @@ data class LabelEntity(
     val archived: Boolean,
 )
 
-/** Schema 2 (0.23): a label on a session, several per session. */
+/** Schema 2 (SPEC:R23): a label on a session, several per session. */
 @Entity(
     tableName = "session_label",
     foreignKeys = [
@@ -215,7 +215,7 @@ data class SessionLabelEntity(
 )
 
 /**
- * Schema 2, the body-measures module (OS1, 0.10): the person's own measure, an integer [value] in
+ * Schema 2, the body-measures module (OS1, SPEC:R20): the person's own measure, an integer [value] in
  * the stated [unit] (G for WEIGHT, MM for a girth such as WAIST), so a new kind needs no migration.
  * [day] follows the session rule: the local date of taken_at in zone. No BMI, BMR or forecast is
  * stored or derived.

@@ -60,9 +60,9 @@ import com.hazia.sisyphusfit.ui.theme.Tokens
 import kotlin.math.roundToInt
 
 /**
- * First launch (SPEC 0.18): the five modules, none ticked, each with its icon before its name (owner's pick on the 6T);
+ * First launch (SPEC:R90, SPEC:R21): the five modules, none ticked, each with its icon before its name (owner's pick on the 6T);
  * a tap on a card ticks it, its "info" chip opens what it
- * includes in a small card in place (the circled "i" stays the evidence notes', 0.16). "Step forward" records the
+ * includes in a small card in place (the circled "i" stays the evidence notes', SPEC:R91). "Step forward" records the
  * choice, none ticked included.
  */
 @Composable
@@ -75,7 +75,7 @@ fun ModuleChoiceScreen(
     val cards = remember { mutableStateMapOf<Module, Rect>() }
     val marks = remember { mutableStateMapOf<Module, Rect>() }
     var origin by remember { mutableStateOf(Offset.Zero) }
-    // 0.54: when any name would wrap beside its chip, every card puts the chip and box under its text (one form per
+    // SPEC:R88: when any name would wrap beside its chip, every card puts the chip and box under its text (one form per
     // screen); kept until the font size or the width changes, so the wider names cannot flip it back.
     var stacked by remember(LocalDensity.current.fontScale, LocalWindowInfo.current.containerSize.width) { mutableStateOf(false) }
     BackHandler(enabled = open != null) { open = null }

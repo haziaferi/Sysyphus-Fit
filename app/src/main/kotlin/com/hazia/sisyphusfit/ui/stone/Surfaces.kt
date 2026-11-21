@@ -20,7 +20,7 @@ import com.hazia.sisyphusfit.ui.theme.Tokens
 private val GAP = 12.dp
 
 /**
- * A worn surface (SPEC 0.53): module cards, week sections, the resume card ([minHeight] `size.card`) and rows
+ * A worn surface (SPEC:R65): module cards, week sections, the resume card ([minHeight] `size.card`) and rows
  * (`size.row`). Cut on the left, worn on the right, lit toward the worn side.
  */
 @Composable
@@ -44,7 +44,7 @@ fun WornCard(
     )
 }
 
-/** A flat row (SPEC 0.53): no fill, the worn outline drawn 1 dp in `line.edge`; at least `size.row` high. */
+/** A flat row (SPEC:R65): no fill, the worn outline drawn 1 dp in `line.edge`; at least `size.row` high. */
 @Composable
 fun FlatRow(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, content: @Composable RowScope.() -> Unit) {
     Row(

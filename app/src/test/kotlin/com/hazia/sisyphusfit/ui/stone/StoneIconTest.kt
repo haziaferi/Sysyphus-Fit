@@ -32,7 +32,7 @@ class StoneIconTest {
         rule.onNodeWithTag("i").assertWidthIsEqualTo(24.dp).assertHeightIsEqualTo(24.dp)
     }
 
-    // 0.53 "m-icons-lit": a line of carved-light just under the ink, so the icon reads as cut into the surface.
+    // SPEC:R65 "m-icons-lit": a line of carved-light just under the ink, so the icon reads as cut into the surface.
     @Test
     fun litEdgeShowsUnderTheInk() {
         rule.setContent { SisyphusTheme { StoneIcon(R.drawable.ic_minus, Modifier.testTag("i"), tint = Color.Black) } }

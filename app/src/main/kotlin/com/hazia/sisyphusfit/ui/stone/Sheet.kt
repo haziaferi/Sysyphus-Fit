@@ -58,7 +58,7 @@ private const val DISMISS_FRACTION = 0.25f
 private val FLING = 125.dp
 
 /**
- * A bottom sheet (SPEC 0.16, evidence notes; the labels list): `surface.page` with `radius.sheet` top corners and
+ * A bottom sheet (SPEC:R16, evidence notes; the labels list): `surface.page` with `radius.sheet` top corners and
  * `elevation.float`, over `shadow.scrim`. Tapping the scrim, dragging or flinging the sheet down, or system Back closes
  * it; TalkBack reads it as a pane. It slides with `motion.valley`, the app's one decided slide.
  */

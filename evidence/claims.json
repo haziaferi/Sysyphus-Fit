@@ -24,7 +24,7 @@
     {
       "id": "strength.progression.double",
       "version": 1,
-      "held": "SPEC §11: the progression package is blocked until the owner decides where suggestions stop",
+      "held": "SPEC:R43: the progression package is blocked until the owner decides where suggestions stop",
       "module": "strength",
       "features": [
         "LL5",
@@ -83,7 +83,7 @@
       "module": "shared",
       "features": [
         "X-WEEK",
-        "0.24"
+        "R24"
       ],
       "report_rules": [
         {
@@ -321,7 +321,7 @@
       "module": "daily_movement",
       "features": [
         "AK1",
-        "0.26"
+        "R22"
       ],
       "report_rules": [
         {
@@ -544,7 +544,7 @@
       "module": "strength",
       "features": [
         "KA3",
-        "0.19"
+        "R22"
       ],
       "report_rules": [
         {
@@ -588,7 +588,7 @@
       "module": "mobility_balance",
       "features": [
         "PL1",
-        "0.19"
+        "R22"
       ],
       "report_rules": [
         {

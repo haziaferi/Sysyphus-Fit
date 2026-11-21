@@ -19,11 +19,11 @@ import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 import com.hazia.sisyphusfit.ui.theme.sisifo
 
-// The pill's height in the decided mockups (".pill": 36px); it grows with its label (0.49).
+// The pill's height in the decided mockups (".pill": 36px); it grows with its label (SPEC:R56).
 private val PILL_HEIGHT = 36.dp
 
 /**
- * A secondary button (SPEC 0.53): a worn pebble in `surface.sunk` standing on the 2 dp ground shadow. [quiet] drops the
+ * A secondary button (SPEC:R65): a worn pebble in `surface.sunk` standing on the 2 dp ground shadow. [quiet] drops the
  * pebble and keeps the label (the header's Finish). The touch area is at least `size.hit`.
  */
 @Composable

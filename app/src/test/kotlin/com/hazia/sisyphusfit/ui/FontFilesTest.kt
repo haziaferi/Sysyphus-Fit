@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
-/** SPEC 0.40: the app bundles Sisifo's released files, v1.0 of github.com/haziaferi/sisifo, unchanged. */
+/** SPEC:R10: the app bundles Sisifo's released files, v1.0 of github.com/haziaferi/sisifo, unchanged. */
 class FontFilesTest {
     private val res = File("src/main/res")
 

@@ -5,7 +5,7 @@ import androidx.sqlite.SQLiteException
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import java.io.File
 
-// The desktop JVM target: where the tests run, and the start of a Windows build (SPEC 0.1).
+// The desktop JVM target: where the tests run, and the start of a Windows build (SPEC:R03).
 // BundledSQLiteDriver never deletes a corrupt file, so it needs no wrapper.
 
 fun openSisyphusDatabase(file: File, now: () -> Long = System::currentTimeMillis): DatabaseOpen<SisyphusDatabase> =

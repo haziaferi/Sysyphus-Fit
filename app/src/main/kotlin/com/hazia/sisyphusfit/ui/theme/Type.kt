@@ -10,7 +10,7 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.em
 import com.hazia.sisyphusfit.R
 
-/** Sisifo at one instance of its two axes (SPEC 0.40): weight 300-700, CARV 0-100. */
+/** Sisifo at one instance of its two axes (SPEC:R59): weight 300-700, CARV 0-100. */
 fun sisifo(weight: Int, carve: Float, italic: Boolean = false): FontFamily = FontFamily(
     Font(
         if (italic) R.font.sisifo_italic else R.font.sisifo,

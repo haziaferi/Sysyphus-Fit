@@ -44,7 +44,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object HistoryRoot
 @Serializable data object MoreRoot
 
-/** The bottom tabs (0.29, in English first as 0.39 says). */
+/** The bottom tabs (SPEC:R82, in English first as SPEC:R58 says). */
 val AppTabs = listOf(
     TabItem("Start", R.drawable.ic_tab_start), TabItem("This week", R.drawable.ic_tab_week),
     TabItem("History", R.drawable.ic_tab_history), TabItem("More", R.drawable.ic_tab_more),
@@ -58,10 +58,10 @@ private val graphs = listOf(StartTab, WeekTab, HistoryTab, MoreTab)
 private val roots = listOf(StartRoot, WeekRoot, HistoryRoot, MoreRoot)
 
 /**
- * The app's frame. Until a module choice is recorded it shows the choice (0.18), without the tab bar; while the setting
- * loads, only the page; when the data cannot be opened, a screen that says so (0.60). Then the current tab's screen above the fixed tab bar (0.54), which shows on the four roots. The
- * app opens on Start (0.25). Changing tab keeps each tab's place (the documented multiple-back-stacks pattern); Back from
- * another tab's root returns to Start, and from Start leaves the app. The screen changes at once (0.53): only the
+ * The app's frame. Until a module choice is recorded it shows the choice (SPEC:R90), without the tab bar; while the setting
+ * loads, only the page; when the data cannot be opened, a screen that says so (SPEC:R92). Then the current tab's screen above the fixed tab bar (SPEC:R88), which shows on the four roots. The
+ * app opens on Start (SPEC:R83). Changing tab keeps each tab's place (the documented multiple-back-stacks pattern); Back from
+ * another tab's root returns to Start, and from Start leaves the app. The screen changes at once (SPEC:R82): only the
  * valley moves.
  */
 @Composable

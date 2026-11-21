@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
-/** 0.56: the band behind Android's navigation buttons shows the app's own surface. */
+/** SPEC:R85: the band behind Android's navigation buttons shows the app's own surface. */
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36])
 class MainActivityTest {

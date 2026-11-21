@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPEC §5, default until the owner decides: nothing goes to a cloud backup (the app has no
+<!-- SPEC:R11, default until the owner decides: nothing goes to a cloud backup (the app has no
      network and its own one-file backup is the way out); a device-to-device transfer to a new phone
      carries everything. -->
 <data-extraction-rules>

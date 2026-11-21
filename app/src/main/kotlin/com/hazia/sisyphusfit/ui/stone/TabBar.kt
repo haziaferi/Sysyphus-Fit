@@ -133,7 +133,7 @@ private fun clearance(pts: List<Offset>, boxes: List<Rect>, density: Float): Flo
 fun reducedMotion(): Boolean = !ValueAnimator.areAnimatorsEnabled()
 
 /**
- * The bottom tab bar (SPEC 0.29, 0.53, 0.54): fixed at the bottom, its line dipping into a valley under the current tab,
+ * The bottom tab bar (SPEC:R82, SPEC:R66, SPEC:R88): fixed at the bottom, its line dipping into a valley under the current tab,
  * the valley's floor underlined. Tapping a tab slides the valley there (`motion.valley`); with reduced motion it jumps.
  * The bar grows with its labels and reaches under the navigation bar ([insets]).
  */

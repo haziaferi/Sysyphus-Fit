@@ -1,0 +1,148 @@
+# SisyphusFit spec history
+
+Not a source of current rules: `SPEC.md` is. One line per change, newest at the bottom. Retired wording is in git.
+
+- 2026-10-19 · R03 · added · platform · owner
+- 2026-10-19 · R04 · added · package name · owner
+- 2026-10-19 · R05 · added · repository and local research · owner
+- 2026-10-19 · R06 · added · gradle modules · builder
+- 2026-10-19 · R07 · added · no account, no network · owner
+- 2026-10-19 · R08 · added · frontend before building · owner
+- 2026-10-19 · R11 · added · android's own backup · builder
+- 2026-10-19 · R12 · added · app icon · builder
+- 2026-10-19 · R13 · added · signing key · builder
+- 2026-10-19 · R26 · added · units · owner
+- 2026-10-19 · R27 · added · ids · builder
+- 2026-10-19 · R28 · added · tables, schema version 2 · owner
+- 2026-10-19 · R29 · added · an amount is a session without times · builder
+- 2026-10-19 · R30 · added · the counting day · builder
+- 2026-10-19 · R31 · added · only done sets are stored · builder
+- 2026-10-19 · R35 · added · the database never deletes itself · builder
+- 2026-10-19 · R37 · added · gates · owner
+- 2026-10-20 · R02 · added · records and comments, never prescribes · owner
+- 2026-10-20 · R14 · added · evidence sources · owner
+- 2026-10-20 · R15 · added · what the evidence says about the app's shape · owner
+- 2026-10-20 · R16 · added · commentary rules · owner
+- 2026-10-20 · R17 · added · evidence pack · owner
+- 2026-10-20 · R18 · added · wellness, not medical software · owner
+- 2026-10-20 · R19 · added · the five modules · owner
+- 2026-10-20 · R20 · added · body measures without verdicts · owner
+- 2026-10-20 · R21 · added · modules chosen by the person · owner
+- 2026-10-20 · R22 · added · additions inside modules · owner
+- 2026-10-20 · R23 · added · modules are tags · owner
+- 2026-10-20 · R26 · changed · weight with two decimals in grams · owner
+- 2026-10-20 · R32 · added · partial reps · owner
+- 2026-10-20 · R34 · added · nothing logged is lost · owner
+- 2026-10-20 · R38 · added · thin slice, then deepening · owner
+- 2026-10-20 · R39 · added · stage list · owner
+- 2026-10-20 · R40 · added · today is designed last · owner
+- 2026-10-20 · R41 · added · a harvest row is read against the code first · unrecorded
+- 2026-10-20 · R42 · added · the shape of Today · owner
+- 2026-10-20 · R43 · added · where suggestions stop · owner
+- 2026-10-20 · R44 · added · screens grouped by purpose · owner
+- 2026-10-20 · R45 · added · purposes and screens · owner
+- 2026-10-20 · R46 · added · doing and showing screens · owner
+- 2026-10-20 · R47 · added · calm before complete · owner
+- 2026-10-20 · R48 · added · one home per thing · owner
+- 2026-10-20 · R49 · added · one form per element · owner
+- 2026-10-20 · R50 · added · touch areas and hierarchy · owner
+- 2026-10-20 · R51 · added · judgement-free · owner
+- 2026-10-20 · R52 · added · gates G1-G5 · owner
+- 2026-10-20 · R53 · added · greyscale · owner
+- 2026-10-20 · R67 · added · the live comparison · owner
+- 2026-10-20 · R83 · added · the app opens on Start · owner
+- 2026-10-20 · R115 · added · no streaks · owner
+- 2026-10-20 · R116 · added · no readiness or load alarms · owner
+- 2026-10-20 · R117 · added · no prescriptions or automatic deloads · owner
+- 2026-10-20 · R118 · added · no profiles or connected sensors · owner
+- 2026-10-20 · R119 · added · no hidden duplicates · owner
+- 2026-10-20 · R120 · added · notes that span modules · builder
+- 2026-10-21 · R24 · added · this week counts a mixed session by its parts · owner
+- 2026-10-21 · R25 · added · sessions without sets in This week · owner
+- 2026-10-21 · R28 · changed · schema 2 adds four tables and three columns · owner
+- 2026-10-21 · R33 · added · migrations add, never rewrite · owner
+- 2026-10-21 · R36 · added · backup format · builder
+- 2026-10-21 · R57 · added · density · owner
+- 2026-10-21 · R64 · added · icons · owner
+- 2026-10-21 · R69 · added · the main bar and running controls · owner
+- 2026-10-22 · R58 · added · english first · owner
+- 2026-10-22 · R68 · added · set input · owner
+- 2026-10-23 · R59 · added · typeface · owner
+- 2026-10-23 · R60 · added · type roles · owner
+- 2026-10-23 · R69 · changed · exercise screen's running control is the rest round only · owner
+- 2026-10-23 · R70 · added · the running control on the exercise screen · owner
+- 2026-10-23 · R71 · added · the rest timer · owner
+- 2026-10-23 · R72 · added · default rest length · owner
+- 2026-10-23 · R73 · added · session clock · owner
+- 2026-10-26 · R76 · added · the boulder's form · owner
+- 2026-10-26 · R77 · added · what the figure and the stone share · owner
+- 2026-10-27 · R39 · changed · rest-timer stage sized by the growing round · owner
+- 2026-10-27 · R52 · changed · G5 lost text at font sizes 1.0-2.0 · owner
+- 2026-10-27 · R54 · added · screen width · owner
+- 2026-10-27 · R55 · added · fit on the phone's app area · owner
+- 2026-10-27 · R56 · added · text follows the phone's font size · owner
+- 2026-10-27 · R59 · changed · carve follows the role's token, not the rendered size · owner
+- 2026-10-27 · R60 · changed · token sizes in sp; comparison card text sizes · owner
+- 2026-10-27 · R74 · added · the rest round is the boulder · owner
+- 2026-10-27 · R75 · added · the figure · owner
+- 2026-10-27 · R78 · added · one centre line · owner
+- 2026-10-27 · R79 · added · the comparison card at larger font sizes · owner
+- 2026-10-27 · R80 · added · the rest round grows with its time · owner
+- 2026-10-27 · R81 · added · the compact rest screen · owner
+- 2026-10-28 · R06 · changed · :app holds the shell · builder
+- 2026-10-28 · R09 · added · compose Foundation only · owner
+- 2026-10-28 · R10 · added · bundled font files · owner
+- 2026-10-28 · R37 · changed · evidence and token checks in CI · owner
+- 2026-10-28 · R62 · added · design tokens · owner
+- 2026-10-28 · R63 · added · evidence note sheet spacing · owner
+- 2026-10-28 · R64 · changed · object icons faceted · owner
+- 2026-10-28 · R65 · added · stone language · owner
+- 2026-10-28 · R66 · added · the tab bar's valley · owner
+- 2026-10-28 · R82 · added · navigation · owner
+- 2026-10-28 · R84 · added · wiring by hand · owner
+- 2026-10-28 · R85 · added · edge to edge · owner
+- 2026-10-28 · R86 · added · the shared data core · owner
+- 2026-10-28 · R88 · added · tab screens at larger font sizes · owner
+- 2026-10-28 · R89 · added · tab roots without screens · owner
+- 2026-10-29 · R19 · changed · Daily movement and Stamina split by spread vs set-out sessions · owner
+- 2026-10-29 · R58 · changed · accent-aware sorting comes with Italian · owner
+- 2026-10-29 · R61 · added · text line boxes · owner
+- 2026-10-29 · R85 · changed · the choice and the tab bodies keep clear of side buttons and cutouts · owner
+- 2026-10-29 · R86 · changed · names a newer build wrote are kept on rewrite · owner
+- 2026-10-29 · R87 · added · starting while a session is open · owner
+- 2026-10-29 · R90 · added · the module choice screen · owner
+- 2026-10-29 · R91 · added · module cards on the choice · owner
+- 2026-10-29 · R92 · added · when the data cannot be opened · owner
+- 2026-10-29 · R93 · added · build order for Start · owner
+- 2026-10-29 · R94 · added · what Start shows · owner
+- 2026-10-29 · R95 · added · session names · owner
+- 2026-10-29 · R96 · added · the resume card · owner
+- 2026-10-29 · R97 · added · start's date line · owner
+- 2026-10-29 · R98 · added · exercises before routines · owner
+- 2026-10-29 · R101 · added · exercise type and its lock · owner
+- 2026-10-29 · R102 · added · editing an exercise · owner
+- 2026-10-30 · R99 · added · where exercises are made and managed · owner
+- 2026-10-30 · R100 · added · the add sheet · owner
+- 2026-10-30 · R101 · changed · per side locked with the type · owner
+- 2026-10-30 · R103 · added · exercise editor fields · owner
+- 2026-11-01 · R104 · added · how the type is chosen in the editor · builder
+- 2026-11-01 · R105 · added · how modules are picked in the editor · builder
+- 2026-11-01 · R106 · added · how categories are picked in the editor · builder
+- 2026-11-01 · R107 · added · how optional fields show · builder
+- 2026-11-01 · R108 · added · how the default rest is picked · builder
+- 2026-11-01 · R109 · added · how notes are written · builder
+- 2026-11-01 · R110 · added · type after the first logged set · builder
+- 2026-11-01 · R111 · added · how the add sheet adds · builder
+- 2026-11-01 · R112 · added · pill and chip shapes · builder
+- 2026-11-01 · R113 · added · how the add sheet's search reaches categories · builder
+- 2026-11-01 · R114 · added · categories and labels · builder
+- 2026-11-21 · R01 · added · jobs and how often · builder
+- 2026-11-21 · R05 · changed · confirmed by the owner with its reason · owner
+- 2026-11-21 · R16 · changed · examples in English, Details label · owner
+- 2026-11-21 · R17 · changed · text English first, Italian with the translation pass · owner
+- 2026-11-21 · R34 · changed · confirmed by the owner with its reason · owner
+- 2026-11-21 · R40 · changed · confirmed by the owner with its reason · owner
+- 2026-11-21 · R50 · changed · hit areas on a five-row ladder, 42 to 72 dp; confirmed by the owner · owner
+- 2026-11-21 · R51 · changed · Nothing here. in English; no-judgement wording rules · owner
+- 2026-11-21 · R93 · kind · O → D · owner
+- 2026-11-21 · spec · migrated · from the 0.1-0.60 decision table to numbered rules; old file at 9939e08 · builder

@@ -34,7 +34,7 @@ class TabBarTest {
         TabItem("History", R.drawable.ic_tab_history), TabItem("More", R.drawable.ic_tab_more),
     )
 
-    // 0.54 / vl_tabfit: the floor is as wide as the current label, never under 60 dp, and runs 7 dp under it.
+    // SPEC:R66 / vl_tabfit: the floor is as wide as the current label, never under 60 dp, and runs 7 dp under it.
     @Test
     fun valleyFloorFitsLabel() {
         assertEquals(60f, valleyTarget(centre = 50f, labelWidth = 40f, labelBottom = 55f, density = 1f).floor, 0.01f)
@@ -74,7 +74,7 @@ class TabBarTest {
         assertEquals("already there two frames in", settled, after, 0.5f)
     }
 
-    // 0.53 / valley-motion: 250 ms, cubic-bezier(0.2, 0, 0, 1); one frame in, the valley is on its way.
+    // SPEC:R66 / valley-motion: 250 ms, cubic-bezier(0.2, 0, 0, 1); one frame in, the valley is on its way.
     @Test
     fun valleySlidesOtherwise() {
         rule.mainClock.autoAdvance = false

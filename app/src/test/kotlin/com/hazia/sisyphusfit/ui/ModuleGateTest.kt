@@ -23,7 +23,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-/** First launch (SPEC 0.18): the choice comes before the tabs, once. */
+/** First launch (SPEC:R90): the choice comes before the tabs, once. */
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36], qualifiers = "w384dp-h756dp-xxhdpi")
 class ModuleGateTest {

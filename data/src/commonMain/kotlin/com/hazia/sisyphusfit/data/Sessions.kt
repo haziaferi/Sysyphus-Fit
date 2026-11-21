@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.map
 
 enum class Side { L, R }
 
-/** What a done set records; every count and measure is zero or more. Partial reps are their own count (0.33). */
+/** What a done set records; every count and measure is zero or more. Partial reps are their own count (SPEC:R32). */
 data class SetValues(
     val reps: Int? = null,
     val weightGrams: Long? = null,
@@ -32,7 +32,7 @@ data class SetValues(
     }
 }
 
-/** The session left open (the app was closed mid-workout) with its sets in order, to resume (GL1, 0.27). */
+/** The session left open (the app was closed mid-workout) with its sets in order, to resume (GL1, SPEC:R34). */
 data class OpenSession(val session: SessionEntity, val sets: List<LoggedSetEntity>)
 
 data class SessionWithSets(

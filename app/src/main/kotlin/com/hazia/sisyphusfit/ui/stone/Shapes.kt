@@ -59,13 +59,13 @@ fun cornersPath(size: Size, c: List<Corner>): Path = Path().apply {
     close()
 }
 
-/** A worn pebble (SPEC 0.53): each corner a slightly different elliptical radius. */
+/** A worn pebble (SPEC:R65): each corner a slightly different elliptical radius. */
 class PebbleShape(private val radii: PebbleRadii) : Shape {
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density) =
         Outline.Generic(cornersPath(size, cssCorners(size, radii)))
 }
 
-/** Cut on the left, worn on the right (SPEC 0.53). */
+/** Cut on the left, worn on the right (SPEC:R65). */
 object WornShape : Shape {
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density) =
         Outline.Generic(cornersPath(size, cssCorners(size, Tokens.Radius.worn, density.density)))
@@ -100,7 +100,7 @@ private fun Matrix.toAndroidValues() = floatArrayOf(
     values[Matrix.Perspective0], values[Matrix.Perspective1], values[Matrix.Perspective2],
 )
 
-/** A worn surface: module cards, week sections, the resume card and rows (SPEC 0.53). */
+/** A worn surface: module cards, week sections, the resume card and rows (SPEC:R65). */
 fun Modifier.worn(): Modifier = this
     .background(Tokens.Colors.surfaceWorn, WornShape)
     .drawBehind {

@@ -13,7 +13,7 @@ kotlin {
         withHostTest {}
     }
 
-    // Keeps a Windows build open (SPEC 0.1); the tests run here, without an emulator.
+    // Keeps a Windows build open (SPEC:R03); the tests run here, without an emulator.
     jvm("desktop")
 
     sourceSets {

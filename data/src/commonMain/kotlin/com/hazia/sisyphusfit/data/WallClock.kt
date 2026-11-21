@@ -9,7 +9,7 @@ import kotlin.time.Clock
  */
 typealias Db = suspend () -> SisyphusDatabase
 
-/** The time and the zone a row is recorded in (SPEC §4: epoch milliseconds UTC plus the zone). */
+/** The time and the zone a row is recorded in (SPEC:R26: epoch milliseconds UTC plus the zone). */
 class WallClock(val now: () -> Long, val zone: () -> String) {
     companion object {
         val System = WallClock({ Clock.System.now().toEpochMilliseconds() }, { TimeZone.currentSystemDefault().id })

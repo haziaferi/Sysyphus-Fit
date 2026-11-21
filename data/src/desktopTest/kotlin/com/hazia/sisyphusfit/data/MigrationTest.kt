@@ -11,7 +11,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 /*
- * Schema 1 -> 2 (SPEC §4): additive, so every schema-1 cell must come out of the migration exactly as
+ * Schema 1 -> 2 (SPEC:R33): additive, so every schema-1 cell must come out of the migration exactly as
  * it went in. The schema-1 file comes from Schema1.kt (jvmTestShared), shared with the Robolectric test.
  */
 
@@ -73,7 +73,7 @@ class MigrationTest {
     }
 
     /**
-     * SPEC §5, the database never deletes itself, applied to migrations: a migration that fails stops
+     * SPEC:R35, the database never deletes itself, applied to migrations: a migration that fails stops
      * the open, and the file is left exactly as it was (its version, every table, every cell), not set
      * aside and not wiped, so a fixed (or newer) app can open it on the next start.
      */

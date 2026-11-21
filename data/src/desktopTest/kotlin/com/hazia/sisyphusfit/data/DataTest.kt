@@ -117,7 +117,7 @@ class BackupTest {
         assertTrue("\"note\": null" in text)
         assertEquals(2, BACKUP_VERSION)
         assertTrue("\"version\": 2," in text)
-        // 0.33: a partial rep is its own count, never folded into reps.
+        // SPEC:R32: a partial rep is its own count, never folded into reps.
         assertTrue("\"reps\": 7,\n" in text && "\"power\": 1,\n" in text && "\"partial_reps\": 1\n" in text)
         db.close()
     }

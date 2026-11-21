@@ -1,8 +1,8 @@
 package com.hazia.sisyphusfit.core
 
 /**
- * The training modules (SPEC §8, decisions 0.9, 0.10). A module is a tag on an exercise, and an
- * exercise may carry several (0.23); the database stores the [name].
+ * The training modules (SPEC:R19, SPEC:R20). A module is a tag on an exercise, and an
+ * exercise may carry several (SPEC:R23); the database stores the [name].
  */
 enum class Module { DAILY_MOVEMENT, STRENGTH, STAMINA, MOBILITY_BALANCE, BODY_MEASURES }
 
@@ -13,9 +13,9 @@ data class WeekSet(val sessionId: String, val exerciseId: String, val seconds: L
 data class ModuleWeek(val sessions: Int, val sets: Int, val seconds: Long)
 
 /**
- * "This week" per module, a mixed session counted by its parts (decision 0.24): each set counts,
+ * "This week" per module, a mixed session counted by its parts (SPEC:R24): each set counts,
  * whole, under every module tag its exercise carries; a session counts once under each module it
- * touched. There is deliberately no combined total (SPEC §7): the result is one entry per module,
+ * touched. There is deliberately no combined total (SPEC:R15, SPEC:R24): the result is one entry per module,
  * never summed. An exercise with no tag counts nowhere; a module with nothing done is absent.
  */
 fun weekByModule(sets: List<WeekSet>, tags: Map<String, Set<Module>>): Map<Module, ModuleWeek> {

@@ -12,7 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-/** The modules chosen at first launch (0.18): nothing is assumed until the person chooses. */
+/** The modules chosen at first launch (SPEC:R21): nothing is assumed until the person chooses. */
 class SettingsTest {
     private val temp = TempDatabase()
     private val db = temp.db

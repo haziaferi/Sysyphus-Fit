@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
 /**
- * What "Start or log" (0.25) shows: a session to resume (GL1, 0.27) and the modules the person chose; [failed] when
+ * What "Start or log" (SPEC:R83) shows: a session to resume (GL1, SPEC:R34) and the modules the person chose; [failed] when
  * the database could not be read, for the screen to say so.
  */
 data class StartState(

@@ -30,7 +30,7 @@ abstract class SettingDao {
 
 class Settings(private val db: Db, private val clock: WallClock) {
     /**
-     * The modules the person chose (0.18): null until they choose, so nothing is assumed on; an empty set is
+     * The modules the person chose (SPEC:R21, SPEC:R86): null until they choose, so nothing is assumed on; an empty set is
      * a choice of none. A name this build does not know (a backup from a newer one) is skipped.
      */
     fun modules(): Flow<Set<Module>?> = flow { emitAll(db().settingDao().value(MODULES)) }.map { value ->

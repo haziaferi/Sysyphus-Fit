@@ -3,7 +3,7 @@ package com.hazia.sisyphusfit.core
 import kotlin.random.Random
 
 /**
- * Row ids are ULIDs (SPEC §4): 48 bits of milliseconds then 80 random bits, written as 26
+ * Row ids are ULIDs (SPEC:R27): 48 bits of milliseconds then 80 random bits, written as 26
  * Crockford base-32 characters. They sort by creation time, and a restored or imported row never
  * collides with a local one.
  */

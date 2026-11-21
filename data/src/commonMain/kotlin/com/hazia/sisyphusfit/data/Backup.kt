@@ -19,7 +19,7 @@ import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.longOrNull
 
 /*
- * The one-file backup (harvest row KA9, SPEC §5): every table in [TABLES], every column, rows by id.
+ * The one-file backup (harvest row KA9, SPEC:R36): every table in [TABLES], every column, rows by id.
  * It is generic on purpose: it reads the columns from the database itself (PRAGMA table_info), so a
  * column added by a later schema is in the next backup without anyone remembering to add it.
  */

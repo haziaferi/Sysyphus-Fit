@@ -15,11 +15,11 @@ import com.hazia.sisyphusfit.ui.theme.StoneText
 import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 
-// The chip as decided in 0.47 (".cmp .chipv": 28 high, padding 0 10 0 7, gap 6, a 13 dp icon); it grows with its text (0.49).
+// The chip as decided in SPEC:R78 (".cmp .chipv": 28 high, padding 0 10 0 7, gap 6, a 13 dp icon); it grows with its text (SPEC:R56).
 private val CHIP_HEIGHT = 28.dp
 private val CHIP_ICON = 13.dp
 
-/** The evidence-note chip (SPEC 0.16, 0.47): the circled "i" and the note's title between two carved lines. */
+/** The evidence-note chip (SPEC:R16, SPEC:R78): the circled "i" and the note's title between two carved lines. */
 @Composable
 fun Chip(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(modifier.press(onClick, label = "open the note"), contentAlignment = Alignment.Center) {
@@ -39,13 +39,13 @@ fun Chip(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     }
 }
 
-/** Tags as text (SPEC 0.53, "q-tag-text"): in `ink.secondary`, joined by a middle dot. */
+/** Tags as text (SPEC:R65, "q-tag-text"): in `ink.secondary`, joined by a middle dot. */
 @Composable
 fun Tags(tags: List<String>, modifier: Modifier = Modifier) {
     StoneText(tags.joinToString(" · "), modifier, style = Theme.type.label.copy(color = Tokens.Colors.inkSecondary))
 }
 
-/** A section head (§10 type, eyebrow role): capitals, tracked, in `ink.secondary`. */
+/** A section head (SPEC:R60, eyebrow role): capitals, tracked, in `ink.secondary`. */
 @Composable
 fun Eyebrow(text: String, modifier: Modifier = Modifier) {
     val role = Theme.type.roles.eyebrow

@@ -36,5 +36,5 @@ buildCache {
 
 rootProject.name = "sisyphusfit"
 
-// SPEC §1: pure rules, the database, the Android app. A Windows app would join as :windows.
+// SPEC:R06: pure rules, the database, the Android app. A Windows app would join as :windows.
 include(":core", ":data", ":app")

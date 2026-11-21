@@ -199,7 +199,7 @@ data class LabelEntity(
     val archived: Boolean,
 )
 
-/** Schema 2 (SPEC:R23): a label on a session, several per session. */
+/** Schema 2 (SPEC:R23): a label on a session, several per session; labels tag sessions only (SPEC:R114). */
 @Entity(
     tableName = "session_label",
     foreignKeys = [

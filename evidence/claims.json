@@ -24,7 +24,7 @@
     {
       "id": "strength.progression.double",
       "version": 1,
-      "held": "SPEC:R43: the progression package is blocked until the owner decides where suggestions stop",
+      "held": "SPEC:R43: waits for the progression package (stage 7), whose next-time proposal is a setting, off by default",
       "module": "strength",
       "features": [
         "LL5",

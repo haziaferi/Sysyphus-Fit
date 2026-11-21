@@ -344,7 +344,7 @@ CLEAN = {
     "labels": {"observational": {"en": "Association, not cause"},
                "certainty_level": {k: {"en": k} for k in sorted(LEVELS)}},
     "claims": [
-        {"id": "strength.progression.double", "version": 1, "held": "SPEC:R43", "module": "strength",
+        {"id": "strength.progression.double", "version": 1, "held": "SPEC:R43: waits for the progression package", "module": "strength",
          "features": ["LL5"],
          "report_rules": [{"report": 1, "rule": "6"}],
          # 'shoulder', 'mustard', 'fatigue', 'willing': banned words inside longer words must not trip the gate

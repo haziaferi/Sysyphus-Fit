@@ -146,3 +146,29 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-21 · R51 · changed · Nothing here. in English; no-judgement wording rules · owner
 - 2026-11-21 · R93 · kind · O → D · owner
 - 2026-11-21 · spec · migrated · from the 0.1-0.60 decision table to numbered rules; old file at 9939e08 · builder
+- 2026-11-21 · R01 · kind · Q → D · owner
+- 2026-11-21 · R01 · changed · one person; nine jobs, daily movement most often · owner
+- 2026-11-21 · R11 · kind · Q → D · owner
+- 2026-11-21 · R11 · changed · no cloud backup; a device transfer carries everything, Android 11 included · owner
+- 2026-11-21 · R12 · changed · left for its own design round · owner
+- 2026-11-21 · R13 · kind · Q → D · owner
+- 2026-11-21 · R13 · changed · default debug key per machine · owner
+- 2026-11-21 · R120 · kind · Q → D · owner
+- 2026-11-21 · R120 · changed · the three proposed notes span modules · owner
+- 2026-11-21 · R23 · changed · set-less session carries its module; labels on sessions only · owner
+- 2026-11-21 · R25 · kind · Q → D · owner
+- 2026-11-21 · R25 · changed · each module's totals in its own units · owner
+- 2026-11-21 · R39 · changed · stage 7 no longer blocked · owner
+- 2026-11-21 · R42 · changed · kept for Today's design round · owner
+- 2026-11-21 · R43 · kind · Q → D · owner
+- 2026-11-21 · R43 · changed · one next-time proposal from the person's rule, a setting off by default · owner
+- 2026-11-21 · R72 · kind · Q → D · owner
+- 2026-11-21 · R72 · changed · 2 min · owner
+- 2026-11-21 · R100 · changed · tags are modules and categories, never labels; a typed word matches names and categories · owner
+- 2026-11-21 · R101 · changed · locked → editable with a warning; renamed Changing an exercise's type · owner
+- 2026-11-21 · R110 · retired · answered in R101 · owner
+- 2026-11-21 · R113 · kind · Q → D · owner
+- 2026-11-21 · R113 · changed · no mode · owner
+- 2026-11-21 · R114 · kind · Q → D · owner
+- 2026-11-21 · R114 · changed · labels on sessions, categories on exercises · owner
+- 2026-11-21 · R117 · changed · acceptance names the one proposal · owner

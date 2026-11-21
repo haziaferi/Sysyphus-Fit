@@ -40,7 +40,7 @@ A *text object* is `{"en": "..."}`; no other keys.
 |---|---|---|---|
 | `id` | string | yes | Stable id, `module.topic.name`, lowercase (`^[a-z][a-z0-9_]*(\.[a-z0-9_]+){2}$`). Never reused for a different finding. The app finds note text only through this id. |
 | `version` | integer ≥ 1 | yes | Bumped when the claim's text or sources change. |
-| `held` | string | no | Present = the claim is in the pack but **no screen may show it**; the text says what it waits for (e.g. "SPEC:R43: …"). Removing it is the owner's decision. |
+| `held` | string | no | Present = the claim is in the pack but **no screen may show it**; the text says what it waits for (e.g. "SPEC:R43: waits for the progression package"). Removing it is the owner's decision. |
 | `module` | enum | yes | `shared`, `strength`, `stamina`, `daily_movement`, `mobility_balance`, `body_measures` (SPEC:R19). Notes about the week or the app as a whole are `shared`. |
 | `features` | list of strings | yes, ≥ 1 | What the claim explains: harvest row ids (e.g. `FA15`, `AK1`), SPEC features (`X-WEEK`, `N-HISTORY`) or rule numbers (`R22`). Each must be named in SPEC.md. |
 | `report_rules` | list of `{report, rule}` | yes, ≥ 1 | The report rules the claim comes from. `report` is 1 or 2; `rule` is a string, one number or a range (`"6"`, `"1-4"`). Report 1 holds 1-31; Report 2 holds 32-63 and updates to 1-31. |

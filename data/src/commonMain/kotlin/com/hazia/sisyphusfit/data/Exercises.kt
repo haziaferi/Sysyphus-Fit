@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.map
 /** SPEC:R28: how an exercise is counted. */
 enum class ExerciseKind { DYNAMIC, ISOMETRIC, TIMED, DISTANCE }
 
-/** An exercise as the screens see it: its row and its module tags (SPEC:R23). */
+/** An exercise as the screens see it: its row and its module tags (SPEC:R23); labels never tag exercises (SPEC:R114). */
 data class Exercise(
     val id: String,
     val name: String,

@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
-/** Exercises with their module tags (SPEC:R23): several per exercise, replaced whole. */
+/** Exercises with their module tags (SPEC:R23): several per exercise, replaced whole; never a label (SPEC:R114). */
 class ExercisesTest {
     private val temp = TempDatabase()
     private val db = temp.db

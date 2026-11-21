@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- SPEC:R11, default until the owner decides: nothing goes to a cloud backup (the app has no
+<!-- SPEC:R11 (owner, 2026-11-21): nothing goes to a cloud backup (the app has no
      network and its own one-file backup is the way out); a device-to-device transfer to a new phone
-     carries everything. -->
+     carries everything. Android 12 and later; Android 11 does the same through backup_rules.xml. -->
 <data-extraction-rules>
     <cloud-backup>
         <exclude domain="root" path="." />

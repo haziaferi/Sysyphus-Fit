@@ -10,7 +10,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 
 | ID | Name | Section |
 |---|---|---|
-| Q-R01 | Jobs and how often | 1. Purpose and jobs |
+| D-R01 | Jobs and how often | 1. Purpose and jobs |
 | D-R02 | Records and comments, never prescribes | 1. Purpose and jobs |
 | D-R03 | Platform | 2. Platform and build |
 | D-R04 | Package name | 2. Platform and build |
@@ -20,14 +20,14 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R08 | Frontend before building | 2. Platform and build |
 | D-R09 | Compose Foundation only | 2. Platform and build |
 | D-R10 | Bundled font files | 2. Platform and build |
-| Q-R11 | Android's own backup | 2. Platform and build |
+| D-R11 | Android's own backup | 2. Platform and build |
 | Q-R12 | App icon | 2. Platform and build |
-| Q-R13 | Signing key | 2. Platform and build |
+| D-R13 | Signing key | 2. Platform and build |
 | D-R14 | Evidence sources | 3. Evidence and commentary |
 | D-R15 | What the evidence says about the app's shape | 3. Evidence and commentary |
 | D-R16 | Commentary rules | 3. Evidence and commentary |
 | D-R17 | Evidence pack | 3. Evidence and commentary |
-| Q-R120 | Notes that span modules | 3. Evidence and commentary |
+| D-R120 | Notes that span modules | 3. Evidence and commentary |
 | A-R18 | Wellness, not medical software | 3. Evidence and commentary |
 | D-R19 | The five modules | 4. Training modules |
 | D-R20 | Body measures without verdicts | 4. Training modules |
@@ -35,7 +35,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R22 | Additions inside modules | 4. Training modules |
 | D-R23 | Modules are tags | 4. Training modules |
 | D-R24 | This week counts a mixed session by its parts | 4. Training modules |
-| Q-R25 | Sessions without sets in This week | 4. Training modules |
+| D-R25 | Each module's own units in This week | 4. Training modules |
 | D-R26 | Units | 5. Data model |
 | D-R27 | Ids | 5. Data model |
 | D-R28 | Tables, schema version 2 | 5. Data model |
@@ -53,7 +53,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | O-R40 | Today is designed last | 7. Stages |
 | D-R41 | A harvest row is read against the code first | 7. Stages |
 | Q-R42 | The shape of Today | 7. Stages |
-| Q-R43 | Where suggestions stop | 7. Stages |
+| D-R43 | Where suggestions stop | 7. Stages |
 | D-R44 | Screens grouped by purpose | 8. Screens by purpose |
 | D-R45 | Purposes and screens | 8. Screens by purpose |
 | D-R46 | Doing and showing screens | 8. Screens by purpose |
@@ -82,7 +82,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R69 | The main bar and running controls | 12. Exercise screen and rest |
 | D-R70 | The running control on the exercise screen | 12. Exercise screen and rest |
 | D-R71 | The rest timer | 12. Exercise screen and rest |
-| Q-R72 | Default rest length | 12. Exercise screen and rest |
+| D-R72 | Default rest length | 12. Exercise screen and rest |
 | D-R73 | Session clock | 12. Exercise screen and rest |
 | D-R74 | The rest round is the boulder | 12. Exercise screen and rest |
 | D-R75 | The figure | 12. Exercise screen and rest |
@@ -111,7 +111,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R98 | Exercises before routines | 16. Exercises and routines |
 | D-R99 | Where exercises are made and managed | 16. Exercises and routines |
 | D-R100 | The add sheet | 16. Exercises and routines |
-| D-R101 | Exercise type and its lock | 16. Exercises and routines |
+| D-R101 | Changing an exercise's type | 16. Exercises and routines |
 | D-R102 | Editing an exercise | 16. Exercises and routines |
 | D-R103 | Exercise editor fields | 16. Exercises and routines |
 | Q-R104 | How the type is chosen in the editor | 16. Exercises and routines |
@@ -120,11 +120,10 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | Q-R107 | How optional fields show | 16. Exercises and routines |
 | Q-R108 | How the default rest is picked | 16. Exercises and routines |
 | Q-R109 | How notes are written | 16. Exercises and routines |
-| Q-R110 | Type after the first logged set | 16. Exercises and routines |
 | Q-R111 | How the add sheet adds | 16. Exercises and routines |
 | Q-R112 | Pill and chip shapes | 16. Exercises and routines |
-| Q-R113 | How the add sheet's search reaches categories | 16. Exercises and routines |
-| Q-R114 | Categories and labels | 16. Exercises and routines |
+| D-R113 | How the add sheet's search reaches categories | 16. Exercises and routines |
+| D-R114 | Categories and labels | 16. Exercises and routines |
 | D-R115 | No streaks | Out of scope |
 | D-R116 | No readiness or load alarms | Out of scope |
 | D-R117 | No prescriptions or automatic deloads | Out of scope |
@@ -136,7 +135,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | Term | Meaning |
 |---|---|
 | Module | One of the five training areas of R19 (Daily movement, Strength, Stamina, Mobility and balance, Body measures); the person chooses which are on. |
-| Tag | A module attached to an exercise; an exercise may carry several (R23). |
+| Tag | A module or one of the person's categories attached to an exercise; an exercise may carry several (R23, R114). |
 | Label | A name from the person's own reusable list, attached to a session (R23). |
 | Session | One sitting of activity, counted on one calendar date; it holds logged sets or is an amount. |
 | Amount | A session with no start or end time, only a day and a quantity (R29). |
@@ -170,15 +169,27 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 
 SisyphusFit organises and tracks near-daily movement and training, built from training modules that can be used alone or stacked into a personal set-up. It records what the person does and comments neutrally with graded scientific evidence. It works with no account and no network.
 
-### Q-R01 · Jobs and how often
+### D-R01 · Jobs and how often
 
-**Rule:** Which jobs does the app serve, for whom, and how often is each done?
+**Rule:** The app serves one person, on their own phone, for the jobs below, as often as each row says. Defaults, what opens first and the order of lists follow this order.
 
-**Default:** none proposed: the earlier spec names the modules and screens but never the jobs or how often each is done, and a guess would set every default that follows from it.
+**Values:**
 
-**Why:** Defaults, the order of lists and what opens first follow from how often each job is done; R19 and R45 rest on the modules and purposes instead.
+| Job | How often |
+|---|---|
+| Log daily movement: a quick amount, steps, a sitting break | daily, several times |
+| Log a session live: sets, holds, rests | 3-5 times a week |
+| Check This week, per module | a few times a week |
+| Log afterwards: a walk or session done without the phone | weekly |
+| Look back: History, a past session | weekly |
+| Read an evidence note | occasionally |
+| Make or edit exercises and routines | at the start, then rarely |
+| Back up or restore by hand | rarely; the scheduled backup runs on its own |
+| Choose modules | once, changed rarely |
 
-**Since:** 2026-11-21 · builder · own words
+**Acceptance:** none: this ranks jobs; the rules that apply it carry their own checks.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R02 · Records and comments, never prescribes
 
@@ -277,31 +288,46 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Since:** 2026-10-28 · owner · migrated
 
-### Q-R11 · Android's own backup
+### D-R11 · Android's own backup
 
-**Rule:** What may Android's own backup carry?
+**Rule:** Android's own backup sends nothing to a cloud backup, and a device-to-device transfer to a new phone carries everything, on every Android version the app runs on. The app's own backup (R36) is the way out.
 
-**Default:** Nothing goes to a cloud backup, and a device-to-device transfer to a new phone carries everything, as `app/src/main/res/xml/data_extraction_rules.xml` sets it. Changes: that file only.
+**Why:** Training data never leaves the phone without the person (R07).
 
-**Why:** Lint requires a choice, and the skeleton had to take one without the owner.
+**Values:**
 
-**Since:** 2026-10-19 · builder · migrated
+| Android | Cloud backup | Device-to-device transfer | File |
+|---|---|---|---|
+| 12 and later | nothing | everything | `data_extraction_rules.xml` |
+| 11 (the minimum, `minSdk` 30) | nothing | everything | `backup_rules.xml` |
+
+**Evidence:** On Android 11 one rule set (`fullBackupContent`) covers both cloud backup and device transfer, so every `include` in `backup_rules.xml` carries `requireFlags="deviceToDeviceTransfer"` and applies to a transfer only. The app holds no Keystore-bound keys and no device identifiers, so transferred data stays readable (searched the code, 2026-11-21). Not checked: a transfer from a real Android 11 phone, or through a phone maker's own transfer tool.
+
+**Acceptance:** `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` includes every domain only with `requireFlags="deviceToDeviceTransfer"`.
+
+**Not:** Android's encrypted cloud backup: the data would leave the device. No device transfer, on any version: a new phone would start empty until a restore.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### Q-R12 · App icon
 
 **Rule:** What is the app's launcher icon?
 
-**Default:** none proposed: an icon is a visual decision; lint's `MissingApplicationIcon` is suppressed in the manifest until there is one.
+**Default:** none proposed: an icon is a visual decision, which the owner left for a design round of its own on 2026-11-21; lint's `MissingApplicationIcon` is suppressed in the manifest until there is one.
 
-**Since:** 2026-10-19 · builder · migrated
+**Why:** The boulder alone reads at launcher size (about 48 dp), while the figure pushing it tells more of the story but shrinks to a few pixels.
 
-### Q-R13 · Signing key
+**Since:** 2026-11-21 · owner · agreed rewording
 
-**Rule:** Which key signs the debug builds?
+### D-R13 · Signing key
 
-**Default:** Android's default debug key. A shared committed debug key, as Factotum uses so any checkout can update the installed app, would change only the signing config; it is not copied without the owner's say.
+**Rule:** Debug builds are signed with Android's default debug key of the machine that builds them.
 
-**Since:** 2026-10-19 · builder · migrated
+**Acceptance:** `app/build.gradle.kts` declares no `signingConfig`, and no keystore is in the repository.
+
+**Not:** A shared committed debug key, as Factotum uses: the repository is public and keystores are gitignored. A shared key kept outside the repository: one machine installs the app, so nothing needs it.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ## 3. Evidence and commentary
 
@@ -372,15 +398,15 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Since:** 2026-11-21 · owner · agreed rewording
 
-### Q-R120 · Notes that span modules
+### D-R120 · Notes that span modules
 
-**Rule:** Which evidence notes span modules, and where do they show?
+**Rule:** Three evidence notes span modules: strength plus aerobic work together, lifting before cardio for strength, and two days without movement. Each shows only where the person is doing one of the modules it spans (R16 rule 4).
 
-**Default:** Notes on strength plus aerobic work together, lifting before cardio for strength, and two days without movement, each shown only where the person is doing one of the modules it spans (R16 rule 4). Changes: which claims the pack marks as shared and where the note chips appear.
+**Evidence:** Not checked: which of the three the pack already holds.
 
-**Why:** The earlier spec proposed these cross-module notes and never decided them.
+**Acceptance:** `python tools/evidence_check.py` passes with all three in the pack, and each note's chip appears only on screens of the modules it spans.
 
-**Since:** 2026-10-20 · builder · migrated
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### A-R18 · Wellness, not medical software
 
@@ -449,13 +475,13 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R23 · Modules are tags
 
-**Rule:** A module is a tag on an exercise, and an exercise may carry several. A session carries the tags of the exercises in it, never stored on the session, and can be given several labels from a reusable list the person keeps.
+**Rule:** A module is a tag on an exercise, and an exercise may carry several. A session with sets carries the tags of its exercises, never stored on the session; a session without sets carries the one module it is logged under (R25). A session can be given several labels from a reusable list the person keeps, and labels tag sessions only.
 
-**Evidence:** Schema 2's `exercise_module`, `label` and `session_label` tables (R28).
+**Evidence:** Schema 2's `exercise_module`, `label` and `session_label` tables (R28). Not checked: schema 2 has no column for a set-less session's module; it needs a schema change by R33.
 
-**Acceptance:** Every module of a session is derived from its exercises' tags; `session` has no module column.
+**Acceptance:** A session with sets has the modules of its exercises' tags; a set-less session has exactly the module it was logged under; no exercise carries a label.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R24 · This week counts a mixed session by its parts
 
@@ -467,13 +493,28 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Since:** 2026-10-21 · owner · migrated
 
-### Q-R25 · Sessions without sets in This week
+### D-R25 · Each module's own units in This week
 
-**Rule:** How do sessions without sets (a walk, a quick amount), steps and distance count in "This week"?
+**Rule:** "This week" shows each module's totals in its own units, as below, never converted or combined. A session with sets counts as R24 says; a session without sets (a walk, a quick amount) counts its time under the module it is logged under, chosen when it is logged.
 
-**Default:** none proposed: the owner said steps and distance are units of measurement but not in the way sets are, and left it to refine; the code counts such sessions nowhere.
+**Why:** Steps and distance are units of measurement, but not in the way sets are (owner, 2026-10-21).
 
-**Since:** 2026-10-21 · owner · migrated
+**Values:**
+
+| Module | This week's totals |
+|---|---|
+| Daily movement | time, steps |
+| Strength | sets, time |
+| Stamina | time, distance |
+| Mobility and balance | sets, holds, time |
+
+**Evidence:** Not checked: `weekByModule` counts logged sets only, and a set-less session has no module column yet (R23).
+
+**Acceptance:** A 30-minute walk logged under Daily movement adds 30 min to Daily movement's time and nothing to any other module; steps never appear as sets or minutes.
+
+**Not:** Time only, with steps and distance left out of This week; sets only, as built before.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ## 5. Data model
 
@@ -670,7 +711,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | 4 | intervals package; movement reminders; sitting-break prompts | `TX1`, `TR5`, `FA5`, `FA1`, `IT1`, `AK1` |
 | 5 | goals in plain words; closing a session with duration, intensity and comment; a launcher shortcut per routine or timer | `FA9`, `N-GOAL`, `GR4`, `TR2` |
 | 6 | rest-timer package (R71, R74) | `GL2`, `LL4`, `KA5` |
-| 7 | progression package, blocked until R43 is answered | `LL5`, `GM6` |
+| 7 | progression package: the "next time" proposal of R43 | `LL5`, `GM6` |
 | 8 | early stop reviewed, unfinished sets skipped; quick intervals from a cycles stepper; body-measure chart | `KA2`, `SH1`, `OS2`, `OS4` |
 | 9 | self-checks as own trend; body-measure changes | `PL1`, `OS5` |
 | 10 | GPS package | `OT1`, `FA4`, `OT5`, `FT5` |
@@ -678,7 +719,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** none: an order of work; each stage is done by R38.
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-21 · owner · migrated
 
 ### O-R40 · Today is designed last
 
@@ -704,21 +745,23 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** What shape does Today take?
 
-**Default:** none proposed: the owner deferred it; by purpose with a Start sheet (0.836) and a card per module in a hybrid (0.841) are a plateau in R45's scoring.
+**Default:** none proposed: the owner keeps it for Today's design round (R40), where the jobs of R01 and the built screens settle it with mockups; by purpose with a Start sheet (0.836) and a card per module in a hybrid (0.841) are a plateau in R45's scoring.
 
 **Why:** The two leading purpose maps differ only in Today.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-21 · owner · agreed rewording
 
-### Q-R43 · Where suggestions stop
+### D-R43 · Where suggestions stop
 
-**Rule:** How far may the app suggest the next session?
+**Rule:** After a session, the app may offer one editable "next time" proposal, computed only from a progression rule the person sets (`progression_rule`); the app never picks the numbers. The proposal is an option in Settings, off by default.
 
-**Default:** none proposed: the owner deferred the choice between three options, recording and commenting only, one editable "next time" proposal after a session, or a per-set proposal.
+**Why:** It applies the person's own rule, so it stays a record and not a prescription (R02, R117).
 
-**Why:** The progression package (stage 7) waits on it. R02 and R117 bound every option: a per-set proposal fits only if a proposal the person edits is not a prescription.
+**Acceptance:** With the setting off, no proposal appears; with it on and every set hit, the proposal equals last time's numbers plus the rule's step, and editing it changes nothing logged.
 
-**Since:** 2026-10-20 · owner · migrated
+**Not:** Recording and commenting only: progression would stay manual. A per-set proposal: R117 rules out per-set prescriptions.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ## 8. Screens by purpose
 
@@ -1235,13 +1278,17 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Since:** 2026-10-23 · owner · migrated
 
-### Q-R72 · Default rest length
+### D-R72 · Default rest length
 
-**Rule:** What is the default rest length in Settings?
+**Rule:** The default rest length in Settings is 2 min, used when neither the plan nor the exercise sets one, and the person can change it.
 
-**Default:** none proposed: the owner left the value open; the exercise editor's rest choices (R103) do not set it.
+**Why:** Rests over 2 min appear to maximise strength in trained lifters, while 60-120 s suffices for untrained people (Grgic 2018, PMID 28933024, in report 1), so 2 min suits both ends.
 
-**Since:** 2026-10-23 · owner · migrated
+**Acceptance:** A fresh install's Settings shows a 2 min default rest, and a rest started with no plan or exercise length counts down from 2:00.
+
+**Not:** 90 s: may be short for heavy lifts. 3 min: long for accessories.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R73 · Session clock
 
@@ -1651,10 +1698,10 @@ Shape, line, elevation and motion (the same at both densities):
 
 | Case | Behaviour |
 |---|---|
-| tags offered | the modules, plus the person's own labels if any were made, which waits on R114 (R23 puts labels on sessions); tags A-Z, exercises A-Z; tags no exercise carries are hidden |
+| tags offered | the modules, plus the person's own categories (R103), never labels (R114); tags A-Z, exercises A-Z; tags no exercise carries are hidden |
 | several tags | the exercises carrying all of them |
 | no tag and no name | no list |
-| a typed name with no tag | searches every exercise |
+| a typed word with no tag | searches every exercise's name and categories (R113) |
 | "New exercise" | always shown; starts with the picked tags |
 | an exercise already in the session | leaves the list |
 | a row tapped | stays in place, its pill reading "Added" with a tick; a second tap takes it back out; rows never move while the sheet is open |
@@ -1662,19 +1709,31 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Built into the trial as version 2 and adjusted in round 3 (2026-10-30): the visible line pushed the list down on the first add. With pill shapes whose ends change with width, tapping a row could wrap its details and move 11 of 14 rows below (2026-10-31), see R112.
 
-**Acceptance:** Tapping a row twice leaves every row's position unchanged within 0.5 dp.
+**Acceptance:** Tapping a row twice leaves every row's position unchanged.
 
-**Since:** 2026-10-30 · owner · migrated
+**Since:** 2026-11-21 · owner · migrated
 
-### D-R101 · Exercise type and its lock
+### D-R101 · Changing an exercise's type
 
-**Rule:** An exercise's type and its per-side setting are editable until the exercise has its first logged set, then locked. The "Show partial reps" switch is offered for Dynamic exercises only.
+**Rule:** An exercise's type and its per-side setting stay editable. Once the exercise has logged sets, switching either asks first, with the wording below, and logged sets keep their numbers. The "Show partial reps" switch is offered for Dynamic exercises only.
 
-**Why:** A mis-tap at creation then needs no delete and redo.
+**Why:** A wrong type, at creation or later, is fixed without deleting the exercise and its history.
 
-**Acceptance:** An exercise with one logged set shows its type and per-side setting as locked; an Isometric exercise offers no partial-reps switch.
+**Values:**
 
-**Since:** 2026-10-30 · owner · migrated
+| Part | Wording |
+|---|---|
+| question | "Squat has 20 logged sets. Change its type?" with the exercise's name and count |
+| line | "Logged sets keep their numbers." |
+| buttons | "Change" and "Keep" |
+
+**Evidence:** Pattern 7.3 of the editor round, scored 2.93 against 2.91 for editable with no warning (`research/refs-2026-11-01/score/results.html`).
+
+**Acceptance:** Switching the type of an exercise with logged sets shows the question, and "Keep" leaves the type unchanged; an Isometric exercise offers no partial-reps switch.
+
+**Not:** Locked after the first logged set (settled 2026-10-30): a wrong type then needed a new exercise. Editable with no warning: one stray tap would change a logged exercise.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R102 · Editing an exercise
 
@@ -1774,16 +1833,6 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Since:** 2026-11-01 · builder · own words
 
-### Q-R110 · Type after the first logged set
-
-**Rule:** Does an exercise's type stay locked after its first logged set (R101)?
-
-**Default:** Pattern 7.3, editable with a warning (2.93): switching asks "Squat has 20 logged sets. Change its type? Logged sets keep their numbers." with Change and Keep. Changes: R101's lock goes. Next: 7.4, editable with no warning (2.91).
-
-**Why:** The top-scored patterns conflict with the lock the owner settled on 2026-10-30; scored in `research/refs-2026-11-01/score/results.html`.
-
-**Since:** 2026-11-01 · builder · own words
-
 ### Q-R111 · How the add sheet adds
 
 **Rule:** How does the add sheet take several exercises?
@@ -1804,25 +1853,27 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Since:** 2026-11-01 · builder · own words
 
-### Q-R113 · How the add sheet's search reaches categories
+### D-R113 · How the add sheet's search reaches categories
 
-**Rule:** How does the add sheet's search find exercises by category?
+**Rule:** In the add sheet, a typed word matches exercise names and categories alike ("legs" finds Lunge), with no mode to choose.
 
-**Default:** Option (a), no mode: a typed word matches names and categories alike. Changes: the add sheet's search only. The trial measured (a) at 3 taps against 4 for a switch by the search box (b), with the same 227 dp of scrolling.
+**Evidence:** The trial measured it at 3 taps against 4 for a switch by the search box, with the same 227 dp of scrolling (2026-10-31).
 
-**Why:** The owner kept (a) and dropped (b) from the trial on 2026-10-31, before the round was re-based on outside references.
+**Acceptance:** Typing "legs" with no tag picked lists every exercise named or categorised with a word starting "legs".
 
-**Since:** 2026-11-01 · builder · own words
+**Not:** A switch by the search box between names and categories: one tap more.
 
-### Q-R114 · Categories and labels
+**Since:** 2026-11-21 · owner · agreed rewording
 
-**Rule:** Do the person's own labels tag exercises, sessions, or both, and how do they relate to Categories?
+### D-R114 · Categories and labels
 
-**Default:** none proposed: R23 puts labels on sessions and R103 puts categories on exercises, while the add sheet's tag filter (R100) offers labels as exercise tags; nothing settles which of the two is meant.
+**Rule:** Labels tag sessions only, and categories tag exercises only; they are two separate lists of the person's own words.
 
-**Why:** Labels on exercises would need a new rule and a place in the editor.
+**Acceptance:** No exercise carries a label and no session a category; the add sheet's tags are modules and categories.
 
-**Since:** 2026-11-01 · builder · own words
+**Not:** One merged list of words for sessions and exercises: it needs a schema change and mixes two jobs.
+
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ## Acceptance list
 
@@ -1834,14 +1885,18 @@ Shape, line, elevation and motion (the same at both densities):
 - R07 · No account, no network: The merged manifest declares no `INTERNET` permission.
 - R09 · Compose Foundation only: No `androidx.compose.material` artifact is on the app's dependency list; the gallery builds only in the debug variant (`GalleryActivity` under `app/src/debug`).
 - R10 · Bundled font files: `FontFilesTest.fontFilesAreTheRelease` matches both hashes.
+- R11 · Android's own backup: `data_extraction_rules.xml` excludes every domain from `cloud-backup` and leaves `device-transfer` whole; `backup_rules.xml` includes every domain only with `requireFlags="deviceToDeviceTransfer"`.
+- R13 · Signing key: `app/build.gradle.kts` declares no `signingConfig`, and no keystore is in the repository.
 - R14 · Evidence sources: `python tools/evidence_check.py` with the reports present finds every source id in a report's verified id list.
 - R16 · Commentary rules: `python tools/evidence_check.py` passes on the pack; on a note, the brief level shows claim and certainty only, and "Details" opens the rest.
 - R17 · Evidence pack: `python tools/evidence_check.py` passes in CI: every source id is in a report's verified id list, every feature id is one this spec names, and no note text exists without a claim id.
+- R120 · Notes that span modules: `python tools/evidence_check.py` passes with all three in the pack, and each note's chip appears only on screens of the modules it spans.
 - R19 · The five modules: The module choice offers these five in this order (`ModuleChoiceScreenTest`).
 - R20 · Body measures without verdicts: No table, column or code path computes a BMI, a BMR or a forecast; no screen shows one.
 - R21 · Modules chosen by the person: A fresh install shows the module choice before any tab, with every module unticked (`ModuleGateTest`, `ModuleChoiceScreenTest`).
-- R23 · Modules are tags: Every module of a session is derived from its exercises' tags; `session` has no module column.
+- R23 · Modules are tags: A session with sets has the modules of its exercises' tags; a set-less session has exactly the module it was logged under; no exercise carries a label.
 - R24 · This week counts a mixed session by its parts: `CoreTest`'s week tests pass: `aMixedSessionCountsByItsParts`, `anExerciseWithTwoTagsCountsWhollyUnderEach`, `aSessionCountsOnceInAModuleHoweverManyOfItsSetsAreThere`, `anUntaggedExerciseCountsNowhereAndAnEmptyWeekIsEmpty`.
+- R25 · Each module's own units in This week: A 30-minute walk logged under Daily movement adds 30 min to Daily movement's time and nothing to any other module; steps never appear as sets or minutes.
 - R26 · Units: Every column for these quantities is INTEGER in Room's exported `2.json`.
 - R27 · Ids: `CoreTest`'s ULID tests pass, and every table in `2.json` has a text primary key `id`.
 - R28 · Tables, schema version 2: Room's exported `2.json` holds exactly these tables and columns.
@@ -1854,6 +1909,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R35 · The database never deletes itself: That Robolectric test passes.
 - R36 · Backup format: Export, restore into an empty database and export again give byte-identical files; the pinned version-1 file restores.
 - R37 · Gates: `.github/workflows/ci.yml` runs the first three; the pre-push hook runs the fourth.
+- R43 · Where suggestions stop: With the setting off, no proposal appears; with it on and every set hit, the proposal equals last time's numbers plus the rule's step, and editing it changes nothing logged.
 - R44 · Screens grouped by purpose: `purpose_map.py --map` passes on the working map: all 162 harvest rows placed, shared or left out.
 - R46 · Doing and showing screens: The tab roots of This week, History and More draw no main bar.
 - R47 · Calm before complete: Gate G1-G5 runs pass, and the owner signs the screen off on the 6T.
@@ -1881,6 +1937,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R69 · The main bar and running controls: Every doing screen draws one main bar at the bottom; no running control sits beside it.
 - R70 · The running control on the exercise screen: The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s resumes the hold with its time.
 - R71 · The rest timer: With all three set, the plan's length wins; with none but the default, the default runs; ±30 s moves the remaining time by 30 s.
+- R72 · Default rest length: A fresh install's Settings shows a 2 min default rest, and a rest started with no plan or exercise length counts down from 2:00.
 - R73 · Session clock: The clock's bounds are the same on all six session and exercise screens.
 - R74 · The rest round is the boulder: During a rest the figure and the boulder are drawn, and after 0:00 or a skip neither is; with reduced motion the stone's angle never changes.
 - R76 · The boulder's form: The boulder is drawn 80 dp across at font size 1.0 on a 72 dp target.
@@ -1905,13 +1962,15 @@ Shape, line, elevation and motion (the same at both densities):
 - R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" leaves the session STOPPED_EARLY.
 - R97 · Start's date line: On 2026-10-20 the line reads "Tuesday 20 October".
 - R99 · Where exercises are made and managed: The add sheet has no edit action; More lists the exercises grouped by module, each opening its editor.
-- R100 · The add sheet: Tapping a row twice leaves every row's position unchanged within 0.5 dp.
-- R101 · Exercise type and its lock: An exercise with one logged set shows its type and per-side setting as locked; an Isometric exercise offers no partial-reps switch.
+- R100 · The add sheet: Tapping a row twice leaves every row's position unchanged.
+- R101 · Changing an exercise's type: Switching the type of an exercise with logged sets shows the question, and "Keep" leaves the type unchanged; an Isometric exercise offers no partial-reps switch.
 - R102 · Editing an exercise: Saving "plank" beside "Plank" shows the refusal; an archived exercise is gone from the list with its sets kept in History.
 - R103 · Exercise editor fields: Plank can be made with 60 s rest, a note and the category "core", and the session shows its note.
+- R113 · How the add sheet's search reaches categories: Typing "legs" with no tag picked lists every exercise named or categorised with a word starting "legs".
+- R114 · Categories and labels: No exercise carries a label and no session a category; the add sheet's tags are modules and categories.
 - R115 · No streaks: No table or column counts days in a row or missed days, and no screen shows one.
 - R116 · No readiness or load alarms: No screen or note shows a readiness, recovery or load-ratio value.
-- R117 · No prescriptions or automatic deloads: No screen proposes a set's weight or reps by itself; progression waits on R43.
+- R117 · No prescriptions or automatic deloads: No screen proposes a set's weight or reps by itself; the only proposal is R43's, from the person's own rule.
 - R118 · No profiles or connected sensors: The merged manifest declares no Health Connect or Bluetooth permission.
 
 ## Out of scope
@@ -1946,9 +2005,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Harvest row `IV1`, left out in `research/purpose-2026-10-20/compare.md`.
 
-**Acceptance:** No screen proposes a set's weight or reps by itself; progression waits on R43.
+**Acceptance:** No screen proposes a set's weight or reps by itself; the only proposal is R43's, from the person's own rule.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-21 · owner · migrated
 
 ### D-R118 · No profiles or connected sensors
 

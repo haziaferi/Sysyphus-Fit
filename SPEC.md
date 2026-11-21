@@ -103,7 +103,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R90 | The module choice screen | 14. First launch |
 | D-R91 | Module cards on the choice | 14. First launch |
 | D-R92 | When the data cannot be opened | 14. First launch |
-| O-R93 | Build order for Start | 15. Start or log |
+| D-R93 | Build order for Start | 15. Start or log |
 | D-R94 | What Start shows | 15. Start or log |
 | D-R95 | Session names | 15. Start or log |
 | D-R96 | The resume card | 15. Start or log |
@@ -216,7 +216,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** `research/` is in `.gitignore`, and `python ~/.claude/tools/publish_check.py .` passes before every push.
 
-**Since:** 2026-10-19 · owner · migrated
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R06 · Gradle modules
 
@@ -587,7 +587,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** Stage 1a is not done until the backup package (`KA9`, `OS8`) and resume after process death (`GL1`) pass their tests.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R35 · The database never deletes itself
 
@@ -688,7 +688,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** none: an order of work, kept by R39.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R41 · A harvest row is read against the code first
 
@@ -1546,15 +1546,15 @@ Shape, line, elevation and motion (the same at both densities):
 
 ## 15. Start or log
 
-### O-R93 · Build order for Start
+### D-R93 · Build order for Start
 
-**Rule:** Exercises and routines are built first, then the Strength session, then Start.
+**Rule:** Exercises and routines are built first, then the Strength session, then Start. Another order may replace it when one serves better.
 
 **Why:** Start's buttons lead to the session, which needs exercises, so every button works when it ships.
 
 **Acceptance:** none: an order of work; Start's plan names the built screens each button opens.
 
-**Since:** 2026-10-29 · owner · migrated
+**Since:** 2026-11-21 · owner · agreed rewording
 
 ### D-R94 · What Start shows
 

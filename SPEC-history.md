@@ -56,6 +56,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-10-20 · R117 · added · no prescriptions or automatic deloads · owner
 - 2026-10-20 · R118 · added · no profiles or connected sensors · owner
 - 2026-10-20 · R119 · added · no hidden duplicates · owner
+- 2026-10-20 · R120 · added · notes that span modules · builder
 - 2026-10-21 · R24 · added · this week counts a mixed session by its parts · owner
 - 2026-10-21 · R25 · added · sessions without sets in This week · owner
 - 2026-10-21 · R28 · changed · schema 2 adds four tables and three columns · owner
@@ -102,10 +103,11 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-10-28 · R85 · added · edge to edge · owner
 - 2026-10-28 · R86 · added · the shared data core · owner
 - 2026-10-28 · R88 · added · tab screens at larger font sizes · owner
-- 2026-10-28 · R89 · added · tab roots without screens · builder
+- 2026-10-28 · R89 · added · tab roots without screens · owner
 - 2026-10-29 · R19 · changed · Daily movement and Stamina split by spread vs set-out sessions · owner
 - 2026-10-29 · R58 · changed · accent-aware sorting comes with Italian · owner
 - 2026-10-29 · R61 · added · text line boxes · owner
+- 2026-10-29 · R85 · changed · the choice and the tab bodies keep clear of side buttons and cutouts · owner
 - 2026-10-29 · R86 · changed · names a newer build wrote are kept on rewrite · owner
 - 2026-10-29 · R87 · added · starting while a session is open · owner
 - 2026-10-29 · R90 · added · the module choice screen · owner

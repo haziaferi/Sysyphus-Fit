@@ -27,6 +27,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R15 | What the evidence says about the app's shape | 3. Evidence and commentary |
 | D-R16 | Commentary rules | 3. Evidence and commentary |
 | D-R17 | Evidence pack | 3. Evidence and commentary |
+| Q-R120 | Notes that span modules | 3. Evidence and commentary |
 | A-R18 | Wellness, not medical software | 3. Evidence and commentary |
 | D-R19 | The five modules | 4. Training modules |
 | D-R20 | Body measures without verdicts | 4. Training modules |
@@ -98,7 +99,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R86 | The shared data core | 13. App shell |
 | D-R87 | Starting while a session is open | 13. App shell |
 | D-R88 | Tab screens at larger font sizes | 13. App shell |
-| I-R89 | Tab roots without screens | 13. App shell |
+| D-R89 | Tab roots without screens | 13. App shell |
 | D-R90 | The module choice screen | 14. First launch |
 | D-R91 | Module cards on the choice | 14. First launch |
 | D-R92 | When the data cannot be opened | 14. First launch |
@@ -253,9 +254,9 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R09 · Compose Foundation only
 
-**Rule:** The app's pieces are built on Compose Foundation only, with no Material, in `app/.../ui/stone`, and the theme in `ui/theme`.
+**Rule:** The app's pieces are built on Compose Foundation only, with no Material, in `app/.../ui/stone`, and the theme in `ui/theme`. A debug-only gallery shows every piece with density and font-size switches, and it is installed on the 6T for the owner's walk.
 
-**Acceptance:** No `androidx.compose.material` artifact is on the app's dependency list.
+**Acceptance:** No `androidx.compose.material` artifact is on the app's dependency list; the gallery builds only in the debug variant (`GalleryActivity` under `app/src/debug`).
 
 **Since:** 2026-10-28 · owner · migrated
 
@@ -330,8 +331,8 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | Finding | What the app does |
 |---|---|
 | Weekly totals per module decide long-term outcomes; frequency spreads the dose | counts weekly, per module, and never forms a combined score (R24) |
-| Near-daily movement is justified by metabolism (insulin sensitivity raised about 24-48 h after activity; light movement is enough for the acute glucose effect) and by habit, not by more strength or a longer life | offers Daily movement as its own module |
-| Consensus: no more than two days in a row without activity (Strong for diabetes or prediabetes, an inference otherwise) | may say so in a note; never counts missed days (R115) |
+| Near-daily movement is justified by metabolism (insulin sensitivity raised about 24-48 h after activity; light movement is enough for the acute glucose effect) and by habit, not by more strength or a longer life | none stated |
+| Consensus: no more than two days in a row without activity (Strong for diabetes or prediabetes, an inference otherwise) | none stated |
 | Streaks, reset-style pressure, readiness or recovery scores and load-ratio alarms are not supported | has none (R115, R116) |
 | Self-monitoring with self-chosen goals is the best-supported technique; app effects fade | stays useful without novelty |
 
@@ -371,6 +372,16 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Since:** 2026-11-21 · owner · agreed rewording
 
+### Q-R120 · Notes that span modules
+
+**Rule:** Which evidence notes span modules, and where do they show?
+
+**Default:** Notes on strength plus aerobic work together, lifting before cardio for strength, and two days without movement, each shown only where the person is doing one of the modules it spans (R16 rule 4). Changes: which claims the pack marks as shared and where the note chips appear.
+
+**Why:** The earlier spec proposed these cross-module notes and never decided them.
+
+**Since:** 2026-10-20 · builder · migrated
+
 ### A-R18 · Wellness, not medical software
 
 **Rule:** General information about studies, never individual advice, keeps the app a wellness app and not medical software.
@@ -401,11 +412,11 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R20 · Body measures without verdicts
 
-**Rule:** Body measures records the person's own numbers only. No BMI, BMR, verdict or forecast is shown, stored or derived.
+**Rule:** Body measures records the person's own numbers only, each an integer in its stated unit, its `day` set as a session's is (R30). No BMI, BMR, verdict or forecast is shown, stored or derived.
 
 **Acceptance:** No table, column or code path computes a BMI, a BMR or a forecast; no screen shows one.
 
-**Not:** BMI and BMR verdicts and weight forecasts: they judge the person and claim more than the evidence allows.
+**Not:** BMI and BMR (harvest row `OS3`): they risk reading as a health verdict. A weight forecast (`OS6`): it projects a forecast. Both left out in `research/purpose-2026-10-20/compare.md`.
 
 **Since:** 2026-10-20 · owner · migrated
 
@@ -452,7 +463,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Evidence:** `:core` `weekByModule`; mutants on counting only the first tag and on counting a session once per set each turned a test red (2026-10-21).
 
-**Acceptance:** The `weekByModule` tests in `:core` pass.
+**Acceptance:** `CoreTest`'s week tests pass: `aMixedSessionCountsByItsParts`, `anExerciseWithTwoTagsCountsWhollyUnderEach`, `aSessionCountsOnceInAModuleHoweverManyOfItsSetsAreThere`, `anUntaggedExerciseCountsNowhereAndAnEmptyWeekIsEmpty`.
 
 **Since:** 2026-10-21 · owner · migrated
 
@@ -489,7 +500,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** Every table has `id TEXT PRIMARY KEY`, holding a ULID from `:core` `Ids`. A restored or imported row then never collides with a local one, and a later Windows copy can merge.
 
-**Acceptance:** The `Ids` tests pass, and every table in `2.json` has a text primary key `id`.
+**Acceptance:** `CoreTest`'s ULID tests pass, and every table in `2.json` has a text primary key `id`.
 
 **Since:** 2026-10-19 · builder · migrated
 
@@ -524,17 +535,19 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R29 · An amount is a session without times
 
-**Rule:** An amount (`FA10`'s shape) is a session with `started_at` and `ended_at` null and `day` set. A day's total time is the union of its timed sessions plus the sum of its amounts.
+**Rule:** An amount (`FA10`'s shape) is a session with `started_at` and `ended_at` null and `day` set. A day's total time is the union of its timed sessions plus the sum of its amounts (`:core` `dayTotalSeconds`).
 
-**Acceptance:** The `:core` `DayTotals` tests pass.
+**Acceptance:** `CoreTest`'s `overlappingSpansCountOnceAndAmountsAdd`, `aSpanInsideAnotherAddsNothing` and `emptyDayIsZero` pass.
 
 **Since:** 2026-10-19 · builder · migrated
 
 ### D-R30 · The counting day
 
-**Rule:** A session's `day` is the local date of `started_at` in `zone` (`FA13`), computed once by `:core` `CountingDay` and stored. A later change of the phone's zone does not move history.
+**Rule:** A session's `day` is the local date of `started_at` in `zone` (`FA13`), computed once by `:core` `countingDay` and stored. A later change of the phone's zone does not move history.
 
-**Acceptance:** The `CountingDay` tests pass, and a stored session keeps its `day` after the zone changes.
+**Evidence:** Not checked: no test changes the zone after a session is stored.
+
+**Acceptance:** `CoreTest.aSessionCountsOnTheDayItStartsInItsOwnZone` passes, and a stored session keeps its `day` after the phone's zone changes.
 
 **Since:** 2026-10-19 · builder · migrated
 
@@ -560,7 +573,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Evidence:** A test builds a schema-1 file from Room's exported `1.json`, fills every table, migrates through the app's own open and compares every cell (`quote()`) before and after, plus the migrated shape against a fresh one, on the desktop and under Robolectric on the phone's path (`KeepFileOnCorruptionDriver`). A throwing statement, a migration Room's check refuses and a file a newer app wrote each leave the file as it was. A destructive fallback is caught by the Robolectric test only (2026-10-21).
 
-**Acceptance:** `MigrationTest` passes on the desktop and under Robolectric.
+**Acceptance:** `MigrationTest` passes on the desktop and `AndroidMigrationTest` under Robolectric.
 
 **Since:** 2026-10-21 · owner · migrated
 
@@ -604,7 +617,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 | Gate | Command | When |
 |---|---|---|
-| tests and lint | `./gradlew --offline check`: every test, Android lint with warnings as errors (the four version-currency ids informational) | every change, and in CI on every PR and push to main |
+| tests and lint | `./gradlew --offline check`: every test, Android lint with warnings as errors (the four version-currency ids informational) | every change; CI runs `./gradlew check` on every PR and push to main |
 | evidence pack | `python tools/evidence_check.py` | in CI on every PR and push to main |
 | design tokens | `python tools/tokens.py check` | in CI on every PR and push to main |
 | publish check | `python ~/.claude/tools/publish_check.py .` (also the pre-push hook) | before every push |
@@ -703,7 +716,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Default:** none proposed: the owner deferred the choice between three options, recording and commenting only, one editable "next time" proposal after a session, or a per-set proposal.
 
-**Why:** The progression package (stage 7) waits on it, and R02 bounds every option.
+**Why:** The progression package (stage 7) waits on it. R02 and R117 bound every option: a per-set proposal fits only if a proposal the person edits is not a prescription.
 
 **Since:** 2026-10-20 · owner · migrated
 
@@ -737,8 +750,8 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 | Purpose | Its job | Screens |
 |---|---|---|
-| What's next | see what today holds and start or log it | Today (R42), Start or log |
-| Doing it | move, and have the app keep count | Session, Exercise in a session, Set details (sheet), Number entry, Interval timer, Recording, Stopping and finishing, Log afterwards |
+| What's next | see what today holds and start or log it | Today (R42), Start or log (the Start tab, R83) |
+| Doing it | move, and have the app keep count | Session, Exercise in a session, Set details (sheet), Number entry (the phone's keyboard, R68), Interval timer, Recording, Stopping and finishing, Log afterwards |
 | Looking back | see what was done | This week (a section per module), History, A recorded activity, Progress |
 | Making it yours | choose modules and goals; shape routines, programmes, timers, exercises | Modules and goals, Your plans, Programme library, Timers and routes, Exercises |
 | Knowing why | the evidence behind a feature, how a movement is done | Evidence notes |
@@ -837,7 +850,9 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** Screens fill the phone's width from 360 to 412 dp. Wider (large phones, foldables, landscape), the screen keeps a 412 dp column, centred, so its centre line stays the screen's centre.
 
-**Acceptance:** At 600 dp wide the content column is 412 dp and centred within 0.5 dp.
+**Evidence:** Not checked: the app has no 412 dp column yet.
+
+**Acceptance:** At 600 dp wide the content column is 412 dp and centred on the screen.
 
 **Since:** 2026-10-27 · owner · migrated
 
@@ -869,7 +884,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | header title | may end in "…", its full text on a tap |
 | session clock and Finish | never shorten |
 | main bar | may wrap to two lines |
-| screen body | scrolls under the fixed main bar; the rest round's band moves down with the card at that font size |
+| screen body | scrolls under the fixed main bar; the rest round's band moves down with the card at that font size, so R70's fixed height holds within one font size |
 | card rows, chip, main bar | take their sizes as minimums |
 | Android 14 curve at 2.0 | 11 → 22, 14 → 26, 16 → 28, 19 → 32, 23 → 35.5, 28 → 37.3, 40 → 46.9 dp (AOSP `FontScaleConverterFactory`) |
 
@@ -955,7 +970,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R62 · Design tokens
 
-**Rule:** `design/tokens.json` is the one source of the app's visual values, in two layers: raw values (a grey ramp named by CIE L*, black at four alphas) and the roles screens use; a screen never uses a raw value. When colour comes, only the roles' references change. The tables below are written from the file by `python tools/tokens.py md --write`, and the app's `Tokens.kt` by `python tools/tokens.py kotlin --write`.
+**Rule:** `design/tokens.json` is the one source of the app's visual values, in two layers: raw values (a grey ramp named by CIE L*, black at four alphas) and the roles screens use (colour: surface, fill, ink, line, shadow, rest; space, size, radius, stroke, elevation, motion, type); a screen never uses a raw value. When colour comes, only the roles' references change. The tables below are written from the file by `python tools/tokens.py md --write`, and the app's `Tokens.kt` by `python tools/tokens.py kotlin --write`.
 
 **Values:**
 
@@ -1040,7 +1055,7 @@ Shape, line, elevation and motion (the same at both densities):
 | motion.reduced | nothing turns or slides; the figure holds still; the ring and the time move once a second; the valley jumps (R74, R66) |  |
 <!-- tokens:end -->
 
-**Evidence:** `tools/tokens.py check` (CI runs it) checks every reference resolves, every raw value is used by a role, the density pairs, this spec's tables and `Tokens.kt`. Taken from the decided screens as drawn: rebuilt from the file, all 40 (20 per density) matched them pixel for pixel. The owner then merged #6a6a6a into #6b6b6b, drew History's date spindle in the edge grey and dropped the note's facts hairline. Kept apart though close: text #1c1c1c and the stone #1e1e1e, secondary text #575757 and the main bar's dip light #5a5a5a, the page #ebebeb and worn cards #f0f0f0, cards #fafafa and white. Contrast (WCAG 2.2, every text and icon on every surface it sits on, both densities): all pass, the lowest secondary text on the page at 6.1:1 (2026-10-28).
+**Evidence:** `tools/tokens.py check` (CI runs it) checks every reference resolves, every raw value is used by a role, the density pairs, this spec's tables and `Tokens.kt`. Taken from the decided screens as drawn: rebuilt from the file, all 40 (20 per density) matched them pixel for pixel. The owner then merged #6a6a6a into #6b6b6b, drew History's date spindle in the edge grey and dropped the note's facts hairline. Kept apart though close: text #1c1c1c and the stone #1e1e1e, secondary text #575757 and the main bar's dip light #5a5a5a, the page #ebebeb and worn cards #f0f0f0, cards #fafafa and white. Contrast (WCAG 2.2, every text and icon on every surface it sits on, both densities): all pass, the lowest secondary text on the page at 6.1:1, where text needs 4.5:1 and icons 3:1 (2026-10-28).
 
 **Acceptance:** `python tools/tokens.py check` passes.
 
@@ -1194,14 +1209,14 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R71 · The rest timer
 
-**Rule:** The rest starts on Done (`LL4`) and counts down the length that the first row below gives; it moves by −30 s or +30 s, or is skipped, and runs on with a live notification (`GL2`). How it ends is the person's choice in Settings: vibration, sound, notification, alone or together.
+**Rule:** The rest starts on Done (`LL4`) and counts down the length that the first row below gives; it moves by −30 s or +30 s, or is skipped, and runs on with a live notification (`GL2`). How it ends is the person's choice in Settings: vibration, sound, notification, alone or together, kept as a `setting` key.
 
 **Values:**
 
 | Rest length, first found | Where it is kept |
 |---|---|
 | the plan's length (`LO4`) | `routine_item.rest_seconds` |
-| the exercise's own length, set ahead in Edit exercise | `exercise.rest_seconds`, nullable, added when stage 6 is built |
+| the exercise's own length, set ahead in Edit exercise (R103) | `exercise.rest_seconds`, nullable, added with the exercise editor or stage 6, whichever is built first |
 | the default in Settings (R72) | a `setting` key |
 
 **Acceptance:** With all three set, the plan's length wins; with none but the default, the default runs; ±30 s moves the remaining time by 30 s.
@@ -1224,7 +1239,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Scored with consistency first: under the title it was 2 dp off on the session screens, and as first drawn it moved by 76 dp (2026-10-23).
 
-**Acceptance:** The clock's bounds match within 0.5 dp on all six session and exercise screens.
+**Acceptance:** The clock's bounds are the same on all six session and exercise screens.
 
 **Not:** Under the title (2 dp off between screens); under Finish, which tied but took Finish's hit box down to 42 dp.
 
@@ -1272,7 +1287,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Martínez-Serrano 2021, Osterwald 2021 (2026-10-27).
 
-**Acceptance:** none: judged by eye on the 6T at true size; the motion tests check the pace.
+**Acceptance:** none: judged by eye on the 6T at true size; the figure is built with the rest-timer stage (stage 6).
 
 **Since:** 2026-10-27 · owner · migrated
 
@@ -1311,9 +1326,11 @@ Shape, line, elevation and motion (the same at both densities):
 | today | its column's right |
 | the partial note ("+ 1 ½") | the card's right edge, 16 dp in; with no partial (a plank, or none that day) the slot stays empty |
 | text sizes | R60 |
-| evidence-note chip | below the card's text in the hierarchy, between two carved lines; its touch target stays 48 dp |
+| evidence-note chip | 28 dp high, below the card's text in the hierarchy, between two carved lines; its touch target stays 48 dp |
 
-**Acceptance:** The round's, the values' and the card gap's centres lie within 0.5 dp of the screen's centre on every exercise screen.
+**Evidence:** The pieces' sizes match the decided mockups within 1 dp, all 15; that check found the chip at an older 32 dp (2026-10-28).
+
+**Acceptance:** The round's, the values' and the card gap's centres lie on the screen's centre on every exercise screen.
 
 **Since:** 2026-10-27 · owner · migrated
 
@@ -1370,7 +1387,7 @@ Shape, line, elevation and motion (the same at both densities):
 | card spacing | gaps 8 dp, outer columns 53 dp |
 | time in the round | the row-title token (19 / 17 sp) |
 
-**Evidence:** Blind panels on the 6T's app area at its own pixels (owner's axes: actual size .3, harmony .25, hierarchy .25, same screen as balanced .2, compact .2, figure .2, digits .15, seven measured axes .1). Size and height: balanced sizes on the band centre 0.894, scaled stone with the figure kept or balanced sizes under the card 0.770, scaled 0.89 on the centre 0.750, 0.78 at 0.586, the plain-round control 0.533 (last). Card: balanced kept 0.783, tokens + 1 at 0.758, plain tokens 0.738, control 0.531 (2026-10-27).
+**Evidence:** Blind panels on the 6T's app area at its own pixels (owner's axes: actual size .3, harmony .25, hierarchy .25, same screen as balanced .2, compact .2, figure .2, digits .15, seven measured axes .1). Size and height: balanced sizes on the band centre 0.894 against 0.770 for the next (scaled stone with the figure kept; balanced sizes under the card), 0.750 for scaled 0.89 on the centre, 0.586 for 0.78, the plain-round control 0.533 (last); the band centre beat "under the card" at every size. Card: balanced kept 0.783 (first on actual size and same screen, last on compact), tokens + 1 at 0.758, plain tokens 0.738, control 0.531 (last). The measured axes were a plateau (0.752-0.755) (2026-10-27).
 
 **Acceptance:** G1-G5 pass on the compact exercise screens at 360-412 dp and font sizes 1.0-2.0.
 
@@ -1414,27 +1431,27 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R85 · Edge to edge
 
-**Rule:** The band behind Android's three navigation buttons takes the app's own colour, as other apps do: the bar is transparent with dark buttons and Android's contrast scrim is off, so the tab bar's surface, or a doing screen's bottom zone, runs under it (`stoneEdgeToEdge()`).
+**Rule:** The band behind Android's three navigation buttons takes the app's own colour, as other apps do: the bar is transparent with dark buttons and Android's contrast scrim is off, so the tab bar's surface, or a doing screen's bottom zone, runs under it (`stoneEdgeToEdge()`). The module choice and the tab bodies keep clear of three-button navigation and cutouts at the sides (landscape).
 
-**Acceptance:** The 6T golden shows the tab bar's surface under the navigation buttons.
+**Acceptance:** The 6T golden shows the tab bar's surface under the navigation buttons; `SideInsetsTest` keeps the choice and a tab clear of side buttons.
 
-**Since:** 2026-10-28 · owner · migrated
+**Since:** 2026-10-29 · owner · migrated
 
 ### D-R86 · The shared data core
 
-**Rule:** The stores in `:data` behave as the rows below say, with no schema change. A database that cannot be opened is a state the screen shows, never a crash.
+**Rule:** The stores in `:data` behave as the rows below say, on schema 2 (R28). A database that cannot be opened is a state the screen shows, never a crash.
 
 **Values:**
 
 | Store | Behaviour |
 |---|---|
 | settings | the modules chosen are recorded only when the person chooses; none recorded means not chosen yet, and an empty choice is a choice |
-| exercises | each with its module tags, replaced whole |
+| exercises | each with its module tags, replaced whole; `ExerciseStore.update` moves its read inside its transaction with the exercises plan |
 | sessions and sets | one session open at a time, counted on its counting day, resumable after the app is killed |
 | newer names | names a newer build may write are skipped, not fatal: an unknown module drops from its exercise in memory, an unknown kind leaves that exercise out of the list with its sets kept; a rewrite keeps them |
 | first open | a first open left half-way (the person backs out) is kept, not repeated |
 
-**Evidence:** 40 tests at the shell's merge (22 in `:data` on the desktop, 18 in `:app` under Robolectric), each restore and main-thread test turned red by a planted mutant; a fresh review of the whole branch fixed 3 findings, each test first (2026-10-28).
+**Evidence:** 40 tests at the shell's merge (22 in `:data` on the desktop, 18 in `:app` under Robolectric), each restore and main-thread test turned red by a planted mutant; a fresh review of the whole branch fixed 3 findings, each test first; `./gradlew --offline check` ran 150 tests, 0 failed (2026-10-28).
 
 **Acceptance:** The `:data` store tests (`SettingsTest`, `ExercisesTest`, `SessionsTest`) pass.
 
@@ -1450,7 +1467,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R88 · Tab screens at larger font sizes
 
-**Rule:** The tab screens follow R56: rows, buttons, pills and their hit boxes take their sizes as minimums, the main bar wraps, and the body scrolls between the header and the fixed tab bar. When any module card's or history card's name would wrap beside its pill, every card on that screen puts its pill under its text, right-aligned, and the name takes the card's width. "Log afterwards" stays the last item of Start's list and scrolls with it.
+**Rule:** The tab screens follow R56: rows, buttons, pills and their hit boxes take their sizes as minimums, Start's main bar wraps, and the body scrolls between the header and the fixed tab bar. When any module card's or history card's name would wrap beside its pill, every card on that screen puts its pill under its text, right-aligned, and the name takes the card's width. "Log afterwards" stays the last item of Start's list and scrolls with it.
 
 **Evidence:** Gated on the four tab screens at both densities, 360, 384 and 412 dp, font sizes 1.0-2.0 and long names ("Start Wednesday afternoon", "Single-leg Romanian deadlift · Plank · Walk"): G1-G5 pass on all 144 pages, where the earlier tab pages failed G1, G2 and G4 from 1.3. Owner's axes, equal weights: the pill under with "Log afterwards" in the list 0.864 (2026-10-28).
 
@@ -1460,11 +1477,13 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Since:** 2026-10-28 · owner · migrated
 
-### I-R89 · Tab roots without screens
+### D-R89 · Tab roots without screens
 
 **Rule:** A tab whose screen is not built shows its name at its root.
 
-**Since:** 2026-10-28 · builder · migrated
+**Acceptance:** Each unbuilt tab's root shows its name; `AppShellTest.eachTabShowsItsRoot` reaches every root.
+
+**Since:** 2026-10-28 · owner · migrated
 
 ## 14. First launch
 
@@ -1485,7 +1504,7 @@ Shape, line, elevation and motion (the same at both densities):
 | Mobility and balance | "Training range of motion and stability" |
 | Body measures | "Tracking personal progress through body measurements and/or weight" |
 
-**Evidence:** `ModuleTexts.kt` holds the owner's wording, the "Includes: …" texts among it; goldens `module-choice-{balanced,compact}-{100,200}` (2026-10-29).
+**Evidence:** `ModuleTexts.kt` holds the owner's wording, the "Includes: …" texts among it; goldens `module-choice-{balanced,compact}-{100,200}`; `./gradlew --offline check` ran 190 tests, 0 failed, and a fresh review of the branch fixed 2 findings, each test first (2026-10-29).
 
 **Acceptance:** `ModuleChoiceScreenTest` and the goldens pass.
 
@@ -1495,11 +1514,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R91 · Module cards on the choice
 
-**Rule:** Each card shows the module's icon before its name and an "info" chip (carved lines, `type.chip`) that opens a small raised card in place with "Includes: …"; Back or a tap elsewhere closes it, and with TalkBack the open card is announced while the list behind it waits. At large font sizes the cards follow R88's reflow, and the choice keeps clear of three-button navigation and cutouts at the sides. A choice is recorded even when Back follows "Step forward" at once, and while it is read only the page is drawn.
+**Rule:** Each card shows the module's icon before its name and an "info" chip (carved lines, `type.chip`) that opens a small raised card in place with "Includes: …"; Back or a tap elsewhere closes it, and with TalkBack the open card is announced while the list behind it waits. At large font sizes the cards follow R88's reflow, and the screen keeps clear of the sides as R85 says. A choice is recorded even when Back follows "Step forward" at once, and while it is read only the page is drawn.
 
 **Evidence:** The owner's picks on the 6T: the "info" chip over two symbol marks ("info is more explanatory"), the icon before the name. A mutant on Back closing the card was caught (2026-10-29).
 
-**Acceptance:** `ModuleChoiceScreenTest` checks the open card, Back, TalkBack and the choice surviving Back.
+**Acceptance:** `ModuleChoiceScreenTest` checks the open card, Back and TalkBack; `ShellViewModelTest.aChoiceSurvivesLeavingAtOnce` checks the choice survives Back.
 
 **Not:** The circled "i" as the mark: it stays the evidence notes' (R16).
 
@@ -1519,7 +1538,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Goldens `cant-open-balanced-{100,200}` (2026-10-29).
 
-**Acceptance:** `CantOpenScreenshotTest` passes, and a retry after a failed open opens the database.
+**Acceptance:** `CantOpenTest` passes (the screen replaces the choice and the tabs; a retry while broken stays; a retry once it opens goes on), and `CantOpenScreenshotTest`'s goldens match.
 
 **Not:** Restoring a backup from this screen: it waits for the backup plan.
 
@@ -1539,7 +1558,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R94 · What Start shows
 
-**Rule:** Start shows only the chosen modules, in R19's order, with the wording below. Start is built straight in the stone language and judged on the 6T walk, with no variants.
+**Rule:** Start shows only the chosen modules, in R19's order, with the wording below. Start is built straight in the stone language, with no variants to score, and passes the gates of R52 before the owner judges it on the 6T walk.
 
 **Values:**
 
@@ -1622,7 +1641,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 | Case | Behaviour |
 |---|---|
-| tags offered | the modules, plus the person's own labels if any were made (R114); tags A-Z, exercises A-Z; tags no exercise carries are hidden |
+| tags offered | the modules, plus the person's own labels if any were made, which waits on R114 (R23 puts labels on sessions); tags A-Z, exercises A-Z; tags no exercise carries are hidden |
 | several tags | the exercises carrying all of them |
 | no tag and no name | no list |
 | a typed name with no tag | searches every exercise |
@@ -1674,8 +1693,10 @@ Shape, line, elevation and motion (the same at both densities):
 | Field | Behaviour |
 |---|---|
 | Default rest | optional; None · 30 s · 60 s · 90 s · 2 min · 3 min |
-| Notes | free text (self-notes, cues, equipment), readable and editable from inside the session |
+| Notes | free text (self-notes, cues, equipment), readable from inside the session; whether it is also edited there, against R48 and R99, is settled in the Strength session plan |
 | Categories | the person's own words (dumbbells, core, push, legs), several per exercise, apart from modules and session labels; typed into a field that shows nothing until the first letter, then existing ones matching the start of any word, A-Z, and a "New: X" row, case ignored; none to start with |
+
+**Evidence:** Not checked: schema 2 has no column for notes or categories, and `exercise.rest_seconds` is not yet added (R71); the exercises plan brings the schema change, by R33.
 
 **Acceptance:** Plank can be made with 60 s rest, a note and the category "core", and the session shows its note.
 
@@ -1801,7 +1822,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R05 · Repository and local research: `research/` is in `.gitignore`, and `python ~/.claude/tools/publish_check.py .` passes before every push.
 - R06 · Gradle modules: `settings.gradle.kts` includes exactly these modules, and each module's dependencies stay within its row.
 - R07 · No account, no network: The merged manifest declares no `INTERNET` permission.
-- R09 · Compose Foundation only: No `androidx.compose.material` artifact is on the app's dependency list.
+- R09 · Compose Foundation only: No `androidx.compose.material` artifact is on the app's dependency list; the gallery builds only in the debug variant (`GalleryActivity` under `app/src/debug`).
 - R10 · Bundled font files: `FontFilesTest.fontFilesAreTheRelease` matches both hashes.
 - R14 · Evidence sources: `python tools/evidence_check.py` with the reports present finds every source id in a report's verified id list.
 - R16 · Commentary rules: `python tools/evidence_check.py` passes on the pack; on a note, the brief level shows claim and certainty only, and "Details" opens the rest.
@@ -1810,15 +1831,15 @@ Shape, line, elevation and motion (the same at both densities):
 - R20 · Body measures without verdicts: No table, column or code path computes a BMI, a BMR or a forecast; no screen shows one.
 - R21 · Modules chosen by the person: A fresh install shows the module choice before any tab, with every module unticked (`ModuleGateTest`, `ModuleChoiceScreenTest`).
 - R23 · Modules are tags: Every module of a session is derived from its exercises' tags; `session` has no module column.
-- R24 · This week counts a mixed session by its parts: The `weekByModule` tests in `:core` pass.
+- R24 · This week counts a mixed session by its parts: `CoreTest`'s week tests pass: `aMixedSessionCountsByItsParts`, `anExerciseWithTwoTagsCountsWhollyUnderEach`, `aSessionCountsOnceInAModuleHoweverManyOfItsSetsAreThere`, `anUntaggedExerciseCountsNowhereAndAnEmptyWeekIsEmpty`.
 - R26 · Units: Every column for these quantities is INTEGER in Room's exported `2.json`.
-- R27 · Ids: The `Ids` tests pass, and every table in `2.json` has a text primary key `id`.
+- R27 · Ids: `CoreTest`'s ULID tests pass, and every table in `2.json` has a text primary key `id`.
 - R28 · Tables, schema version 2: Room's exported `2.json` holds exactly these tables and columns.
-- R29 · An amount is a session without times: The `:core` `DayTotals` tests pass.
-- R30 · The counting day: The `CountingDay` tests pass, and a stored session keeps its `day` after the zone changes.
+- R29 · An amount is a session without times: `CoreTest`'s `overlappingSpansCountOnceAndAmountsAdd`, `aSpanInsideAnotherAddsNothing` and `emptyDayIsZero` pass.
+- R30 · The counting day: `CoreTest.aSessionCountsOnTheDayItStartsInItsOwnZone` passes, and a stored session keeps its `day` after the phone's zone changes.
 - R31 · Only done sets are stored: Stopping a session early leaves only the sets marked done.
 - R32 · Partial reps: A set logged as 7 and 1 partial reads back as reps 7, partial_reps 1; an exercise with the switch off shows no partial count.
-- R33 · Migrations add, never rewrite: `MigrationTest` passes on the desktop and under Robolectric.
+- R33 · Migrations add, never rewrite: `MigrationTest` passes on the desktop and `AndroidMigrationTest` under Robolectric.
 - R34 · Nothing logged is lost: Stage 1a is not done until the backup package (`KA9`, `OS8`) and resume after process death (`GL1`) pass their tests.
 - R35 · The database never deletes itself: That Robolectric test passes.
 - R36 · Backup format: Export, restore into an empty database and export again give byte-identical files; the pinned version-1 file restores.
@@ -1832,7 +1853,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R51 · Judgement-free: No screen text praises, blames or counts missed days; the empty state reads "Nothing here."
 - R52 · Gates G1-G5: The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp and font sizes 1.0-2.0.
 - R53 · Greyscale: Every colour role in `design/tokens.json` resolves to a grey or a black alpha.
-- R54 · Screen width: At 600 dp wide the content column is 412 dp and centred within 0.5 dp.
+- R54 · Screen width: At 600 dp wide the content column is 412 dp and centred on the screen.
 - R55 · Fit on the phone's app area: The goldens of the 6T's app area pass with and without the sheet.
 - R56 · Text follows the phone's font size: The unit tests check Android 14's curve at 2.0 and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
 - R57 · Density: A fresh install draws balanced, and the compact setting switches every token to its compact value.
@@ -1850,24 +1871,25 @@ Shape, line, elevation and motion (the same at both densities):
 - R69 · The main bar and running controls: Every doing screen draws one main bar at the bottom; no running control sits beside it.
 - R70 · The running control on the exercise screen: The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s resumes the hold with its time.
 - R71 · The rest timer: With all three set, the plan's length wins; with none but the default, the default runs; ±30 s moves the remaining time by 30 s.
-- R73 · Session clock: The clock's bounds match within 0.5 dp on all six session and exercise screens.
+- R73 · Session clock: The clock's bounds are the same on all six session and exercise screens.
 - R74 · The rest round is the boulder: During a rest the figure and the boulder are drawn, and after 0:00 or a skip neither is; with reduced motion the stone's angle never changes.
 - R76 · The boulder's form: The boulder is drawn 80 dp across at font size 1.0 on a 72 dp target.
 - R77 · What the figure and the stone share: `rest.ring-track` resolves to `rest.near-leg` in `design/tokens.json`.
-- R78 · One centre line: The round's, the values' and the card gap's centres lie within 0.5 dp of the screen's centre on every exercise screen.
+- R78 · One centre line: The round's, the values' and the card gap's centres lie on the screen's centre on every exercise screen.
 - R79 · The comparison card at larger font sizes: G1-G5 pass on the exercise screens at font sizes 1.0-2.0.
 - R80 · The rest round grows with its time: At font size 2.0 the boulder is about 135 dp and "10:00" fits inside the ring.
 - R81 · The compact rest screen: G1-G5 pass on the compact exercise screens at 360-412 dp and font sizes 1.0-2.0.
 - R82 · Navigation: `AppShellTest` checks the tabs, Back, rotation and process death.
 - R83 · The app opens on Start: After the module choice, a cold start shows the Start tab.
 - R84 · Wiring by hand: `AppContainerTest` checks the open happens off the main thread and once.
-- R85 · Edge to edge: The 6T golden shows the tab bar's surface under the navigation buttons.
+- R85 · Edge to edge: The 6T golden shows the tab bar's surface under the navigation buttons; `SideInsetsTest` keeps the choice and a tab clear of side buttons.
 - R86 · The shared data core: The `:data` store tests (`SettingsTest`, `ExercisesTest`, `SessionsTest`) pass.
 - R87 · Starting while a session is open: `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal.
 - R88 · Tab screens at larger font sizes: G1-G5 pass on all 144 tab pages.
+- R89 · Tab roots without screens: Each unbuilt tab's root shows its name; `AppShellTest.eachTabShowsItsRoot` reaches every root.
 - R90 · The module choice screen: `ModuleChoiceScreenTest` and the goldens pass.
-- R91 · Module cards on the choice: `ModuleChoiceScreenTest` checks the open card, Back, TalkBack and the choice surviving Back.
-- R92 · When the data cannot be opened: `CantOpenScreenshotTest` passes, and a retry after a failed open opens the database.
+- R91 · Module cards on the choice: `ModuleChoiceScreenTest` checks the open card, Back and TalkBack; `ShellViewModelTest.aChoiceSurvivesLeavingAtOnce` checks the choice survives Back.
+- R92 · When the data cannot be opened: `CantOpenTest` passes (the screen replaces the choice and the tabs; a retry while broken stays; a retry once it opens goes on), and `CantOpenScreenshotTest`'s goldens match.
 - R94 · What Start shows: With Strength and Stamina chosen and only Strength built, Start shows two cards in that order, Stamina's reading "Arrives in a later update".
 - R95 · Session names: A session started on a Tuesday at 08:00 is "Tuesday morning"; at 360 dp and font size 2.0 it shortens only if the full name does not fit.
 - R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" leaves the session STOPPED_EARLY.
@@ -1898,7 +1920,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** The app shows no readiness or recovery score ("muscle recovered") and no load-ratio injury alarm.
 
-**Why:** The evidence does not support them (R15), and they would interpret the person's data (R16).
+**Why:** The evidence does not support them (R15); showing muscles as "recovered" is a readiness claim (report rule 23).
+
+**Evidence:** Harvest row `JF3`, left out in `research/purpose-2026-10-20/compare.md`.
 
 **Acceptance:** No screen or note shows a readiness, recovery or load-ratio value.
 
@@ -1908,7 +1932,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** The app gives no per-set prescription and no automatic deload.
 
-**Why:** It records and comments, never prescribes (R02).
+**Why:** It records and comments, never prescribes (R02); automatic deloads contradict report rules 9-10.
+
+**Evidence:** Harvest row `IV1`, left out in `research/purpose-2026-10-20/compare.md`.
 
 **Acceptance:** No screen proposes a set's weight or reps by itself; progression waits on R43.
 
@@ -1918,7 +1944,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** The app has no multi-person profiles, no Health Connect and no Bluetooth sensors.
 
-**Why:** The owner did not choose them.
+**Why:** The owner did not choose them. The app is for one person; sensing is not the active ingredient (report rule 60) and a sensor adds a permission and a pairing flow; Health Connect shares data with other apps.
+
+**Evidence:** Harvest rows `SH5`, `RU4`, `OS7` and `CA1`, left out in `research/purpose-2026-10-20/compare.md`.
 
 **Acceptance:** The merged manifest declares no Health Connect or Bluetooth permission.
 
@@ -1928,7 +1956,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** No hidden swipe duplicates a visible control.
 
-**Why:** One home per thing (R48).
+**Why:** Swipe to repeat a set does with a hidden gesture a job visible controls already do (`LO1`, `LL1`).
+
+**Evidence:** Harvest row `SG1`, left out in `research/purpose-2026-10-20/compare.md`.
 
 **Acceptance:** none: checked in each screen's review.
 

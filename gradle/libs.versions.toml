@@ -18,7 +18,7 @@ composeBom = "2026.09.00"
 activityCompose = "1.13.0"
 coreKtx = "1.19.1"
 roborazzi = "1.76.0"
-# Chosen by the spikes of 2026-10-28 (SPEC 0.58).
+# Chosen by the spikes of 2026-10-28 (SPEC:R82, SPEC:R84).
 navigationCompose = "2.10.2"
 lifecycle = "2.11.0"
 

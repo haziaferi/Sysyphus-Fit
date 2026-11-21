@@ -33,8 +33,8 @@ import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 import com.hazia.sisyphusfit.ui.theme.sisifo
 
-// The main bar's worn dip and its light, as drawn in the decided mockups ("sv-wear", SPEC 0.53): x on a 328-wide
-// grid stretched to the bar, y in dp, so the dip stays 8 dp deep when the bar grows with its label (0.49).
+// The main bar's worn dip and its light, as drawn in the decided mockups ("sv-wear", SPEC:R65): x on a 328-wide
+// grid stretched to the bar, y in dp, so the dip stays 8 dp deep when the bar grows with its label (SPEC:R56).
 private const val GRID = 328f
 private val DIP = 8.dp
 private val LABEL_TOP = 8.dp
@@ -61,8 +61,8 @@ object DipShape : Shape {
 }
 
 /**
- * The main action of a doing screen (SPEC 0.35, 0.53): full width in the bottom zone, `fill.dark`, the dip lit faintly
- * by `fill.dark-light`. At least `size.button` high; its label wraps to two lines rather than shortening (0.49).
+ * The main action of a doing screen (SPEC:R69, SPEC:R65): full width in the bottom zone, `fill.dark`, the dip lit faintly
+ * by `fill.dark-light`. At least `size.button` high; its label wraps to two lines rather than shortening (SPEC:R56).
  */
 @Composable
 fun MainBar(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @DrawableRes icon: Int? = null) {
@@ -111,7 +111,7 @@ fun MainBar(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @
 }
 
 /**
- * The bottom zone behind the main bar (SPEC 0.35): `surface.sunk`, reaching under the navigation bar (edge to edge) and
+ * The bottom zone behind the main bar (SPEC:R69): `surface.sunk`, reaching under the navigation bar (edge to edge) and
  * keeping its content clear of it, below or (landscape, three buttons) at a side.
  */
 @Composable

@@ -16,7 +16,7 @@ import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 
 /**
- * When the data cannot be opened (owner's call, 0.60): said plainly, on any launch, with one way on. A damaged file is
+ * When the data cannot be opened (owner's call, SPEC:R92): said plainly, on any launch, with one way on. A damaged file is
  * set aside by the database open, never removed, so "nothing has been deleted" is true.
  */
 @Composable

@@ -36,7 +36,7 @@ class PiecesTest {
     private fun DpRect.h() = bottom - top
     private fun DpRect.w() = right - left
 
-    // SPEC 0.21: touch areas at least 42 dp; the pieces use size.hit (48 / 44).
+    // SPEC:R50: touch areas at least 42 dp; the pieces use size.hit (48 / 44).
     @Test
     fun everyPressableIsAtLeast42dp() {
         rule.setContent { SisyphusTheme { PieceSamples() } }
@@ -58,7 +58,7 @@ class PiecesTest {
         }
     }
 
-    // 0.49: the main bar may wrap to two lines; it never cuts its label.
+    // SPEC:R56: the main bar may wrap to two lines; it never cuts its label.
     @Test
     fun mainBarWrapsAtFontScale2() {
         RuntimeEnvironment.setFontScale(2f)
@@ -67,7 +67,7 @@ class PiecesTest {
         assertTrue("two lines: ${text.h()}", text.h() > 40.dp)
     }
 
-    // 0.43, 0.49: the title may end in "…"; the clock and Finish never shorten.
+    // SPEC:R73, SPEC:R56: the title may end in "…"; the clock and Finish never shorten.
     @Test
     fun headerKeepsClockAndFinishAtFontScale2() {
         RuntimeEnvironment.setFontScale(2f)
@@ -91,7 +91,7 @@ class PiecesTest {
         assertTrue("$before -> $after", after > before)
     }
 
-    // 0.49: the value shrinks to fit between the steppers, not below the compact token (34 sp), then its unit moves under it.
+    // SPEC:R56: the value shrinks to fit between the steppers, not below the compact token (34 sp), then its unit moves under it.
     @Test
     fun stepperValueShrinksThenUnitMovesUnder() {
         RuntimeEnvironment.setFontScale(2f)
@@ -103,7 +103,7 @@ class PiecesTest {
         assertTrue("unit under the value: unit.top ${unit.top} >= value.bottom ${value.bottom}", unit.top >= value.bottom - 1.dp)
     }
 
-    // Found by compose_check.py: the decided chip is 0.47's (".cmp .chipv": 28 high, a 13 dp icon), not the older 32.
+    // Found by compose_check.py: the decided chip is SPEC:R78's (".cmp .chipv": 28 high, a 13 dp icon), not the older 32.
     @Test
     fun chipIsTheDecidedChip() {
         rule.setContent { SisyphusTheme { Chip("Training frequency", onClick = {}) } }
@@ -111,7 +111,7 @@ class PiecesTest {
         assertEquals(28f, chip.h().value, 0.5f)
     }
 
-    // §10 type: the eyebrow role is set in capitals, tracked 0.08 em, in ink.secondary (".eyebrow" in the mockups).
+    // SPEC:R60: the eyebrow role is set in capitals, tracked 0.08 em, in ink.secondary (".eyebrow" in the mockups).
     @Test
     fun eyebrowIsInCapitals() {
         rule.setContent { SisyphusTheme { Eyebrow("Modules") } }

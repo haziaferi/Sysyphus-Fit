@@ -29,7 +29,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-/** The shell's gate: the choice only while nothing is recorded (0.18); never a flash of it once something is. */
+/** The shell's gate: the choice only while nothing is recorded (SPEC:R90); never a flash of it once something is. */
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36])

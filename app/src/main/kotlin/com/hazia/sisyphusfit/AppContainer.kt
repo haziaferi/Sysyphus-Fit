@@ -15,7 +15,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 /**
- * Everything the screens need, wired by hand (SPEC 0.58). The database opens once, on first use, on [io]:
+ * Everything the screens need, wired by hand (SPEC:R84). The database opens once, on first use, on [io]:
  * `openDatabase` blocks while it probes, and a corrupt file is set aside there, never on the main thread.
  */
 class AppContainer(

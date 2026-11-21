@@ -20,8 +20,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * What the shell shows: nothing while the setting loads, the module choice until one is recorded (0.18), then the tabs;
- * [Failed] when the data cannot be opened (owner's call, 0.60), on any launch.
+ * What the shell shows: nothing while the setting loads, the module choice until one is recorded (SPEC:R90), then the tabs;
+ * [Failed] when the data cannot be opened (owner's call, SPEC:R92), on any launch.
  */
 sealed interface ShellState {
     data object Loading : ShellState

@@ -107,7 +107,7 @@ class ReviewFixesTest {
         assertTrue("right of the side inset", bar.left >= zone.left + 48.dp)
     }
 
-    // Minor 5, re-graded: SPEC 0.47, the chip keeps its 48 dp touch target, compact too.
+    // Minor 5, re-graded: SPEC:R78, the chip keeps its 48 dp touch target, compact too.
     @Test
     fun chipKeeps48dpAtCompact() {
         rule.setContent { SisyphusTheme(DensityMode.Compact) { Chip("Training frequency", onClick = {}) } }

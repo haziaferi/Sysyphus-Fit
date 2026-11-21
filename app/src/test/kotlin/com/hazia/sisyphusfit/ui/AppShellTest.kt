@@ -24,7 +24,7 @@ import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.annotation.Config
 
-/** The four tabs (0.29, 0.39) on Navigation-compose (0.58); the app opens on Start (0.25). */
+/** The four tabs (SPEC:R82, SPEC:R58) on Navigation-compose (SPEC:R82); the app opens on Start (SPEC:R83). */
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36], qualifiers = "w384dp-h756dp-xxhdpi")
 class AppShellTest {
@@ -35,7 +35,7 @@ class AppShellTest {
     private fun tap(label: String) = tab(label).performClick().also { rule.waitForIdle() }
     private fun shows(root: Int) = rule.onNodeWithTag("root:$root").assertIsDisplayed()
 
-    // The shell shows only the page while it reads the module choice off the main thread (0.18), which Compose's idling
+    // The shell shows only the page while it reads the module choice off the main thread (SPEC:R90), which Compose's idling
     // does not wait for.
     private fun ready() = rule.waitUntil(5_000) { rule.onAllNodesWithTag("root:0").fetchSemanticsNodes().isNotEmpty() }
 

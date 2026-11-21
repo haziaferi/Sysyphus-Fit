@@ -18,8 +18,8 @@ import com.hazia.sisyphusfit.ui.theme.Tokens
 private val LIT_DROP = 0.7.dp
 
 /**
- * One of the app's 28 icons (SPEC 0.37), 24 dp, cut into the surface: [tint] over a line of `line.carved-light`
- * 0.7 dp lower (0.53). Decorative unless [contentDescription] is given by the caller's semantics.
+ * One of the app's 28 icons (SPEC:R64), 24 dp, cut into the surface: [tint] over a line of `line.carved-light`
+ * 0.7 dp lower (SPEC:R65). Decorative unless [contentDescription] is given by the caller's semantics.
  */
 @Composable
 fun StoneIcon(@DrawableRes icon: Int, modifier: Modifier = Modifier, tint: Color = Tokens.Colors.inkPrimary, size: Dp = 24.dp) {

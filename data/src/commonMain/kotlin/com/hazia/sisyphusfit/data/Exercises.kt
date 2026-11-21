@@ -14,10 +14,10 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
-/** SPEC §4: how an exercise is counted. */
+/** SPEC:R28: how an exercise is counted. */
 enum class ExerciseKind { DYNAMIC, ISOMETRIC, TIMED, DISTANCE }
 
-/** An exercise as the screens see it: its row and its module tags (0.23). */
+/** An exercise as the screens see it: its row and its module tags (SPEC:R23). */
 data class Exercise(
     val id: String,
     val name: String,

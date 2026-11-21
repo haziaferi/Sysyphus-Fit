@@ -15,7 +15,7 @@ import com.hazia.sisyphusfit.ui.theme.Tokens
 enum class CarvedEdge { Top, Bottom }
 
 /**
- * A line carved into the surface (SPEC 0.53): a band `stroke.carved` high, its upper half a dark lens (the cut), its lower
+ * A line carved into the surface (SPEC:R65): a band `stroke.carved` high, its upper half a dark lens (the cut), its lower
  * half a light lens (the lit edge), each thickest in the middle, as drawn in the decided mockups. [faded] fades both
  * ends over a fifth of the width (History's date spindle); [cut] is the dark lens's colour.
  */

@@ -20,7 +20,7 @@ import org.robolectric.annotation.GraphicsMode
 // As the gallery's goldens: a change over 0.02% of the image is a change.
 private val options = RoborazziOptions(compareOptions = RoborazziOptions.CompareOptions(changeThreshold = 0.0002f))
 
-/** The can't-open screen (0.60) in the 6T's app area (384 x 756 dp at 450 dpi, SPEC 0.48), at font 1.0 and 2.0. */
+/** The can't-open screen (SPEC:R92) in the 6T's app area (384 x 756 dp at 450 dpi, SPEC:R55), at font 1.0 and 2.0. */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class CantOpenScreenshotTest {

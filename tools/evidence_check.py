@@ -49,7 +49,7 @@ SOURCE_KEYS = {"author": (str, True), "year": (int, True), "pmid": (str, False),
                "coi": (dict, False), "independence": (str, False)}
 TEXT_FIELDS = ("claim", "body", "population", "design", "certainty")  # text fields shown to the person
 
-# Instructions, promises, second person (never about the person, §7 rule 7) and weight-judging words.
+# Instructions, promises, second person (never about the person, SPEC:R16 rule 7) and weight-judging words.
 BANNED = {
     "en": ["should", "must", "need to", "needs to", "have to", "has to", "make sure", "try to", "we recommend",
            "avoid", "guarantee", "guaranteed", "guarantees", "definitely", "will", "recommended", "ought to",
@@ -66,9 +66,9 @@ def numbers(text):
 
 
 def spec_features(text):
-    """Feature ids SPEC.md names: harvest rows (FA15), SPEC features (X-WEEK, N-HISTORY), decisions (0.24)."""
+    """Feature ids SPEC.md names: harvest rows (FA15), SPEC features (X-WEEK, N-HISTORY), rules (R24)."""
     return (set(re.findall(r"\b[A-Z]{2}\d{1,2}\b", text)) | set(re.findall(r"\b[XN]-[A-Z]+\b", text))
-            | set(re.findall(r"^\| (0\.\d+) \|", text, re.M)))
+            | set(re.findall(r"^### [A-Z]-(R\d+) · ", text, re.M)))
 
 
 def norm_name(s):
@@ -155,7 +155,7 @@ def check_source(s, where, ids, out):
 
 
 def check_content(c, where, reports, out):
-    """§7 rule 6: the grade, status, sources and every number shown come from the report(s) the claim cites."""
+    """SPEC:R16 rule 6: the grade, status, sources and every number shown come from the report(s) the claim cites."""
     cited = sorted({r["report"] for r in c.get("report_rules", [])
                     if isinstance(r, dict) and r.get("report") in reports})
     if not cited:
@@ -344,7 +344,7 @@ CLEAN = {
     "labels": {"observational": {"en": "Association, not cause"},
                "certainty_level": {k: {"en": k} for k in sorted(LEVELS)}},
     "claims": [
-        {"id": "strength.progression.double", "version": 1, "held": "SPEC §11", "module": "strength",
+        {"id": "strength.progression.double", "version": 1, "held": "SPEC:R43", "module": "strength",
          "features": ["LL5"],
          "report_rules": [{"report": 1, "rule": "6"}],
          # 'shoulder', 'mustard', 'fatigue', 'willing': banned words inside longer words must not trip the gate
@@ -463,7 +463,7 @@ def selftest():
         hit = [f for f in found if expect in f]
         print(f"  {'PASS' if hit else 'FAIL'}  {name}: " + (hit[0] if hit else f"not caught (got {found})"))
         failures += not hit
-    if not {"FA15", "X-WEEK", "N-HISTORY", "0.24"} <= spec_features("| 0.24 | x |\nFA15, X-WEEK and N-HISTORY") \
+    if not {"FA15", "X-WEEK", "N-HISTORY", "R24"} <= spec_features("### D-R24 · x\nFA15, X-WEEK and N-HISTORY") \
             or spec_features("P3 · C3, BMI, 6T, 0.5 sets"):
         print("  FAIL  SPEC.md feature-id reading")
         failures += 1

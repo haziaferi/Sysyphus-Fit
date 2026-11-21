@@ -33,7 +33,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-/** First launch (SPEC 0.18): the five modules, all unticked, chosen by tapping their cards. */
+/** First launch (SPEC:R90): the five modules, all unticked, chosen by tapping their cards. */
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi")
 class ModuleChoiceScreenTest {

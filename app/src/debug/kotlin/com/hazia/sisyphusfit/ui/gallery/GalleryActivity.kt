@@ -46,7 +46,7 @@ import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 import com.hazia.sisyphusfit.ui.theme.stoneEdgeToEdge
 
-/** Debug only: every shared piece on one screen, to judge on the phone at true size (SPEC 0.48). */
+/** Debug only: every shared piece on one screen, to judge on the phone at true size (SPEC:R55). */
 class GalleryActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

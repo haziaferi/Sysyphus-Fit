@@ -12,7 +12,7 @@ import androidx.sqlite.execSQL
  */
 
 /**
- * Schema 1 -> 2 (SPEC §4, stage 1a): additive only. Four new tables (module tags, labels and their
+ * Schema 1 -> 2 (SPEC:R28, SPEC:R33, stage 1a): additive only. Four new tables (module tags, labels and their
  * session links, body measures) and three new columns with a default of 0 (an exercise's
  * partial-reps switch, a set's power flag and partial-reps count); no schema-1 row is rewritten.
  */

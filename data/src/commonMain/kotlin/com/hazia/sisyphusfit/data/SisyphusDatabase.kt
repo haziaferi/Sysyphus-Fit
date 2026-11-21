@@ -33,7 +33,7 @@ abstract class SisyphusDatabase : RoomDatabase() {
 @Suppress("NO_ACTUAL_FOR_EXPECT", "KotlinNoActualForExpect")
 expect object SisyphusDatabaseConstructor : RoomDatabaseConstructor<SisyphusDatabase>
 
-/** The floor's writes and reads (SPEC §2). Features add their own DAOs as their stage is built. */
+/** The floor's writes and reads (SPEC:R28). Features add their own DAOs as their stage is built. */
 @Dao
 interface FloorDao {
     @Insert suspend fun addExercise(row: ExerciseEntity)

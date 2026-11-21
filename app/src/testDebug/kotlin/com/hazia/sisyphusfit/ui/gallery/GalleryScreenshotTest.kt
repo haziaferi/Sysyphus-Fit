@@ -33,7 +33,7 @@ private val options = RoborazziOptions(compareOptions = RoborazziOptions.Compare
 
 /**
  * Goldens of every piece (balanced and compact at font size 1.0, 1.3 and 2.0, tall enough to hold them all) and of the
- * gallery in the 6T's app area (384 x 756 dp at 450 dpi, SPEC 0.48), closed and with the sheet open.
+ * gallery in the 6T's app area (384 x 756 dp at 450 dpi, SPEC:R55), closed and with the sheet open.
  * `./gradlew :app:testDebugUnitTest -Proborazzi.record=true` records them; a plain run verifies against them.
  */
 @RunWith(AndroidJUnit4::class)

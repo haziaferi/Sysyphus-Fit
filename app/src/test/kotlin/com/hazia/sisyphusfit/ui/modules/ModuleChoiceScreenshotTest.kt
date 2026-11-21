@@ -28,7 +28,7 @@ import org.robolectric.annotation.GraphicsMode
 // As the gallery's goldens: a change over 0.02% of the image is a change.
 private val options = RoborazziOptions(compareOptions = RoborazziOptions.CompareOptions(changeThreshold = 0.0002f))
 
-/** The module choice in the 6T's app area (384 x 756 dp at 450 dpi, SPEC 0.48), balanced and compact, font 1.0 and 2.0. */
+/** The module choice in the 6T's app area (384 x 756 dp at 450 dpi, SPEC:R55), balanced and compact, font 1.0 and 2.0. */
 @RunWith(AndroidJUnit4::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class ModuleChoiceScreenshotTest {
@@ -51,7 +51,7 @@ class ModuleChoiceScreenshotTest {
     @Test @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi") fun compact100() = golden(DensityMode.Compact, 1f)
     @Test @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi") fun compact200() = golden(DensityMode.Compact, 2f)
 
-    // 0.49, 0.54: at font 2.0 on the narrowest phone the bar stays whole on screen and every card scrolls into view.
+    // SPEC:R56, SPEC:R88: at font 2.0 on the narrowest phone the bar stays whole on screen and every card scrolls into view.
     @Test @Config(sdk = [36], qualifiers = "w360dp-h756dp-450dpi")
     fun stepForwardStaysOnScreenAt2x() {
         show(DensityMode.Balanced, 2f)
@@ -63,7 +63,7 @@ class ModuleChoiceScreenshotTest {
         assertTrue("last card above the bar", last.bottom <= bar.top)
     }
 
-    // 0.54's reflow: when a name would wrap beside the chip, every card puts the chip and box under its text, right-aligned.
+    // SPEC:R88's reflow: when a name would wrap beside the chip, every card puts the chip and box under its text, right-aligned.
     @Test @Config(sdk = [36], qualifiers = "w360dp-h756dp-450dpi")
     fun atLargeFontTheChipGoesUnderTheText() {
         show(DensityMode.Balanced, 2f)

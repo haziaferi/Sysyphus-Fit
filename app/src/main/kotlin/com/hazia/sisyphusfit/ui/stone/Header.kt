@@ -28,7 +28,7 @@ import com.hazia.sisyphusfit.ui.theme.sisifo
 private val HEADER_HEIGHT = 64.dp
 
 /**
- * A session or exercise screen's header (SPEC 0.43, 0.49): Back, the title, the session clock and Finish. The title may
+ * A session or exercise screen's header (SPEC:R73, SPEC:R56): Back, the title, the session clock and Finish. The title may
  * end in "…" and shows in full on a tap; the clock and Finish never shorten.
  */
 @Composable

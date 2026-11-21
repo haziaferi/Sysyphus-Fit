@@ -9,7 +9,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import com.hazia.sisyphusfit.ui.theme.Theme
 
-/** At least the density's touch target (`size.hit`, SPEC 0.21: never under 42 dp) in both directions. */
+/** At least the density's touch target (`size.hit`, SPEC:R50: never under 42 dp) in both directions. */
 @Composable
 fun Modifier.minHit(): Modifier = sizeIn(minWidth = Theme.size.hit, minHeight = Theme.size.hit)
 

@@ -24,7 +24,7 @@ jobs:
           distribution: temurin
           java-version: "21"
       - uses: gradle/actions/setup-gradle@v4
-      # The SPEC 5 gate: every test and Android lint with warnings as errors. gradlew is not marked
+      # The SPEC:R37 gate: every test and Android lint with warnings as errors. gradlew is not marked
       # executable in git, so it runs through bash.
       - run: bash ./gradlew check --stacktrace
 

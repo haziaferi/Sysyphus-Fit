@@ -29,7 +29,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
-/** The pattern every screen copies (SPEC 0.58): a ViewModel per screen, its stores from the app's container. */
+/** The pattern every screen copies (SPEC:R84): a ViewModel per screen, its stores from the app's container. */
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36])

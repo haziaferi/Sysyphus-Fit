@@ -6,7 +6,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 
-/** SPEC 0.34: balanced by default, compact as the person's option. */
+/** SPEC:R57: balanced by default, compact as the person's option. */
 enum class DensityMode { Balanced, Compact }
 
 private class ThemeValues(val mode: DensityMode, val space: Tokens.Space, val size: Tokens.Size, val type: AppType)

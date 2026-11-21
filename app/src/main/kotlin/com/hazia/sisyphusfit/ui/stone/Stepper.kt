@@ -38,11 +38,11 @@ private val GAP = 8.dp
 private val VALUE_PAD = 8.dp
 private val VALUE_MIN = 48.dp
 
-/** How the value and its unit fit between the pebbles (SPEC 0.49). */
+/** How the value and its unit fit between the pebbles (SPEC:R56). */
 data class StepperFit(val size: TextUnit, val unitUnder: Boolean)
 
 /**
- * SPEC 0.49: the value keeps its role's size if it fits beside its unit; else it shrinks, never below [min]; if it
+ * SPEC:R56: the value keeps its role's size if it fits beside its unit; else it shrinks, never below [min]; if it
  * still does not fit, the unit moves under it and the value takes the largest size (from [full] to [min]) that fits alone.
  */
 fun stepperFit(full: TextUnit, min: TextUnit, room: Dp, valueWidth: (TextUnit) -> Dp, unitWidth: Dp): StepperFit {
@@ -52,7 +52,7 @@ fun stepperFit(full: TextUnit, min: TextUnit, room: Dp, valueWidth: (TextUnit) -
 }
 
 /**
- * A set value with its − / + pebbles (SPEC 0.28, 0.53): borderless light pebbles on the 1 dp step shadow, the number you
+ * A set value with its − / + pebbles (SPEC:R68, SPEC:R65): borderless light pebbles on the 1 dp step shadow, the number you
  * tap to type underlined 1.5 dp in `line.edge`, its unit beside it. [small] is the partials row (smaller pebbles and
  * value); [pebble] is `radius.pebble-b` for weight and partials, `radius.pebble-a` for reps. [name] names the
  * pebbles for TalkBack ("Decrease kg").

@@ -88,7 +88,7 @@ class ThemeTest {
         assertTrue("tabular 0000 at wght 700 ($bold) is wider than at 400 ($regular)", bold > regular)
     }
 
-    // SPEC 0.49: at font size 2.0 Android 14+ scales sp on its nonlinear curve (16 -> 28 dp), not linearly (32).
+    // SPEC:R56: at font size 2.0 Android 14+ scales sp on its nonlinear curve (16 -> 28 dp), not linearly (32).
     @Test
     fun fontScale2UsesNonlinearCurve() {
         RuntimeEnvironment.setFontScale(2f)

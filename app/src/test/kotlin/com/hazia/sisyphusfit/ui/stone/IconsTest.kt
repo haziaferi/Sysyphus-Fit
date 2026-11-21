@@ -7,7 +7,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.w3c.dom.Element
 
-/** SPEC 0.37: our own set of 28, a 24 grid, 2 dp strokes, no fill; object icons faceted from 0.53. */
+/** SPEC:R64: our own set of 28, a 24 grid, 2 dp strokes, no fill; object icons faceted (SPEC:R65). */
 class IconsTest {
     private val names = listOf(
         "back", "backspace", "backup", "caret", "check", "chevron", "clock", "close", "edit", "info", "label", "minus",
@@ -44,7 +44,7 @@ class IconsTest {
         }
     }
 
-    // 0.37/0.53: the path icons and the -/+ keep round caps; object icons are cut square.
+    // SPEC:R64, SPEC:R65: the path icons and the -/+ keep round caps; object icons are cut square.
     @Test
     fun pathIconsKeepRoundCapsObjectsAreCut() {
         listOf("back", "minus", "plus", "chevron", "tab_week").forEach { n ->

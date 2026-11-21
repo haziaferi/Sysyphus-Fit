@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
-/** One session model (N-SESSION), logged per calendar date (FA13), resumable after the app is killed (GL1, 0.27). */
+/** One session model (N-SESSION), logged per calendar date (FA13), resumable after the app is killed (GL1, SPEC:R34). */
 class SessionsTest {
     private val temp = TempDatabase()
     private val db = temp.db

@@ -7,8 +7,10 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /*
- * Schema version 2 (SPEC:R28): schema 1, designed for the whole 50-point scope, plus the additive
- * parts of stage 1a (module tags, labels, body measures, power and partial reps). Integers only:
+ * Schema version 3 (SPEC:R28): schema 1, designed for the whole 50-point scope, plus the additive
+ * parts of stage 1a (schema 2: module tags, labels, body measures, power and partial reps; schema 3,
+ * SPEC:R121: an amount's time and module, a set's type, steps, an exercise's rest, note and
+ * categories). Integers only:
  * epoch milliseconds UTC plus the recording zone, seconds, grams, millimetres, metres, 1e-7 degrees.
  * Ids are ULIDs from :core. A column added by a later schema goes LAST in its entity, with a SQL
  * default: ALTER TABLE appends, so a migrated table then matches a fresh one column for column.
@@ -17,6 +19,8 @@ import androidx.room.PrimaryKey
 /**
  * kind: DYNAMIC, ISOMETRIC, TIMED, DISTANCE. sided: counted per side (harvest CM2).
  * show_partial_reps (schema 2, SPEC:R32): the partial-reps count is offered on this exercise.
+ * Schema 3 (SPEC:R103): rest_seconds is the rest after its sets, null for Settings' default length and 0 for none;
+ * note is the person's own text.
  */
 @Entity(tableName = "exercise")
 data class ExerciseEntity(
@@ -26,6 +30,8 @@ data class ExerciseEntity(
     val sided: Boolean,
     val archived: Boolean,
     @ColumnInfo(name = "show_partial_reps", defaultValue = "0") val showPartialReps: Boolean = false,
+    @ColumnInfo(name = "rest_seconds") val restSeconds: Int? = null,
+    val note: String? = null,
 )
 
 /** Schema 2 (SPEC:R23): a module tag on an exercise, several per exercise. module: a :core Module name. */
@@ -74,6 +80,8 @@ data class RoutineItemEntity(
  * A session. Without times it is an amount on [day] (harvest FA10). [day] is the local date it
  * counts on, computed once by :core countingDay (FA13). state: OPEN (in progress, resumable),
  * FINISHED, STOPPED_EARLY (KA2). intensity 1-5 (GR4).
+ * Schema 3 (SPEC:R121): seconds is an amount's time (SPEC:R29); module, a :core Module name, is the module a session
+ * without sets is logged under.
  */
 @Entity(
     tableName = "session",
@@ -91,12 +99,17 @@ data class SessionEntity(
     val state: String,
     val intensity: Int?,
     val note: String?,
+    val seconds: Int? = null,
+    val module: String? = null,
 )
 
 /**
  * A done set; skipped sets are never written (KA2). rpe is RPE x10 (BC1). side: L, R or null.
  * Schema 2: power is "move fast" (SPEC:R22); partial_reps is its own count beside reps, never converted
  * into reps (SPEC:R32: 7 full and 1 partial is reps 7, partial_reps 1).
+ * Schema 3 (SPEC:R121): kind is the exercise's type when the set was logged, kept when the type changes later, so the
+ * comparison matches like with like (SPEC:R67). The empty default exists only for ALTER TABLE: the migration and the
+ * restore of an older backup fill it from the set's exercise (FILL_SET_KINDS), and SessionDao.addSet writes it.
  */
 @Entity(
     tableName = "logged_set",
@@ -121,6 +134,7 @@ data class LoggedSetEntity(
     @ColumnInfo(name = "done_at") val doneAt: Long,
     @ColumnInfo(defaultValue = "0") val power: Boolean = false,
     @ColumnInfo(name = "partial_reps", defaultValue = "0") val partialReps: Int = 0,
+    @ColumnInfo(defaultValue = "''") val kind: String = "",
 )
 
 /** LL5: add this after a session where every set hit its target. when: ALL_SETS_HIT. */
@@ -233,6 +247,40 @@ data class BodyMeasureEntity(
 )
 
 /**
+ * Schema 3 (SPEC:R121): a day's steps from one source, ENTERED by the person (each entry adds to the day's row) or
+ * counted by the SENSOR. Steps are never sessions.
+ */
+@Entity(tableName = "steps", indices = [Index(value = ["day", "source"], unique = true)])
+data class StepsEntity(
+    @PrimaryKey val id: String,
+    val day: String,
+    val steps: Int,
+    val source: String,
+)
+
+/** Schema 3 (SPEC:R103): a category, the person's own word for exercises (dumbbells, core), apart from modules and labels. */
+@Entity(tableName = "category")
+data class CategoryEntity(
+    @PrimaryKey val id: String,
+    val name: String,
+)
+
+/** Schema 3 (SPEC:R103): a category on an exercise, several per exercise. */
+@Entity(
+    tableName = "exercise_category",
+    foreignKeys = [
+        ForeignKey(ExerciseEntity::class, ["id"], ["exercise_id"], onDelete = ForeignKey.CASCADE),
+        ForeignKey(CategoryEntity::class, ["id"], ["category_id"], onDelete = ForeignKey.CASCADE),
+    ],
+    indices = [Index(value = ["exercise_id", "category_id"], unique = true), Index("category_id")],
+)
+data class ExerciseCategoryEntity(
+    @PrimaryKey val id: String,
+    @ColumnInfo(name = "exercise_id") val exerciseId: String,
+    @ColumnInfo(name = "category_id") val categoryId: String,
+)
+
+/**
  * Every table in dependency order: a parent before its children. Restore inserts in this order and
  * deletes in reverse; a table missing here would be missing from every backup, so a test pins this
  * list to sqlite_master.
@@ -242,4 +290,6 @@ val TABLES = listOf(
     "progression_rule", "interval_preset", "track_point", "goal", "setting",
     // Schema 2, appended so a schema-1 backup's tables keep their place.
     "exercise_module", "label", "session_label", "body_measure",
+    // Schema 3, appended the same way.
+    "steps", "category", "exercise_category",
 )

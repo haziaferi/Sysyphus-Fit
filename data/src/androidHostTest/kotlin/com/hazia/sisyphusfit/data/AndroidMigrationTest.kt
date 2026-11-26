@@ -11,8 +11,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-// The 1 -> 2 migration on the phone's own path: openSisyphusDatabase(context), through
-// KeepFileOnCorruptionDriver and the framework SQLite, where the desktop tests use the bundled one.
+// The migrations on the phone's own path: openSisyphusDatabase(context), through KeepFileOnCorruptionDriver and the
+// framework SQLite, where the desktop tests use the bundled one.
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [36])
 class AndroidMigrationTest {
@@ -28,33 +28,39 @@ class AndroidMigrationTest {
     }
 
     @Test
-    fun theAppMigratesASchema1DatabaseKeepingEveryCell() {
-        val v1Columns = createSchema1(file, driver)
-        val before = raw(file, driver) { it.allCells(v1Columns) }
+    fun theAppMigratesAnOlderDatabaseKeepingEveryCell() {
+        for (version in listOf(1, 2)) {
+            val oldColumns = createSchema(version, file, driver)
+            val before = raw(file, driver) { it.allCells(oldColumns) }
 
-        val open = openSisyphusDatabase(context)
-        open.database.close()
-        assertFalse(open.recovered)
-        assertEquals(emptyList(), setAside())
+            val open = openSisyphusDatabase(context)
+            open.database.close()
+            assertFalse(open.recovered)
+            assertEquals(emptyList(), setAside())
 
-        raw(file, driver) { c ->
-            assertEquals(before, c.allCells(v1Columns))
-            assertMigrated(c, v1Columns)
+            raw(file, driver) { c ->
+                assertEquals(before, c.allCells(oldColumns), "schema $version")
+                assertMigrated(c, oldColumns, from = version)
+            }
+            file.parentFile!!.deleteRecursively()
         }
     }
 
     @Test
     fun aFailedMigrationOnThePhoneLeavesTheFileAsItWas() {
-        for ((how, damage) in migrationBreakers) {
-            val v1Columns = createSchema1(file, driver, damage)
-            val before = raw(file, driver) { it.untouchable(v1Columns) }
+        for (version in listOf(1, 2)) {
+            for ((how, damage) in migrationBreakers(version)) {
+                val label = "schema $version, $how"
+                val oldColumns = createSchema(version, file, driver, damage)
+                val before = raw(file, driver) { it.untouchable(oldColumns) }
 
-            assertTrue(runCatching { openSisyphusDatabase(context) }.isFailure, "$how: the open should fail")
+                assertTrue(runCatching { openSisyphusDatabase(context) }.isFailure, "$label: the open should fail")
 
-            assertTrue(file.exists(), how)
-            assertEquals(emptyList(), setAside(), how)
-            assertEquals(before, raw(file, driver) { it.untouchable(v1Columns) }, how)
-            file.parentFile!!.deleteRecursively()
+                assertTrue(file.exists(), label)
+                assertEquals(emptyList(), setAside(), label)
+                assertEquals(before, raw(file, driver) { it.untouchable(oldColumns) }, label)
+                file.parentFile!!.deleteRecursively()
+            }
         }
     }
 }

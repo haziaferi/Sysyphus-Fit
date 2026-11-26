@@ -69,11 +69,15 @@ abstract class SessionDao {
     @Transaction
     open suspend fun start(row: SessionEntity): String = openId() ?: row.id.also { insert(row) }
 
-    /** Adds a done set at the next position in its session, which must be open. */
+    @Query("SELECT kind FROM exercise WHERE id = :exerciseId")
+    protected abstract suspend fun kindOf(exerciseId: String): String?
+
+    /** Adds a done set at the next position in its session, which must be open, under its exercise's type now (SPEC:R121). */
     @Transaction
     open suspend fun addSet(row: LoggedSetEntity) {
         checkOpen(row.sessionId)
-        insert(row.copy(position = nextPosition(row.sessionId)))
+        val kind = checkNotNull(kindOf(row.exerciseId)) { "no exercise ${row.exerciseId}" }
+        insert(row.copy(position = nextPosition(row.sessionId), kind = kind))
     }
 
     @Query("SELECT MAX(done_at) FROM logged_set WHERE session_id = :sessionId")

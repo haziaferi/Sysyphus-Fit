@@ -8,7 +8,7 @@ import androidx.room.Query
 import androidx.room.RoomDatabase
 import androidx.room.RoomDatabaseConstructor
 
-const val SCHEMA_VERSION = 2
+const val SCHEMA_VERSION = 3
 const val DATABASE_NAME = "sisyphusfit.db"
 
 @Database(
@@ -17,6 +17,7 @@ const val DATABASE_NAME = "sisyphusfit.db"
         LoggedSetEntity::class, ProgressionRuleEntity::class, IntervalPresetEntity::class,
         TrackPointEntity::class, GoalEntity::class, SettingEntity::class,
         ExerciseModuleEntity::class, LabelEntity::class, SessionLabelEntity::class, BodyMeasureEntity::class,
+        StepsEntity::class, CategoryEntity::class, ExerciseCategoryEntity::class,
     ],
     version = SCHEMA_VERSION,
     exportSchema = true,
@@ -45,6 +46,9 @@ interface FloorDao {
     @Insert suspend fun addLabel(row: LabelEntity)
     @Insert suspend fun addSessionLabels(rows: List<SessionLabelEntity>)
     @Insert suspend fun addBodyMeasure(row: BodyMeasureEntity)
+    @Insert suspend fun addSteps(row: StepsEntity)
+    @Insert suspend fun addCategory(row: CategoryEntity)
+    @Insert suspend fun addExerciseCategories(rows: List<ExerciseCategoryEntity>)
 
     @Query("SELECT * FROM exercise WHERE archived = 0 ORDER BY name, id")
     suspend fun exercises(): List<ExerciseEntity>

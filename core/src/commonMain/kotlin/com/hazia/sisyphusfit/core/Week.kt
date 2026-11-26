@@ -2,9 +2,9 @@ package com.hazia.sisyphusfit.core
 
 /**
  * The training modules (SPEC:R19, SPEC:R20). A module is a tag on an exercise, and an
- * exercise may carry several (SPEC:R23); the database stores the [name]. A session without sets is to carry
- * its own module and count in that module's units (SPEC:R23, SPEC:R25), while one with sets counts by its parts as below;
- * not built: the week counts sets only.
+ * exercise may carry several (SPEC:R23); the database stores the [name]. A session without sets carries its own
+ * module (schema 3's `session.module`) and counts in that module's units (SPEC:R23, SPEC:R25), while one with sets
+ * counts by its parts as below; not built: the week counts sets only, and reads neither that column nor steps.
  */
 enum class Module { DAILY_MOVEMENT, STRENGTH, STAMINA, MOBILITY_BALANCE, BODY_MEASURES }
 

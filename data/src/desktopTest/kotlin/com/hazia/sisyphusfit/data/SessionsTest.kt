@@ -58,6 +58,16 @@ class SessionsTest {
         assertEquals(listOf(0, 1, 2), store.sets(s).first().map { it.position })
     }
 
+    // SPEC:R121: a set keeps the type its exercise had when it was logged; changing the type later (R101) leaves it.
+    @Test fun aSetKeepsTheTypeItWasLoggedUnder() = runBlocking {
+        val ex = exercise("Hollow hold")
+        val s = store.start()
+        store.logSet(s, ex, SetValues(reps = 5))
+        exercises.update(exercises.active().first().single().copy(kind = ExerciseKind.ISOMETRIC))
+        store.logSet(s, ex, SetValues(seconds = 30))
+        assertEquals(listOf("DYNAMIC", "ISOMETRIC"), store.sets(s).first().map { it.kind })
+    }
+
     @Test fun partialRepsStayTheirOwnCount() = runBlocking {
         val s = store.start()
         store.logSet(s, exercise(), SetValues(reps = 7, partialReps = 1))

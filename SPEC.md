@@ -39,7 +39,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R26 | Units | 5. Data model |
 | D-R27 | Ids | 5. Data model |
 | D-R28 | Tables, schema version 2 | 5. Data model |
-| D-R121 | Where amounts and steps are stored | 5. Data model |
+| D-R121 | Schema 3 additions | 5. Data model |
 | D-R29 | An amount is a session without times | 5. Data model |
 | D-R30 | The counting day | 5. Data model |
 | D-R31 | Only done sets are stored | 5. Data model |
@@ -404,7 +404,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R120 · Notes that span modules
 
-**Rule:** Three evidence notes span modules: strength plus aerobic work together, lifting before cardio for strength, and two days without movement. Each shows only where the person is doing one of the modules it spans (R16 rule 4), and none is ever triggered or worded by the person's own days without movement (R115, R16 rule 7).
+**Rule:** Three evidence notes span modules: strength plus aerobic work together, lifting before cardio for strength, and two days without movement. The first two show only where the person is doing one of the modules they span, the third only where Daily movement is being done (R16 rule 4). The third is never triggered or worded by the person's own days without movement (R51, R115).
 
 **Evidence:** Not checked: which of the three the pack already holds.
 
@@ -452,9 +452,9 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R21 · Modules chosen by the person
 
-**Rule:** The person chooses which modules are on at first launch, with nothing assumed on, and changes the choice later in Settings. Switching a module off hides its Start card and its This week section; History keeps every session, its exercises stay in the add sheet and under More, and switching it back on shows everything again.
+**Rule:** The person chooses which modules are on at first launch, with nothing assumed on, and changes the choice later in Settings. Switching a module off hides its Start card and its This week section, and stops what it runs on its own (Daily movement's reminders, sitting-break prompts and step counting, R22); History keeps every session, its exercises stay in the add sheet and under More, and switching it back on shows and starts everything again.
 
-**Acceptance:** A fresh install shows the module choice before any tab, with every module unticked (`ModuleGateTest`, `ModuleChoiceScreenTest`); switching Strength off and on again leaves every Strength session and exercise as it was.
+**Acceptance:** A fresh install shows the module choice before any tab, with every module unticked (`ModuleGateTest`, `ModuleChoiceScreenTest`); switching Strength off and on again leaves every Strength session and exercise as it was; with Daily movement off, no reminder or prompt fires and no sensor steps are recorded.
 
 **Not:** Hiding a switched-off module's exercises from the add sheet too: they stay reachable.
 
@@ -487,7 +487,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** A session with sets has the modules of its exercises' tags; a set-less session has exactly the module it was logged under; no exercise carries a label.
 
-**Since:** 2026-11-21 · owner · agreed rewording
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R24 · This week counts a mixed session by its parts
 
@@ -509,11 +509,11 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 | Module | This week's totals |
 |---|---|
-| Daily movement | time, steps |
+| Daily movement | time; steps, each day the larger of its entered and its sensor count (R121) |
 | Strength | sets, time |
 | Stamina | time, distance |
 | Mobility and balance | sets, holds, time |
-| Body measures | none: a measure is not a weekly total; measures show in the body-measure chart (stage 8) |
+| Body measures | none: a measure is not a weekly total; each shows in History on its day, as a plain value, and in the body-measure chart once it exists (stage 8) |
 
 **Evidence:** Not checked: `weekByModule` counts logged sets only, and a set-less session has no module column yet (R121).
 
@@ -581,9 +581,9 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Since:** 2026-10-21 · owner · migrated
 
-### D-R121 · Where amounts and steps are stored
+### D-R121 · Schema 3 additions
 
-**Rule:** The next schema adds, by R33, the columns and the table below, so a session without sets keeps its time and its module, and steps are kept per day. Steps, entered or counted by the sensor, are never stored as sessions.
+**Rule:** Schema 3 adds, by R33, the columns and the table below, so a session without sets keeps its time and its module, a set keeps the type it was logged under, and steps are kept per day. Steps, entered or counted by the sensor, are never stored as sessions. The backup format moves with it to `version` 3, and a version-2 backup still restores as R36 says.
 
 **Values:**
 
@@ -591,11 +591,12 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 |---|---|---|
 | `session` | `seconds`, nullable | an amount's time (R29) |
 | `session` | `module`, nullable | the module a session without sets is logged under (R23, R25) |
-| `steps`, a new table | id, day, steps, source (ENTERED, SENSOR) | one row per day and source (R22) |
+| `logged_set` | `kind`, the exercise's type when the set was logged; existing rows take their exercise's type | what the comparison matches on (R67) |
+| `steps`, a new table | id, day, steps, source (ENTERED, SENSOR) | one row per day and source (R22); each entry adds to the day's ENTERED row |
 
-**Evidence:** Not checked: none of it is built; schema 2's `session` has no time, steps or module column (`Tables.kt`, 2026-11-26).
+**Evidence:** Not checked: none of it is built; schema 2's `session` has no time, steps or module column, and `logged_set` no type (`Tables.kt`, 2026-11-26).
 
-**Acceptance:** Room's exported schema holds these columns and the table, and the migration test from schema 2 keeps every cell (R33).
+**Acceptance:** Room's exported schema holds these columns and the table, the migration test from schema 2 keeps every cell (R33), and a version-2 backup restores with the new columns at their defaults.
 
 **Not:** Steps on the session too: a sensor's count is not a session.
 
@@ -679,13 +680,13 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R123 · Scheduled backups never replace a good one
 
-**Rule:** Each scheduled backup is a new file in the chosen folder, named by its date and time; none replaces an earlier one. A backup of a database holding fewer sessions than the last backup held is not written, so a fresh or damaged database never stands in for a good backup.
+**Rule:** Each scheduled backup is a new file in the chosen folder, named by its date and time; none replaces an earlier one. Removing old files never removes the last backup made before the data shrank (a backup holding fewer rows in all than the one before it), and Settings shows when the data shrank.
 
 **Evidence:** Not checked: the backup package is not built; how many dated files are kept is left to its plan.
 
-**Acceptance:** Two scheduled runs leave two files; a run on a fresh database after a backup of 40 sessions writes nothing.
+**Acceptance:** Two scheduled runs leave two files; after a backup of 40 sessions and a fresh start, the next run still writes its file, the clean-up keeps the 40-session backup, and Settings shows that the data shrank.
 
-**Not:** One file overwritten each run: a damaged or empty database would replace the last good backup.
+**Not:** One file overwritten each run: a damaged or empty database would replace the last good backup. Skipping a backup when the data shrank: after a deliberate delete or a restore of an older file, backups would stop.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -749,7 +750,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | 3 | last sets shown when picking an exercise; one own-trend chart with no success or failure framing; weekday to-do list; steps entered and counted by the step sensor (the sensor row not yet priced) | `GM2`, `N-CHART`, `CM3`, `N-STEPS` |
 | 4 | intervals package; movement reminders; sitting-break prompts | `TX1`, `TR5`, `FA5`, `FA1`, `IT1`, `AK1` |
 | 5 | goals in plain words; closing a session with duration, intensity and comment; a launcher shortcut per routine or timer | `FA9`, `N-GOAL`, `GR4`, `TR2` |
-| 6 | rest-timer package (R71, R74) | `GL2`, `LL4`, `KA5` |
+| 6 | rest-timer package (R71, R74), settling R124 | `GL2`, `LL4`, `KA5` |
 | 7 | progression package: the "next time" proposal of R43 | `LL5`, `GM6` |
 | 8 | early stop reviewed, unfinished sets skipped; quick intervals from a cycles stepper; body-measure chart | `KA2`, `SH1`, `OS2`, `OS4` |
 | 9 | self-checks as own trend; body-measure changes | `PL1`, `OS5` |
@@ -758,7 +759,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** none: an order of work; each stage is done by R38.
 
-**Since:** 2026-11-21 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### O-R40 · Today is designed last
 
@@ -834,7 +835,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 |---|---|---|
 | What's next | see what today holds and start or log it | Today (R42), Start or log (the Start tab, R83) |
 | Doing it | move, and have the app keep count | Session, Exercise in a session, Set details (sheet), Number entry (the phone's keyboard, R68), Interval timer, Recording, Stopping and finishing, Log afterwards |
-| Looking back | see what was done | This week (a section per module), History, A recorded activity, Progress |
+| Looking back | see what was done | This week (a section per module but Body measures, R25), History, A recorded activity, Progress |
 | Making it yours | choose modules and goals; shape routines, programmes, timers, exercises | Modules and goals, Your plans, Programme library, Timers and routes, Exercises |
 | Knowing why | the evidence behind a feature, how a movement is done | Evidence notes |
 | Looking after the app | settings, backup, import and export, privacy | Settings, Back up and restore, Import, export, delete |
@@ -843,7 +844,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** none: a working list; each screen's own rules carry the checks.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R46 · Doing and showing screens
 
@@ -893,7 +894,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | 1 | 48 / 44 dp | chips, the smaller steppers (partials), icon buttons |
 | 2 | 56 / 48 dp | rows, the main bar, the set steppers |
 | 3 | 64-72 / 56-72 dp | module cards, the tab bar, the floating control |
-| maximum | 72 dp at font size 1.0 | the rest round, its touch target growing with the round (about 135 dp at 2.0, R80) |
+| maximum | 72 dp at font size 1.0 | the rest round, its touch target growing with the round (about 121 dp at 2.0, R80) |
 
 **Evidence:** 42 dp is above WCAG 2.2 AA (24 px) and below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner flags it. The ladder meets `app-register-layout`'s hit-area requirement (a minimum, steps by importance, a maximum, no overlap), checked 2026-11-21; its sizes are the `size` tokens of `design/tokens.json`, not measured on rendered screens.
 
@@ -985,7 +986,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Evidence:** Gated at 1.0, 1.3, 1.5 and 2.0 with long real values ("102.5 × 12", 142.25 kg, a 10:00 rest, "Single-leg Romanian deadlift", "Wednesday afternoon", 1:12:40) by G1-G5, on Android 14's curve only; the tests run on SDK 36. Sources: Android 14's notes on nonlinear font scaling; WCAG 2.2 SC 1.4.4 (resize to 200% without loss; truncation acceptable when the full content is available on activation) and WCAG2ICT. Not checked: the 6T's own largest text size.
 
-**Acceptance:** The unit tests check Android 14's curve at 2.0, even scaling at 1.3, and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
+**Acceptance:** The unit tests check Android 14's curve at 2.0, even scaling at 1.15 and 1.3, and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1254,9 +1255,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R67 · The live comparison
 
-**Rule:** While sets are logged, the past is shown only as the live comparison, today against last time (`SG2`). Last time's numbers show from the start of each set, and today's fill in as they are logged, which also does `LL2`'s job. Last time is the last session whose sets of the exercise carry its current type's numbers: reps for Dynamic, seconds for Isometric and Timed, distance for Distance (R101).
+**Rule:** While sets are logged, the past is shown only as the live comparison, today against last time (`SG2`). Last time's numbers show from the start of each set, and today's fill in as they are logged, which also does `LL2`'s job. Last time is the last session that logged the exercise under its current type, matched on each set's `kind` (R121, R101).
 
-**Acceptance:** On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Dynamic to Isometric, the card shows no reps as last time.
+**Acceptance:** On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Isometric to Timed, the card shows none of the Isometric sets as last time.
 
 **Not:** Last time's numbers whatever their type: reps would face seconds.
 
@@ -1294,11 +1295,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R70 · The running control on the exercise screen
 
-**Rule:** A hold starts from the main bar ("Start · set N"), and Done ends it and records its time, as it records a strength set; Done also starts the rest (R71). The only running control on this screen is the rest round, at the same height on every exercise screen of a density, in the band between the comparison card and the steppers, so nothing on the screen moves when it appears. A tap on the round opens −30 s and +30 s, a held press skips the rest, and after Done on a hold "Hold saved · Undo" shows for 10 s, so a stray Done can resume the hold and cancel the rest it started (`FA4`'s undo).
+**Rule:** A hold starts from the main bar ("Start · set N"), and Done ends it and records its time, as it records a strength set; Done also starts the rest as R71 says. The only running control on this screen is the rest round, at the same height on every exercise screen of a density, in the band between the comparison card and the steppers, so nothing on the screen moves when it appears. A tap on the round opens −30 s and +30 s, a held press skips the rest, and after Done on a hold "Hold saved · Undo" shows for 10 s, so a stray Done can be taken back as if it was never tapped: the saved hold is removed, its clock runs on from the hold's start, and the rest it started stops (`FA4`'s undo).
 
 **Evidence:** Nothing moves when the round appears, checked within 0.5 dp (2026-10-23).
 
-**Acceptance:** The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s resumes the hold with its time, and the rest round leaves.
+**Acceptance:** The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s leaves no row for that hold, shows its clock counting from the hold's start, and the rest round leaves.
 
 **Not:** A pill, an inline panel, and a sheet from the bar (the sheet lay over live steppers and failed G1). The rest running on after an Undo.
 
@@ -1317,7 +1318,7 @@ Shape, line, elevation and motion (the same at both densities):
 | the exercise sets one, ahead in Edit exercise (R103) | that length; "None" is no rest | `exercise.rest_seconds`, nullable, 0 for "None", added with the exercise editor or stage 6, whichever is built first |
 | otherwise | the default in Settings (R72) | a `setting` key |
 
-**Acceptance:** With all three set, the plan's length wins; with none but the default, the default runs; an exercise set to "None" starts no rest; a per-side hold rests only after its second side; ±30 s moves the remaining time by 30 s.
+**Acceptance:** With the plan, the exercise and the default all set, the plan's length wins, even over an exercise's "None"; with none but the default, the default runs; an exercise set to "None" starts no rest; a per-side hold rests only after its second side; ±30 s moves the remaining time by 30 s.
 
 **Not:** `KA5`'s 10 s steps. A rest between the two sides: it doubles every per-side rest. A fixed 15 s between sides.
 
@@ -1359,7 +1360,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R74 · The rest round is the boulder
 
-**Rule:** During a rest the round is the boulder, which the figure pushes up an implied 20° slope from its left; the round stays where R70 puts it, centred. They appear only during a rest, a small thing to look forward to, and both leave the screen at 0:00 or on a skip. Each part behaves as its row below says.
+**Rule:** During a rest the round is the boulder, which the figure pushes up an implied 20° slope from its left; the round stays where R70 puts it, centred. They appear only during a rest, a small thing to look forward to, and both leave the screen at 0:00, on a skip or on an Undo (R70). Each part behaves as its row below says.
 
 **Values:**
 
@@ -1376,11 +1377,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Blind panel: the pushed round 0.798, a figure on a track round it 0.694-0.701, the plain round 0.673 (last) (2026-10-27).
 
-**Acceptance:** During a rest the figure and the boulder are drawn, and after 0:00 or a skip neither is; with reduced motion the stone's angle never changes.
+**Acceptance:** During a rest the figure and the boulder are drawn, and after 0:00, a skip or an Undo neither is; with reduced motion the stone's angle never changes.
 
 **Not:** The track versions (a summit to reach, a stone rolling back); a stone at the ring's head (not seen at true size); a centred pair (the round stays centred).
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R75 · The figure
 
@@ -1405,7 +1406,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R76 · The boulder's form
 
-**Rule:** The boulder is the owner's own outline (rocc1, first cleaning, its bumps kept), 80 dp across, overhanging the 72 dp control by 4 dp; the touch target stays 72 dp. Nothing is on its face.
+**Rule:** The boulder is the owner's own outline (rocc1, first cleaning, its bumps kept), 80 dp across, overhanging the 72 dp control by 4 dp, at font size 1.0; the touch target stays the control's size, and both grow together (R80). Nothing is on its face.
 
 **Evidence:** Chosen in motion, with the figure walking: its many dents and peaks make the turn read faster than a smoother rim. Stills had put a reworked smooth rim ahead (0.844 against 0.650), but the owner judges turning only in motion. The owner called the choice provisional ("for now") on 2026-10-26.
 
@@ -1413,7 +1414,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Not:** Marks on the face: busy and somewhat cartoonish in the page. A smoother rim: the turn reads slower.
 
-**Since:** 2026-10-26 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R77 · What the figure and the stone share
 
@@ -1461,11 +1462,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Owner's axes, equal weights: text grows as asked and hierarchy kept (measured), layout holds and reads at true size (blind panel of three, on the 6T's own pixels): reflow 0.766 (2026-10-27).
 
-**Acceptance:** G1-G5 pass on the exercise screens at font sizes 1.0-2.0.
+**Acceptance:** G1-G5 pass on the exercise screens at every font size G5 names (R52).
 
 **Not:** Capping the card's text at 1.3 (0.760: its values stopped at 20 dp where 28 were asked, and its heads touched); shrinking it to keep the mirror (0.698); last time behind a tap (0.585).
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R80 · The rest round grows with its time
 
@@ -1476,13 +1477,13 @@ Shape, line, elevation and motion (the same at both densities):
 | Font size | Time | Scale | Boulder |
 |---|---|---|---|
 | 1.0 | 19 sp | 1.0× | 80 dp |
-| 2.0 | 32 dp | 1.68× | about 135 dp, its touch target with it |
+| 2.0 | 32 dp | 1.68× | about 135 dp; its 72 dp touch target scales with it to about 121 dp |
 
-**Acceptance:** At font size 2.0 the boulder is about 135 dp and "10:00" fits inside the ring.
+**Acceptance:** At font size 2.0 the boulder is about 135 dp, its touch target about 121 dp, and "10:00" fits inside the ring.
 
 **Not:** The time shrinking inside an unchanged 80 dp boulder (0.760 against 0.762; the time stopped at 24 dp where 32 were asked); a time fixed in dp (0.749); the time beside the round (0.708).
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R81 · The compact rest screen
 
@@ -1501,11 +1502,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Blind panels on the 6T's app area at its own pixels (owner's axes: actual size .3, harmony .25, hierarchy .25, same screen as balanced .2, compact .2, figure .2, digits .15, seven measured axes .1). Size and height: balanced sizes on the band centre 0.894 against 0.770 for the next (scaled stone with the figure kept; balanced sizes under the card), 0.750 for scaled 0.89 on the centre, 0.586 for 0.78, the plain-round control 0.533 (last); the band centre beat "under the card" at every size. Card: balanced kept 0.783 (first on actual size and same screen, last on compact), tokens + 1 at 0.758, plain tokens 0.738, control 0.531 (last). The measured axes were a plateau (0.752-0.755) (2026-10-27).
 
-**Acceptance:** G1-G5 pass on the compact exercise screens at 360-412 dp and font sizes 1.0-2.0.
+**Acceptance:** G1-G5 pass on the compact exercise screens at 360-412 dp and every font size G5 names (R52).
 
 **Not:** The round under the card (lost to the band centre at every size); scaled stones.
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ## 13. App shell
 
@@ -1571,13 +1572,13 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R87 · Starting while a session is open
 
-**Rule:** Starting a session while one open on today's counting day resumes it instead of failing: `SessionStore.start` returns the open session's id and adds nothing. One left open from an earlier counting day is first closed as stopped early, ending at its last set (at its start when it holds none), and the new session starts on today. A database rule allowing only one open session (a partial unique index, schema 3) waits for the backup plan, where a restore that brings two is settled.
+**Rule:** Starting a session while one is open resumes it instead of failing: `SessionStore.start` returns the open session's id and adds nothing. A session left idle from an earlier day is closed first, as R96 says, so only one still in use is resumed. A database rule allowing only one open session (a partial unique index) waits for the backup plan's schema, where a restore that brings two is settled.
 
-**Evidence:** Not checked: `SessionStore.start` resumes an open session from any day (`Sessions.kt:90`), 2026-11-26.
+**Evidence:** Not checked: nothing closes an idle session from an earlier day yet (`Sessions.kt:90`), 2026-11-26.
 
-**Acceptance:** `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal. With Tuesday's session open, starting on Wednesday closes Tuesday's at its last set and opens a session counted on Wednesday.
+**Acceptance:** `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal.
 
-**Not:** Resuming an open session from any day: today's sets would count on yesterday (R30).
+**Not:** Resuming an idle session from an earlier day: today's sets would count on that day (R30).
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1587,11 +1588,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Gated on the four tab screens at both densities, 360, 384 and 412 dp, font sizes 1.0-2.0 and long names ("Start Wednesday afternoon", "Single-leg Romanian deadlift · Plank · Walk"): G1-G5 pass on all 144 pages, where the earlier tab pages failed G1, G2 and G4 from 1.3. Owner's axes, equal weights: the pill under with "Log afterwards" in the list 0.864 (2026-10-28).
 
-**Acceptance:** G1-G5 pass on all 144 tab pages.
+**Acceptance:** G1-G5 pass on all 144 tab pages, and on the tab pages at the evenly scaled sizes G5 names (R52).
 
 **Not:** Hiding the tab bar while scrolling down (the owner's pick on the 6T kept it fixed); "Log afterwards" fixed above the main bar (0.823); the whole card as the target with a chevron (0.823, lowest harmony); the pill beside (0.772).
 
-**Since:** 2026-10-28 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R89 · Tab roots without screens
 
@@ -1642,7 +1643,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R92 · When the data cannot be opened
 
-**Rule:** When the data cannot be opened, on any launch, a screen says so in place of the choice or the tabs, with the wording below. "Try again" opens again; a failed open is not kept, and a damaged file is set aside, never removed. Restoring from a backup joins this screen with the backup package.
+**Rule:** When the data cannot be opened with nothing set aside, such as after a failed migration (R33), a screen says so on any launch in place of the choice or the tabs, with the wording below; a file R35 sets aside leads to R122 instead. "Try again" opens again, and a failed open is not kept. Restoring from a backup joins this screen with the backup package.
 
 **Values:**
 
@@ -1662,11 +1663,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R122 · When the data was set aside
 
-**Rule:** When R35 has set a damaged file aside and opened a fresh database, a screen says so before the module choice or the tabs: the data was damaged, kept on the phone and not deleted. Restoring from a backup joins this screen with the backup package. Its wording is settled with the screen's plan (R08).
+**Rule:** When R35 has set a damaged file aside and opened a fresh database, a screen says so before the module choice or the tabs, on every launch until the person dismisses it: the data was damaged, kept on the phone and not deleted. Restoring from a backup joins this screen with the backup package. Its wording is settled with the screen's plan (R08).
 
 **Evidence:** Not checked: not built; nothing reads `DatabaseOpen.recovered` (R35), 2026-11-26.
 
-**Acceptance:** A launch whose open set a file aside shows this screen first, and the set-aside file is still on disk.
+**Acceptance:** A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed; the set-aside file is still on disk.
 
 **Not:** A silent fresh start: the module choice would come back as if the app were new.
 
@@ -1720,7 +1721,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R96 · The resume card
 
-**Rule:** While a session is open, Start shows the resume card below and hides the module cards. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time, or at its start when it holds no set.
+**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens on a session with sets that began on an earlier counting day and whose last set is over 3 h old, Start closes it as stopped early at its last set and shows the module cards. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
 
 **Values:**
 
@@ -1733,9 +1734,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Not checked: `SessionStore.finish` ends a session at the clock's time (`Sessions.kt:120`), 2026-11-26.
 
-**Acceptance:** With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31.
+**Acceptance:** With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
 
-**Not:** Ending when "End/Save" is tapped: a session forgotten overnight would last hours.
+**Not:** Ending when "End/Save" is tapped: a session forgotten overnight would last hours. Closing every session from an earlier day: one still going past midnight would be cut. Ending a session without sets at its start: it would record no time.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1824,7 +1825,7 @@ Shape, line, elevation and motion (the same at both densities):
 |---|---|
 | modules offered | the chosen modules, plus any the exercise already carries |
 | a name already used, case ignored | refused: "You already have an exercise called Plank." |
-| a name an archived exercise has, case ignored | refused: "You have an archived exercise called Plank." with "Bring it back", which unarchives it with its history |
+| a name an archived exercise has, case ignored | refused: "You have an archived exercise called Plank." with "Bring it back", which unarchives it with its history and discards the form in progress; from Edit it opens the revived exercise in its editor, and from the add sheet's "New exercise" it joins the session as an "Added" row |
 | archive | a quiet pill at the foot of Edit; archived exercises leave the list, their sets stay; no archived list yet |
 | Back with unsaved changes | a one-line sheet "Discard your changes?" with Discard and Keep editing |
 | look | the stone language, judged on the 6T |
@@ -1975,14 +1976,14 @@ Shape, line, elevation and motion (the same at both densities):
 - R120 · Notes that span modules: `python tools/evidence_check.py` passes with all three in the pack, and each note's chip appears only on screens of the modules it spans; two days with nothing logged change no note.
 - R19 · The five modules: The module choice offers these five in this order (`ModuleChoiceScreenTest`).
 - R20 · Body measures without verdicts: No table, column or code path computes a BMI, a BMR or a forecast; no screen shows one.
-- R21 · Modules chosen by the person: A fresh install shows the module choice before any tab, with every module unticked (`ModuleGateTest`, `ModuleChoiceScreenTest`); switching Strength off and on again leaves every Strength session and exercise as it was.
+- R21 · Modules chosen by the person: A fresh install shows the module choice before any tab, with every module unticked (`ModuleGateTest`, `ModuleChoiceScreenTest`); switching Strength off and on again leaves every Strength session and exercise as it was; with Daily movement off, no reminder or prompt fires and no sensor steps are recorded.
 - R23 · Modules are tags: A session with sets has the modules of its exercises' tags; a set-less session has exactly the module it was logged under; no exercise carries a label.
 - R24 · This week counts a mixed session by its parts: `CoreTest`'s week tests pass: `aMixedSessionCountsByItsParts`, `anExerciseWithTwoTagsCountsWhollyUnderEach`, `aSessionCountsOnceInAModuleHoweverManyOfItsSetsAreThere`, `anUntaggedExerciseCountsNowhereAndAnEmptyWeekIsEmpty`.
 - R25 · Each module's own units in This week: A 30-minute walk logged under Daily movement adds 30 min to Daily movement's time and nothing to any other module; steps never appear as sets or minutes; This week has no Body measures section.
 - R26 · Units: Every column for these quantities is INTEGER in Room's exported `2.json`.
 - R27 · Ids: `CoreTest`'s ULID tests pass, and every table in `2.json` has a text primary key `id`.
 - R28 · Tables, schema version 2: Room's exported `2.json` holds exactly these tables and columns.
-- R121 · Where amounts and steps are stored: Room's exported schema holds these columns and the table, and the migration test from schema 2 keeps every cell (R33).
+- R121 · Schema 3 additions: Room's exported schema holds these columns and the table, the migration test from schema 2 keeps every cell (R33), and a version-2 backup restores with the new columns at their defaults.
 - R29 · An amount is a session without times: `CoreTest`'s `overlappingSpansCountOnceAndAmountsAdd`, `aSpanInsideAnotherAddsNothing` and `emptyDayIsZero` pass.
 - R30 · The counting day: `CoreTest.aSessionCountsOnTheDayItStartsInItsOwnZone` passes, and a stored session keeps its `day` after the phone's zone changes.
 - R31 · Only done sets are stored: Stopping a session early leaves only the sets marked done.
@@ -1991,7 +1992,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R34 · Nothing logged is lost: Stage 1a is not done until the backup package (`KA9`, `OS8`) and resume after process death (`GL1`) pass their tests.
 - R35 · The database never deletes itself: That Robolectric test passes, and a set-aside file leads to R122's screen.
 - R36 · Backup format: Export, restore into an empty database and export again give byte-identical files; the pinned version-1 file restores.
-- R123 · Scheduled backups never replace a good one: Two scheduled runs leave two files; a run on a fresh database after a backup of 40 sessions writes nothing.
+- R123 · Scheduled backups never replace a good one: Two scheduled runs leave two files; after a backup of 40 sessions and a fresh start, the next run still writes its file, the clean-up keeps the 40-session backup, and Settings shows that the data shrank.
 - R37 · Gates: `.github/workflows/ci.yml` runs the first three; the pre-push hook runs the fourth.
 - R43 · Where suggestions stop: With the setting off, no proposal appears; with it on and every set hit, the proposal equals last time's numbers plus the rule's step, and editing it changes nothing logged.
 - R44 · Screens grouped by purpose: `purpose_map.py --map` passes on the working map: all 162 harvest rows placed, shared or left out.
@@ -2005,7 +2006,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R53 · Greyscale: Every colour role in `design/tokens.json` resolves to a grey or a black alpha.
 - R54 · Screen width: At 600 dp wide the content column is 412 dp and centred on the screen.
 - R55 · Fit on the phone's app area: The goldens of the 6T's app area pass with and without the sheet.
-- R56 · Text follows the phone's font size: The unit tests check Android 14's curve at 2.0, even scaling at 1.3, and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
+- R56 · Text follows the phone's font size: The unit tests check Android 14's curve at 2.0, even scaling at 1.15 and 1.3, and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
 - R57 · Density: A fresh install draws balanced, and the compact setting switches every token to its compact value.
 - R58 · English first: Every string the app shows is English.
 - R59 · Typeface: The theme's unit tests check the variable axes and the carve by role.
@@ -2016,35 +2017,35 @@ Shape, line, elevation and motion (the same at both densities):
 - R64 · Icons: `IconsTest` and `StoneIconTest` pass.
 - R65 · Stone language: The goldens of the gallery pass, and the pieces' sizes match the decided mockups within 1 dp.
 - R66 · The tab bar's valley: `TabBarTest` checks the valley's geometry and motion; the tab goldens pass.
-- R67 · The live comparison: On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Dynamic to Isometric, the card shows no reps as last time.
+- R67 · The live comparison: On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Isometric to Timed, the card shows none of the Isometric sets as last time.
 - R68 · Set input: Each stepper tap moves the value by 1; a tap on the number raises the system numeric keyboard; 61.25 kg is stored as 61250 g.
 - R69 · The main bar and running controls: Every doing screen draws one main bar at the bottom; no running control sits beside it.
-- R70 · The running control on the exercise screen: The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s resumes the hold with its time, and the rest round leaves.
-- R71 · The rest timer: With all three set, the plan's length wins; with none but the default, the default runs; an exercise set to "None" starts no rest; a per-side hold rests only after its second side; ±30 s moves the remaining time by 30 s.
+- R70 · The running control on the exercise screen: The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s leaves no row for that hold, shows its clock counting from the hold's start, and the rest round leaves.
+- R71 · The rest timer: With the plan, the exercise and the default all set, the plan's length wins, even over an exercise's "None"; with none but the default, the default runs; an exercise set to "None" starts no rest; a per-side hold rests only after its second side; ±30 s moves the remaining time by 30 s.
 - R72 · Default rest length: A fresh install's Settings shows a 2 min default rest, and a rest started with no plan or exercise length counts down from 2:00.
 - R73 · Session clock: The clock's bounds are the same on all six session and exercise screens.
-- R74 · The rest round is the boulder: During a rest the figure and the boulder are drawn, and after 0:00 or a skip neither is; with reduced motion the stone's angle never changes.
+- R74 · The rest round is the boulder: During a rest the figure and the boulder are drawn, and after 0:00, a skip or an Undo neither is; with reduced motion the stone's angle never changes.
 - R76 · The boulder's form: The boulder is drawn 80 dp across at font size 1.0 on a 72 dp target.
 - R77 · What the figure and the stone share: `rest.ring-track` resolves to `rest.near-leg` in `design/tokens.json`.
 - R78 · One centre line: The round's, the values' and the card gap's centres lie on the screen's centre on every exercise screen.
-- R79 · The comparison card at larger font sizes: G1-G5 pass on the exercise screens at font sizes 1.0-2.0.
-- R80 · The rest round grows with its time: At font size 2.0 the boulder is about 135 dp and "10:00" fits inside the ring.
-- R81 · The compact rest screen: G1-G5 pass on the compact exercise screens at 360-412 dp and font sizes 1.0-2.0.
+- R79 · The comparison card at larger font sizes: G1-G5 pass on the exercise screens at every font size G5 names (R52).
+- R80 · The rest round grows with its time: At font size 2.0 the boulder is about 135 dp, its touch target about 121 dp, and "10:00" fits inside the ring.
+- R81 · The compact rest screen: G1-G5 pass on the compact exercise screens at 360-412 dp and every font size G5 names (R52).
 - R82 · Navigation: `AppShellTest` checks the tabs, Back, rotation and process death.
 - R83 · The app opens on Start: After the module choice, a cold start shows the Start tab.
 - R84 · Wiring by hand: `AppContainerTest` checks the open happens off the main thread and once.
 - R85 · Edge to edge: The 6T golden shows the tab bar's surface under the navigation buttons; `SideInsetsTest` keeps the choice and a tab clear of side buttons.
 - R86 · The shared data core: The `:data` store tests (`SettingsTest`, `ExercisesTest`, `SessionsTest`) pass.
-- R87 · Starting while a session is open: `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal. With Tuesday's session open, starting on Wednesday closes Tuesday's at its last set and opens a session counted on Wednesday.
-- R88 · Tab screens at larger font sizes: G1-G5 pass on all 144 tab pages.
+- R87 · Starting while a session is open: `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal.
+- R88 · Tab screens at larger font sizes: G1-G5 pass on all 144 tab pages, and on the tab pages at the evenly scaled sizes G5 names (R52).
 - R89 · Tab roots without screens: Each unbuilt tab's root shows its name; `AppShellTest.eachTabShowsItsRoot` reaches every root.
 - R90 · The module choice screen: `ModuleChoiceScreenTest` and the goldens pass.
 - R91 · Module cards on the choice: `ModuleChoiceScreenTest` checks the open card, Back and TalkBack; `ShellViewModelTest.aChoiceSurvivesLeavingAtOnce` checks the choice survives Back.
 - R92 · When the data cannot be opened: `CantOpenTest` passes (the screen replaces the choice and the tabs; a retry while broken stays; a retry once it opens goes on), and `CantOpenScreenshotTest`'s goldens match.
-- R122 · When the data was set aside: A launch whose open set a file aside shows this screen first, and the set-aside file is still on disk.
+- R122 · When the data was set aside: A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed; the set-aside file is still on disk.
 - R94 · What Start shows: With Strength and Stamina chosen and only Strength built, Start shows two cards in that order, Stamina's reading "Arrives in a later update".
 - R95 · Session names: A session started on a Tuesday at 08:00 is "Tuesday morning", and one at 00:30 on a Wednesday "Wednesday night"; at 360 dp and font size 2.0 it shortens only if the full name does not fit.
-- R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31.
+- R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
 - R97 · Start's date line: On 2026-10-20 the line reads "Tuesday 20 October".
 - R99 · Where exercises are made and managed: The add sheet has no edit action; More lists the exercises grouped by module, each opening its editor.
 - R100 · The add sheet: Tapping a row twice leaves every row's position unchanged; an exercise added before the sheet opened is not listed.

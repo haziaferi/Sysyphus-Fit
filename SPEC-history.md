@@ -201,3 +201,28 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R21 · changed · switching a module off hides it and keeps its data · owner
 - 2026-11-26 · R25 · changed · no Body measures section · owner
 - 2026-11-26 · R70 · changed · Undo cancels the rest · owner
+- 2026-11-26 · R23 · changed · evidence points to R121 for the module column · owner
+- 2026-11-26 · R121 · renamed · "Where amounts and steps are stored" → "Schema 3 additions" · owner
+- 2026-11-26 · R121 · changed · schema 3, backup version 3, logged_set.kind, entered steps add · owner
+- 2026-11-26 · R67 · changed · last time matches each set's kind · owner
+- 2026-11-26 · R120 · changed · the two-day note shows on Daily movement only; cites R51 · owner
+- 2026-11-26 · R70 · changed · Undo removes the saved hold; its clock runs from the hold's start · owner
+- 2026-11-26 · R71 · changed · acceptance: the plan beats an exercise's None · owner
+- 2026-11-26 · R74 · changed · the round also leaves on an Undo · owner
+- 2026-11-26 · R76 · changed · the touch target grows with the boulder · owner
+- 2026-11-26 · R80 · changed · touch target about 121 dp at 2.0 · owner
+- 2026-11-26 · R50 · changed · maximum about 121 dp at 2.0 · owner
+- 2026-11-26 · R56 · changed · unit tests at 1.15 too · owner
+- 2026-11-26 · R79 · changed · gated at G5's font sizes · owner
+- 2026-11-26 · R81 · changed · gated at G5's font sizes · owner
+- 2026-11-26 · R88 · changed · gated at the even-scaling sizes too · owner
+- 2026-11-26 · R92 · changed · for opens that fail with nothing set aside · owner
+- 2026-11-26 · R122 · changed · shows until dismissed · owner
+- 2026-11-26 · R39 · changed · stage 6 settles R124 · owner
+- 2026-11-26 · R45 · changed · This week has no Body measures section · owner
+- 2026-11-26 · R123 · changed · always write; the clean-up keeps the last backup before data shrank · owner
+- 2026-11-26 · R87 · changed · resumes; R96 closes an idle session from an earlier day · owner
+- 2026-11-26 · R96 · changed · closes after 3 h idle from an earlier day; no-set sessions ask the end · owner
+- 2026-11-26 · R25 · changed · steps take the larger count; measures show in History · owner
+- 2026-11-26 · R21 · changed · Daily movement off stops reminders, prompts and step counting · owner
+- 2026-11-26 · R102 · changed · Bring it back opens the exercise or joins the session · owner

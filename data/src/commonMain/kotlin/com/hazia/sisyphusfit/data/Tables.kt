@@ -108,8 +108,9 @@ data class SessionEntity(
  * Schema 2: power is "move fast" (SPEC:R22); partial_reps is its own count beside reps, never converted
  * into reps (SPEC:R32: 7 full and 1 partial is reps 7, partial_reps 1).
  * Schema 3 (SPEC:R121): kind is the exercise's type when the set was logged, kept when the type changes later, so the
- * comparison matches like with like (SPEC:R67). The empty default exists only for ALTER TABLE: the migration and the
- * restore of an older backup fill it from the set's exercise (FILL_SET_KINDS), and SessionDao.addSet writes it.
+ * comparison matches like with like (SPEC:R67). The empty SQL default exists only for ALTER TABLE: the migration and
+ * every restore fill it from the set's exercise (FILL_SET_KINDS), and SessionDao.addSet writes it. Kotlin gives it no
+ * default, so any other writer has to name the type.
  */
 @Entity(
     tableName = "logged_set",
@@ -134,7 +135,7 @@ data class LoggedSetEntity(
     @ColumnInfo(name = "done_at") val doneAt: Long,
     @ColumnInfo(defaultValue = "0") val power: Boolean = false,
     @ColumnInfo(name = "partial_reps", defaultValue = "0") val partialReps: Int = 0,
-    @ColumnInfo(defaultValue = "''") val kind: String = "",
+    @ColumnInfo(defaultValue = "''") val kind: String,
 )
 
 /** LL5: add this after a session where every set hit its target. when: ALL_SETS_HIT. */

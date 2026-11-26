@@ -95,7 +95,7 @@ class MigrationTest {
                 val oldColumns = createSchema(version, file, driver, damage)
                 val before = raw(file, driver) { it.untouchable(oldColumns) }
 
-                assertTrue(runCatching { openSisyphusDatabase(file) }.isFailure, "$label: the open should fail")
+                assertFailedAsIntended(how, runCatching { openSisyphusDatabase(file) }.exceptionOrNull(), label)
 
                 assertTrue(file.exists(), label)
                 assertEquals(emptyList(), setAside(file), label)

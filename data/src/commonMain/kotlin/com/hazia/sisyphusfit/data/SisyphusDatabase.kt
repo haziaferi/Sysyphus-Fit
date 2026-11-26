@@ -64,15 +64,17 @@ interface FloorDao {
     suspend fun openSession(): SessionEntity?
 
     /**
-     * The sets of the last FINISHED or STOPPED_EARLY session that did [exerciseId], in order:
-     * what stage 1's LL2 and GM2 show beside a set and when picking an exercise.
+     * The sets of the last FINISHED or STOPPED_EARLY session that did [exerciseId] under its current type, in order:
+     * what stage 1's LL2 and GM2 show beside a set and when picking an exercise. Sets of another type are never last time
+     * (SPEC:R67), so reps never face seconds after a type change.
      */
     @Query(
         """
         SELECT s.* FROM logged_set s
-        WHERE s.exercise_id = :exerciseId AND s.session_id = (
+        WHERE s.exercise_id = :exerciseId AND s.kind = (SELECT kind FROM exercise WHERE id = :exerciseId) AND s.session_id = (
             SELECT ls.session_id FROM logged_set ls JOIN session se ON se.id = ls.session_id
-            WHERE ls.exercise_id = :exerciseId AND se.state != 'OPEN'
+            WHERE ls.exercise_id = :exerciseId AND ls.kind = (SELECT kind FROM exercise WHERE id = :exerciseId)
+                AND se.state != 'OPEN'
             ORDER BY ls.done_at DESC, ls.id DESC LIMIT 1
         )
         ORDER BY s.position, s.id

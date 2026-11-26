@@ -45,7 +45,9 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
 
 /**
  * Gives every set whose kind is still empty its exercise's type (SPEC:R121): the sets logged before schema 3, after
- * the migration adds the column and after an older backup is restored. An exercise always exists (RESTRICT).
+ * the migration adds the column and after any restore. An exercise always exists: foreign keys are on for every
+ * connection since schema 1 and a set's exercise is RESTRICT. Were one missing, the NOT NULL column refuses the fill
+ * and the open stops with the file kept (SPEC:R33), rather than storing a set under no type.
  */
 const val FILL_SET_KINDS =
     "UPDATE `logged_set` SET `kind` = (SELECT `kind` FROM `exercise` WHERE `exercise`.`id` = `logged_set`.`exercise_id`) WHERE `kind` = ''"

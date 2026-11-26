@@ -251,3 +251,6 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R71 · changed · exercise.rest_seconds is in schema 3 · builder
 - 2026-11-26 · R86 · changed · the stores run on schema 3 · builder
 - 2026-11-26 · R103 · changed · evidence: schema 3 holds the editor's fields · builder
+- 2026-11-26 · R121 · changed · every restore fills a missing set type; shape compared on the desktop only · builder
+- 2026-11-26 · R33 · changed · evidence: schema-2 files, refused shape told by Room's message · builder
+- 2026-11-26 · R67 · changed · evidence: lastSets matches the exercise's current type · builder

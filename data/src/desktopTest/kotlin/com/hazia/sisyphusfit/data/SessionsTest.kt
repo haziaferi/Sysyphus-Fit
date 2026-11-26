@@ -232,6 +232,25 @@ class SessionsTest {
         assertFailsWith<IllegalArgumentException> { runBlocking { store.endAndSave(s, askedEnd = 2_000_001) } }
     }
 
+    // SPEC:R67: last time is the last session that logged the exercise under its current type, so reps never face seconds.
+    @Test fun lastSetsAreThoseOfTheExercisesCurrentType() = runBlocking {
+        val ex = exercise("Hollow hold")
+        val a = store.start()
+        store.logSet(a, ex, SetValues(reps = 8))
+        store.finish(a)
+        time.now += 1_000
+        exercises.update(exercises.active().first().single().copy(kind = ExerciseKind.ISOMETRIC))
+        assertEquals(emptyList(), store.lastSets(ex))
+
+        val b = store.start()
+        store.logSet(b, ex, SetValues(seconds = 30))
+        store.finish(b)
+        time.now += 1_000
+        assertEquals(listOf(30), store.lastSets(ex).map { it.seconds })
+        exercises.update(exercises.active().first().single().copy(kind = ExerciseKind.DYNAMIC))
+        assertEquals(listOf(8), store.lastSets(ex).map { it.reps })
+    }
+
     @Test fun lastSetsComeFromTheLastClosedSession() = runBlocking {
         val ex = exercise()
         val a = store.start()

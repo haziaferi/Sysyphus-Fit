@@ -172,10 +172,22 @@ internal fun migrationBreakers(version: Int): Map<String, List<String>> = mapOf(
         if (version == 1) "ALTER TABLE logged_set ADD COLUMN power INTEGER" else "ALTER TABLE session ADD COLUMN seconds INTEGER",
     ),
     "the shape is wrong" to listOf(
-        if (version == 1) "CREATE TABLE label (id TEXT NOT NULL PRIMARY KEY, title TEXT)" else "CREATE TABLE steps (id TEXT NOT NULL PRIMARY KEY, n TEXT)",
+        // A table the migration then skips and adds no index to, so the open reaches Room's check (SHAPE_REFUSED).
+        if (version == 1) "CREATE TABLE label (id TEXT NOT NULL PRIMARY KEY, title TEXT)" else "CREATE TABLE category (id TEXT NOT NULL PRIMARY KEY, title TEXT)",
     ),
     "a newer app wrote it" to listOf("PRAGMA user_version = ${SCHEMA_VERSION + 1}"),
 )
+
+/** How Room's own check after a migration says it refused the shape the migration left. */
+internal const val SHAPE_REFUSED = "Migration didn't properly handle"
+
+/** The failure [migrationBreakers]' case [how] must end in: Room's shape check for a wrong shape, any failure otherwise. */
+internal fun assertFailedAsIntended(how: String, failure: Throwable?, label: String) {
+    kotlin.test.assertNotNull(failure, "$label: the open should fail")
+    if (how == "the shape is wrong") {
+        kotlin.test.assertTrue(SHAPE_REFUSED in failure.message.orEmpty(), "$label: failed with ${failure.message}, not Room's check")
+    }
+}
 
 /** Everything a failed open must leave alone: every old cell, every table's shape, the version. */
 internal fun SQLiteConnection.untouchable(oldColumns: Map<String, List<String>>) =

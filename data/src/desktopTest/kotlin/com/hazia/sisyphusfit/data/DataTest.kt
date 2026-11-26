@@ -93,7 +93,7 @@ class SchemaTest {
     @Test
     fun foreignKeysAreEnforced() = runTest {
         val db = freshDb()
-        assertFails { db.floorDao().addSets(listOf(LoggedSetEntity("L9", "nope", "nope", 0, null, 1, null, null, null, null, null, 0))) }
+        assertFails { db.floorDao().addSets(listOf(LoggedSetEntity("L9", "nope", "nope", 0, null, 1, null, null, null, null, null, 0, kind = "DYNAMIC"))) }
         db.close()
     }
 }
@@ -113,7 +113,7 @@ class BackupTest {
         val b = freshDb()
         restoreBackup(b, first)
         assertEquals(first, exportBackup(b))
-        assertEquals(3, b.floorDao().lastSets("E1").size + b.floorDao().lastSets("E2").size)
+        assertEquals(listOf("L1") to listOf("L2"), b.floorDao().lastSets("E1").map { it.id } to b.floorDao().lastSets("E2").map { it.id })
         a.close(); b.close()
     }
 
@@ -228,8 +228,9 @@ class FloorTest {
         val db = freshDb().also { seed(it) }
         val f = db.floorDao()
         f.addSession(SessionEntity("S3", "R1", null, 5_000, null, "Europe/Rome", "2026-10-20", "OPEN", null, null))
-        f.addSets(listOf(LoggedSetEntity("L9", "S3", "E1", 0, null, 3, 62_500, null, null, null, null, 5_100)))
-        assertEquals(listOf("L1", "L3"), f.lastSets("E1").map { it.id })
+        f.addSets(listOf(LoggedSetEntity("L9", "S3", "E1", 0, null, 3, 62_500, null, null, null, null, 5_100, kind = "DYNAMIC")))
+        // L3 was logged under another type, so it is not last time (SPEC:R67).
+        assertEquals(listOf("L1"), f.lastSets("E1").map { it.id })
         assertEquals("S3", f.openSession()?.id)
         db.close()
     }

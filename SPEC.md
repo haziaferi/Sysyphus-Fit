@@ -586,7 +586,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R121 · Schema 3 additions
 
-**Rule:** Schema 3 adds, by R33, the columns and tables below, so a session without sets keeps its time and its module, a set keeps the type it was logged under, steps are kept per day, and an exercise holds R103's rest, note and categories. A set's `kind` is its exercise's type when it was logged: the migration and the restore of a version-1 or version-2 backup fill it from the set's exercise, and a later change of type leaves it. Steps, entered or counted by the sensor, are never stored as sessions, and the backup format moves to `version` 3 (R36).
+**Rule:** Schema 3 adds, by R33, the columns and tables below, so a session without sets keeps its time and its module, a set keeps the type it was logged under, steps are kept per day, and an exercise holds R103's rest, note and categories. A set's `kind` is its exercise's type when it was logged: the migration and every restore fill a missing one from the set's exercise (all the sets of a version-1 or version-2 backup), and a later change of type leaves it. Steps, entered or counted by the sensor, are never stored as sessions, and the backup format moves to `version` 3 (R36).
 
 **Values:**
 
@@ -601,7 +601,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | `category`, a new table | id, name | the person's own categories (R103) |
 | `exercise_category`, a new table | id, exercise_id, category_id | a category on an exercise, several per exercise |
 
-**Evidence:** `MigrationTest` and `AndroidMigrationTest` migrate a schema-1 and a schema-2 file keeping every cell, each set taking its exercise's type, and the same shape as a fresh file; `OldBackupTest` restores the pinned version-1 file and `backup-v2.json`, exported by the schema-2 app (acba13a); `SessionsTest.aSetKeepsTheTypeItWasLoggedUnder`. A mutant leaving the migration's fill out turned the migration test red (2026-11-26). Not checked: nothing writes steps, `session.module`, `session.seconds` or the exercise fields yet; their stores come with the screens that use them.
+**Evidence:** `MigrationTest` and `AndroidMigrationTest` migrate a schema-1 and a schema-2 file keeping every cell, each set taking its exercise's type; on the desktop the migrated file also has the same shape as a fresh one, column order included, where the phone's path relies on Room's own check; `OldBackupTest` restores the pinned version-1 file and `backup-v2.json`, exported by the schema-2 app (acba13a); `SessionsTest.aSetKeepsTheTypeItWasLoggedUnder`. A mutant leaving the migration's fill out turned the migration test red (2026-11-26). Not checked: nothing writes steps, `session.module`, `session.seconds` or the exercise fields yet; their stores come with the screens that use them.
 
 **Acceptance:** Room's exported `3.json` holds these columns and tables, `MigrationTest` and `AndroidMigrationTest` pass from schema 1 and schema 2, and `OldBackupTest` restores both pinned backups with every set under its exercise's type.
 
@@ -647,11 +647,11 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** A new column goes last with a SQL default, so a fresh table matches a migrated one column for column. There is no destructive fallback: a failed migration stops the open with every cell, table shape and the version unchanged, nothing set aside and nothing wiped.
 
-**Evidence:** A test builds a schema-1 file from Room's exported `1.json`, fills every table, migrates through the app's own open and compares every cell (`quote()`) before and after, plus the migrated shape against a fresh one, on the desktop and under Robolectric on the phone's path (`KeepFileOnCorruptionDriver`). A throwing statement, a migration Room's check refuses and a file a newer app wrote each leave the file as it was. A destructive fallback is caught by the Robolectric test only (2026-10-21).
+**Evidence:** A test builds a schema-1 and a schema-2 file from Room's exported `1.json` and `2.json`, fills every table, migrates through the app's own open and compares every cell (`quote()`) before and after, on the desktop and under Robolectric on the phone's path (`KeepFileOnCorruptionDriver`); the desktop test also compares the migrated shape against a fresh one. From either file, a throwing statement, a migration Room's check refuses (told by its message) and a file a newer app wrote each leave the file as it was (2026-11-26). A destructive fallback is caught by the Robolectric test only (2026-10-21).
 
 **Acceptance:** `MigrationTest` passes on the desktop and `AndroidMigrationTest` under Robolectric.
 
-**Since:** 2026-10-21 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ## 6. Safety and gates
 
@@ -1263,6 +1263,8 @@ Shape, line, elevation and motion (the same at both densities):
 ### D-R67 · The live comparison
 
 **Rule:** While sets are logged, the past is shown only as the live comparison, today against last time (`SG2`). Last time's numbers show from the start of each set, and today's fill in as they are logged, which also does `LL2`'s job. Last time is the last session that logged the exercise under its current type, matched on each set's `kind` (R121, R101).
+
+**Evidence:** `FloorDao.lastSets` takes only sets of the exercise's current type, from the last closed session that has any (`SessionsTest.lastSetsAreThoseOfTheExercisesCurrentType`, 2026-11-26). Not checked: the exercise screen is not built.
 
 **Acceptance:** On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Isometric to Timed, the card shows none of the Isometric sets as last time.
 

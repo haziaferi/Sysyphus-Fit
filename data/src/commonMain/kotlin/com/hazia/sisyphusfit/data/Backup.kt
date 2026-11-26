@@ -61,8 +61,8 @@ suspend fun exportBackup(db: SisyphusDatabase): String = db.useReaderConnection 
 /**
  * Replaces everything with [text] in one transaction: on any refusal or failure nothing changes.
  * Refuses another format, a newer backup or schema, an unknown table and a column this database
- * does not have; a table or column the backup lacks is left empty or at its default, except that the sets of a backup
- * older than version 3 take their exercise's type (SPEC:R121), as the migration gives them.
+ * does not have; a table or column the backup lacks is left empty or at its default, except that a set without a type
+ * (every set of a backup older than version 3) takes its exercise's type (SPEC:R121), as the migration gives it.
  */
 suspend fun restoreBackup(db: SisyphusDatabase, text: String) {
     val root = runCatching { json.parseToJsonElement(text).jsonObject }.getOrElse { throw BackupException("not a backup file") }
@@ -90,7 +90,7 @@ suspend fun restoreBackup(db: SisyphusDatabase, text: String) {
                     }
                 }
             }
-            if (version < 3) exec(this, FILL_SET_KINDS)
+            exec(this, FILL_SET_KINDS)
         }
     }
 }

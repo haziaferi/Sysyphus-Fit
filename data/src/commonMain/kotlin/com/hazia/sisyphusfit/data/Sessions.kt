@@ -156,6 +156,7 @@ class SessionStore(private val db: Db, private val clock: WallClock) {
             reps = values.reps, weightGrams = values.weightGrams, seconds = values.seconds,
             distanceMetres = values.distanceMetres, rpe = null, rir = null, doneAt = now,
             power = values.power, partialReps = values.partialReps,
+            kind = "", // addSet writes the exercise's type, read in its own transaction
         )
         db().sessionDao().addSet(row)
         return id

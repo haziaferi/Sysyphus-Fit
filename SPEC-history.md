@@ -315,3 +315,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R102 · changed · archived exercises move to "Archived" · owner
 - 2026-11-26 · R94 · changed · no module chosen: "Nothing here." with "Choose paths" · owner
 - 2026-11-26 · R122 · changed · line says the old data can be restored once backups arrive · owner
+- 2026-11-26 · R50 · changed · evidence: segments on size.hit, the chip out of the tick area · builder
+- 2026-11-26 · R91 · changed · the chip in a strip of its own after the box · owner
+- 2026-11-26 · R127 · changed · evidence: StoneIndication and its goldens · builder
+- 2026-11-26 · R128 · changed · evidence: MessageScreen and its test · builder

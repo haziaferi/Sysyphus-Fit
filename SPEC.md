@@ -933,7 +933,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | 3 | 64-72 / 56-72 dp | module cards, the tab bar, the floating control |
 | maximum | 72 dp at font size 1.0 | the rest round, its touch target growing with the round (about 121 dp at 2.0, R80) |
 
-**Evidence:** 42 dp is above WCAG 2.2 AA (24 px) and below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner flags it. The ladder meets `app-register-layout`'s hit-area requirement (a minimum, steps by importance, a maximum, no overlap), checked 2026-11-21; its sizes are the `size` tokens of `design/tokens.json`, not measured on rendered screens. Not checked: segmented choices are 44 dp from a private `SEGMENT_HEIGHT` in `Choices.kt`, under step 1's 48 dp, and the "info" chip's target lies inside its card's tick area (skill review, 2026-11-26).
+**Evidence:** 42 dp is above WCAG 2.2 AA (24 px) and below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner flags it. The ladder meets `app-register-layout`'s hit-area requirement (a minimum, steps by importance, a maximum, no overlap), checked 2026-11-21; its sizes are the `size` tokens of `design/tokens.json`, not measured on rendered screens. Segmented choices take `size.hit` in place of the mockups' 44 dp, and the "info" chip's target left its card's tick area (`PiecesTest.segmentsTakeTheTouchTarget`, `PiecesTest.noTouchTargetInsideAnother`, `ModuleChoiceScreenTest.theInfoChipLiesOutsideTheTickArea`, 2026-11-26).
 
 **Acceptance:** Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp; every touch target's `size` token sits on one row of the ladder.
 
@@ -976,7 +976,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** Every piece you press shows a pressed look drawn in its own shape, and a 2 dp focus ring in `ink.primary` that follows that shape 2 dp outside it, on the ground around it, when keyboard or switch access reaches it, so it shows round the main bar too; Foundation's rectangular default never shows. No control is drawn disabled: one that cannot act is not shown, or its screen says why, and the main bar always acts (R90).
 
-**Evidence:** Required by `design-system-plus` (component states, focus first) and `visual-craft` (pressed and focus-visible on every button); a visible focus is a floor of `app-register-layout`. Not checked: `Press.kt` uses Foundation's default indication, `ModuleChoiceScreen.kt` and `Sheet.kt` each pass `indication = null`, and each form's pressed look is drawn in the code pass with `visual-craft` (2026-11-26).
+**Evidence:** Required by `design-system-plus` (component states, focus first) and `visual-craft` (pressed and focus-visible on every button); a visible focus is a floor of `app-register-layout`. `StoneIndication` (`Press.kt`) draws every piece's press in its own shape (`state.pressed` over light pieces, `state.pressed-dark` under the main bar's label) and its ring; goldens `pieces-pressed` and `pieces-focused`, and every target takes the focus (`PiecesTest.noTouchTargetInsideAnother`, 2026-11-26). The two scrims behind a sheet or a module's card keep no indication: they have no shape of their own, and their press closes what is open. Not checked: Tab order on the phone with a keyboard.
 
 **Acceptance:** Each piece's golden includes its pressed and its focused state; with a keyboard, Tab reaches every control on a screen and its ring shows.
 
@@ -988,7 +988,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** A screen that tells one thing and offers one action (R92, R122) sets its title and line just above the bottom zone, next to that action. The space above stays empty, as the screen has nothing else to show.
 
-**Evidence:** `ck analyse` finds 68% of the can't-open screen and 62% of the set-aside screen empty at font size 1.0, the message 570 dp above its bar; `app-register-layout` and `design-critique-plus` take an empty pane only with a stated reason (2026-11-26). Not checked: the screens still draw the message at the top.
+**Evidence:** `ck analyse` finds 68% of the can't-open screen and 62% of the set-aside screen empty at font size 1.0, the message 570 dp above its bar; `app-register-layout` and `design-critique-plus` take an empty pane only with a stated reason (2026-11-26). `MessageScreen` sets both screens' words at the foot of their scrolling area (`SetAsideTest.theMessageSitsJustAboveTheBar`; goldens `set-aside-balanced-{100,200}`, `cant-open-balanced-{100,200}`, 2026-11-26).
 
 **Acceptance:** On the goldens of R92 and R122 at 1.0 and 2.0, the line's last row ends within `space.section` of the bottom zone.
 
@@ -1179,6 +1179,9 @@ Colour roles (screens use these; raw greys are named by CIE L*):
 | shadow.float-near | black.14 | `#00000024` | a sheet's near shadow |
 | shadow.float-far | black.20 | `#00000033` | a sheet's far shadow |
 | shadow.scrim | black.42 | `#0000006b` | behind a sheet |
+| state.pressed | black.06 | `#0000000f` | drawn over a light piece while it is pressed, in its own shape (R127) |
+| state.pressed-dark | grey.24 | `#3b3b3b` | a dark piece's fill while it is pressed, under its label (R127) |
+| state.focus | ink.primary | `#1c1c1c` | the focus ring, outside the piece's shape (R127) |
 | rest.stone | grey.10 | `#1c1c1c` | the boulder and the figure (R75, R76) |
 | rest.near-leg | grey.31 | `#4a4a4a` | the figure's near leg (R75) |
 | rest.ring-track | rest.near-leg | `#4a4a4a` | the white ring's track before it fills: the near leg's grey (R77) |
@@ -1227,6 +1230,8 @@ Shape, line, elevation and motion (the same at both densities):
 | stroke.carved | 3 dp | a carved line, dark over light (R65) |
 | stroke.underline | 4 dp | the current tab's underline on the valley floor (R66) |
 | stroke.ring | 2.6 dp | the rest round's white ring and its track |
+| stroke.focus | 2 dp | the focus ring (R127) |
+| stroke.focus-gap | 2 dp | between a piece's shape and its focus ring (R127) |
 | elevation.ground | 0 2 0 0 #bdbdbd | a pill standing on the ground |
 | elevation.step | 0 1 0 0 #00000033 | a light pebble |
 | elevation.edge-inset | inset 0 0 0 1 #6b6b6b | a flat row's outline |
@@ -1743,7 +1748,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R90 · The module choice screen
 
-**Rule:** Before the tabs, with no tab bar, the app asks once for the modules, with the wording below. All five modules start unticked and all five are offered, each one not built yet marked "Arrives in a later update"; stepping forward with none ticked is a choice, and a tap anywhere on a card outside its "info" chip's touch area ticks it (R91).
+**Rule:** Before the tabs, with no tab bar, the app asks once for the modules, with the wording below. All five modules start unticked and all five are offered, each one not built yet marked "Arrives in a later update"; stepping forward with none ticked is a choice, and a tap anywhere on a card ticks it, except in the strip that holds its "info" chip (R91).
 
 **Values:**
 
@@ -1768,9 +1773,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R91 · Module cards on the choice
 
-**Rule:** Each card shows the module's icon before its name and an "info" chip (carved lines, `type.chip`), whose touch target lies outside the card's tick area and at least 5 dp from it, that opens a small raised card in place with "Includes: …"; Back or a tap elsewhere closes it, and with TalkBack the open card is announced while the list behind it waits. At large font sizes the cards follow R88's reflow, and the screen keeps clear of the sides as R85 says. A choice is recorded even when Back follows "Step forward" at once, and while it is read only the page is drawn.
+**Rule:** Each card shows the module's icon before its name and an "info" chip (carved lines, `type.chip`) in a strip of its own at the card's end, after the box (under the text and box at R88's reflow), whose touch target lies outside the card's tick area and at least 5 dp from it, that opens a small raised card in place with "Includes: …"; Back or a tap elsewhere closes it, and with TalkBack the open card is announced while the list behind it waits. At large font sizes the cards follow R88's reflow, and the screen keeps clear of the sides as R85 says. A choice is recorded even when Back follows "Step forward" at once, and while it is read only the page is drawn.
 
-**Evidence:** The owner's picks on the 6T: the "info" chip over two symbol marks ("info is more explanatory"), the icon before the name. A mutant on Back closing the card was caught (2026-10-29). Not checked: the chip's target lies inside the card's toggle (`ModuleChoiceScreen.kt`), which `design-critique-plus` counts as overlapping targets (2026-11-26).
+**Evidence:** The owner's picks on the 6T: the "info" chip over two symbol marks ("info is more explanatory"), the icon before the name. A mutant on Back closing the card was caught (2026-10-29). The chip left the card's toggle, where `design-critique-plus` counted it as overlapping targets, for its own strip 8 dp away; the box moved before it so the tick area stays one rectangle (`ModuleChoiceScreenTest.theInfoChipLiesOutsideTheTickArea`, 2026-11-26).
 
 **Acceptance:** `ModuleChoiceScreenTest` checks the open card, Back and TalkBack; `ShellViewModelTest.aChoiceSurvivesLeavingAtOnce` checks the choice survives Back.
 
@@ -1868,7 +1873,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R96 · The resume card
 
-**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens, every open session idle for over 3 h, counted from its last set or, with none, from its start, is closed as stopped early at its last set, or dropped when nothing was logged in it (no set and no time of its own), and the module cards show. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
+**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens, every open session idle for over 3 h, counted from its last set or track point or, with none, from its start, is closed as stopped early at that moment (with only a time of its own, that long after its start), or dropped when nothing was logged in it, and the module cards show; one with only a note waits for the question below, so the note is kept. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
 
 **Values:**
 

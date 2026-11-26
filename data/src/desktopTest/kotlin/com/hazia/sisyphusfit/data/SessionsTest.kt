@@ -169,21 +169,50 @@ class SessionsTest {
         assertEquals("OPEN", store.open().first()!!.session.state)
     }
 
-    @Test fun anIdleSessionFromTodayStaysOpen() = runBlocking {
+    // SPEC:R96: a morning's session left open does not take the evening's sets; it is closed at its last set.
+    @Test fun aSessionIdleSinceTheMorningIsClosedInTheEvening() = runBlocking {
         time.zone = "UTC"
         time.now = TUE_1900 - 12 * HOUR
         store.logSet(store.start(), exercise(), SetValues(reps = 5))
-        time.now = TUE_1900 + 4 * HOUR
-        assertEquals(false, store.closeIfIdle())
+        time.now = TUE_1900 - 1 * HOUR
+        assertEquals(true, store.closeIfIdle())
+        assertNull(store.open().first())
+        assertEquals(TUE_1900 - 12 * HOUR, db.floorDao().sessionsBetween("0000-01-01", "9999-12-31").single().endedAt)
     }
 
-    // Without a set there is no time to end at: the resume card asks instead.
-    @Test fun anIdleSessionWithoutSetsStaysOpen() = runBlocking {
+    // SPEC:R96: a mistaken start with nothing logged is dropped once idle over 3 h, counted from its start.
+    @Test fun aSessionWithNothingLoggedIsDroppedAfterThreeHours() = runBlocking {
         time.zone = "UTC"
         time.now = TUE_1900
         store.start(activity = "Walk")
-        time.now = TUE_1900 + 14 * HOUR
+        time.now = TUE_1900 + 3 * HOUR + MINUTE
+        assertEquals(true, store.closeIfIdle())
+        assertEquals(0L, db.count("SELECT count(*) FROM session"))
+    }
+
+    @Test fun aSessionWithNothingLoggedStaysWithinThreeHours() = runBlocking {
+        time.zone = "UTC"
+        time.now = TUE_1900
+        store.start(activity = "Walk")
+        time.now = TUE_1900 + 2 * HOUR
         assertEquals(false, store.closeIfIdle())
+        assertEquals("OPEN", store.open().first()!!.session.state)
+    }
+
+    // A session with no sets but a time of its own ends that long after its start; one with only a note waits for the
+    // resume card's question, so the note is never lost.
+    @Test fun aSessionWithoutSetsKeepsWhatWasLogged() = runBlocking {
+        time.zone = "UTC"
+        listOf("timed" to "1800, NULL", "noted" to "NULL, 'knee felt fine'").forEach { (id, values) ->
+            db.execute(
+                "INSERT INTO session (id, routine_id, activity, started_at, ended_at, zone, day, state, intensity, seconds, note) " +
+                    "VALUES ('$id', NULL, 'Walk', $TUE_1900, NULL, 'UTC', '2025-10-28', 'OPEN', NULL, $values)",
+            )
+        }
+        time.now = TUE_1900 + 5 * HOUR
+        assertEquals(true, store.closeIfIdle())
+        assertEquals(TUE_1900 + 1_800_000, db.floorDao().sessionsBetween("0000-01-01", "9999-12-31").single { it.id == "timed" }.endedAt)
+        assertEquals("noted", store.open().first()!!.session.id)
     }
 
     // Review of PR #16: "over 3 h" (SPEC:R96) leaves a session idle exactly 3 h open.
@@ -195,19 +224,6 @@ class SessionsTest {
         store.logSet(store.open().first()!!.session.id, exercise("Row"), SetValues(reps = 5))
         time.now += 3 * HOUR
         assertEquals(false, store.closeIfIdle())
-    }
-
-    // R30 counts in the zone a session was recorded in: begun Tuesday 20:00 in Rome, it is from an earlier day once Rome
-    // reaches Wednesday, even with the phone in New York, where it is still Tuesday.
-    @Test fun anEarlierDayIsJudgedInTheSessionsZone() = runBlocking {
-        time.zone = "Europe/Rome"
-        time.now = TUE_1900
-        val s = store.start()
-        time.now = TUE_1900 + 10 * MINUTE
-        store.logSet(s, exercise(), SetValues(reps = 5))
-        time.zone = "America/New_York"
-        time.now = TUE_1900 + 4 * HOUR
-        assertEquals(true, store.closeIfIdle())
     }
 
     // Review of PR #16: a restore can bring two open sessions; an idle older one is closed too, not left for later.

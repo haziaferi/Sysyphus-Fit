@@ -56,6 +56,19 @@ class ModuleChoiceScreenTest {
         rule.onNodeWithText("Choose which paths you want to follow. The other choices will still be available in Settings.").assertExists()
     }
 
+    // SPEC:R91, SPEC:R52 G3: the "info" chip's target lies outside the card's tick area, at least 5 dp from it.
+    @Test fun theInfoChipLiesOutsideTheTickArea() {
+        show()
+        Module.entries.forEach { m ->
+            val tick = card(m).fetchSemanticsNode().touchBoundsInRoot
+            val chip = rule.onNodeWithTag("includes:${m.name}").fetchSemanticsNode().touchBoundsInRoot
+            val gap = with(rule.density) {
+                maxOf(chip.left - tick.right, tick.left - chip.right, chip.top - tick.bottom, tick.top - chip.bottom).toDp()
+            }
+            assertTrue("${m.name}: chip $chip, tick area $tick, gap $gap", gap >= 5.dp - 0.5.dp)
+        }
+    }
+
     @Test fun tappingACardTicksItAndAgainUnticks() {
         show()
         card(Module.STAMINA).performClick().assertIsOn()
@@ -139,7 +152,8 @@ class ModuleChoiceScreenTest {
             val box = rule.onNodeWithTag("box:${m.name}", useUnmergedTree = true).getUnclippedBoundsInRoot()
             assertTrue("${m.name} mark width", markBox.width >= 42.dp)
             assertTrue("${m.name} mark height", markBox.height >= 42.dp)
-            assertTrue("${m.name} gap", box.left - markBox.right >= 5.dp)
+            // SPEC:R91: the box comes before the chip, which has a strip of its own.
+            assertTrue("${m.name} gap", markBox.left - box.right >= 5.dp)
         }
     }
 

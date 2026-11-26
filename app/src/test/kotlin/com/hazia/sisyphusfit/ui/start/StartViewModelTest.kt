@@ -66,7 +66,7 @@ class StartViewModelTest {
         assertEquals(1, waitFor { vm.state.first { it.resume?.sets?.size == 1 } }.resume!!.sets.size)
     }
 
-    // SPEC:R96: opening Start the next morning closes yesterday's idle session, so the module cards show again.
+    // SPEC:R96: opening Start the next morning closes last night's session, idle over 3 h, so the module cards show again.
     @Test fun openingStartClosesAnIdleSessionFromAnEarlierDay() {
         var now = 1_761_678_000_000L // Tuesday 2025-10-28 19:00 UTC
         val timed = AppContainer({ DatabaseOpen(db, recovered = false) }, WallClock({ now }, { "UTC" }))

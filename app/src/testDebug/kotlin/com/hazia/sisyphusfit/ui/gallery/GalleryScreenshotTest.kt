@@ -12,7 +12,10 @@ import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
+import androidx.compose.runtime.CompositionLocalProvider
 import com.hazia.sisyphusfit.ui.stone.BottomZone
+import com.hazia.sisyphusfit.ui.stone.LocalShownState
+import com.hazia.sisyphusfit.ui.stone.ShownState
 import com.hazia.sisyphusfit.ui.stone.MainBar
 import com.hazia.sisyphusfit.ui.stone.TabBar
 import com.hazia.sisyphusfit.ui.theme.DensityMode
@@ -61,6 +64,26 @@ class GalleryScreenshotTest {
     @Test @Config(sdk = [36], qualifiers = "w384dp-h2400dp-xhdpi") fun compact100() = pieces(DensityMode.Compact, 1f)
     @Test @Config(sdk = [36], qualifiers = "w384dp-h2400dp-xhdpi") fun compact130() = pieces(DensityMode.Compact, 1.3f)
     @Test @Config(sdk = [36], qualifiers = "w384dp-h2400dp-xhdpi") fun compact200() = pieces(DensityMode.Compact, 2f)
+
+    // SPEC:R127: every piece drawn pressed, then focused, at balanced 1.0.
+    private fun states(state: ShownState) {
+        RuntimeEnvironment.setFontScale(1f)
+        rule.setContent {
+            CompositionLocalProvider(LocalShownState provides state) {
+                SisyphusTheme(DensityMode.Balanced) {
+                    Column(Modifier.background(Tokens.Colors.surfacePage)) {
+                        PieceSamples()
+                        BottomZone { MainBar("Done · set 2", onClick = {}) }
+                        TabBar(AppTabs, 0, {})
+                    }
+                }
+            }
+        }
+        rule.onRoot().captureRoboImage("pieces-${state.name.lowercase()}.png", roborazziOptions = options)
+    }
+
+    @Test @Config(sdk = [36], qualifiers = "w384dp-h2400dp-xhdpi") fun pressed() = states(ShownState.Pressed)
+    @Test @Config(sdk = [36], qualifiers = "w384dp-h2400dp-xhdpi") fun focused() = states(ShownState.Focused)
 
     @Test @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi")
     fun phone() {

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
@@ -26,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -49,7 +51,9 @@ import com.hazia.sisyphusfit.ui.stone.CarvedEdge
 import com.hazia.sisyphusfit.ui.stone.CheckMark
 import com.hazia.sisyphusfit.ui.stone.MainBar
 import com.hazia.sisyphusfit.ui.stone.StoneIcon
-import com.hazia.sisyphusfit.ui.stone.WornCard
+import com.hazia.sisyphusfit.ui.stone.StoneIndication
+import com.hazia.sisyphusfit.ui.stone.stoneSource
+import com.hazia.sisyphusfit.ui.stone.worn
 import com.hazia.sisyphusfit.ui.stone.WornShape
 import com.hazia.sisyphusfit.ui.stone.carvedLine
 import com.hazia.sisyphusfit.ui.stone.elevation
@@ -134,12 +138,13 @@ private fun ModuleCard(
     val text = ModuleTexts.getValue(module)
     val title = Theme.type.rowTitle
     val oneLine = with(LocalDensity.current) { title.fontSize.toPx() * title.lineHeight.value / title.fontSize.value }
-    val controls: @Composable () -> Unit = {
+    // SPEC:R91, SPEC:R52 G3: the chip's target sits in a strip of its own, CHIP_GAP from the tick area, never inside it.
+    val chip: @Composable () -> Unit = {
         Box(
             Modifier
                 .testTag("includes:${module.name}")
                 .onGloballyPositioned { onMarkPlaced(it.boundsInRoot()) }
-                .press(onMark, label = "show what it includes", description = "What ${text.name} includes"),
+                .press(onMark, label = "show what it includes", description = "What ${text.name} includes", shape = RectangleShape),
             contentAlignment = Alignment.Center,
         ) {
             StoneText(
@@ -148,44 +153,68 @@ private fun ModuleCard(
                 style = Theme.type.chip,
             )
         }
-        Box(Modifier.testTag("box:${module.name}")) { CheckMark(checked) }
     }
+    val words: @Composable () -> Unit = {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            StoneIcon(text.icon)
+            StoneText(
+                text.name,
+                Modifier.weight(1f, fill = false).onSizeChanged { if (!stacked && it.height > oneLine * 1.5f) onNameWraps() },
+                style = title,
+            )
+        }
+        StoneText(text.line, style = Theme.type.body.copy(color = Tokens.Colors.inkSecondary))
+        if (module !in BuiltModules) {
+            StoneText(
+                "Arrives in a later update",
+                Modifier.testTag("later:${module.name}"),
+                style = Theme.type.label.copy(color = Tokens.Colors.inkSecondary),
+            )
+        }
+    }
+    val tick = Modifier
+        .testTag("module:${module.name}")
+        .toggleable(checked, interactionSource = stoneSource(), indication = StoneIndication(RectangleShape), role = Role.Checkbox, onValueChange = onChange)
+        .padding(start = Theme.space.pad, top = Theme.space.padY, bottom = Theme.space.padY)
+    val box: @Composable () -> Unit = { Box(Modifier.testTag("box:${module.name}")) { CheckMark(checked) } }
     Box(
         Modifier
-            .testTag("module:${module.name}")
+            .testTag("piece:worn-card")
+            .fillMaxWidth()
+            .heightIn(min = Theme.size.card)
             .onGloballyPositioned { onCard(it.boundsInRoot()) }
-            .toggleable(checked, role = Role.Checkbox, onValueChange = onChange),
+            .elevation(Tokens.Elevation.step, WornShape)
+            .worn(),
     ) {
-        WornCard {
-            Column(Modifier.weight(1f)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                    StoneIcon(text.icon)
-                    StoneText(
-                        text.name,
-                        Modifier.weight(1f, fill = false).onSizeChanged { if (!stacked && it.height > oneLine * 1.5f) onNameWraps() },
-                        style = title,
-                    )
+        if (stacked) {
+            Column(Modifier.fillMaxWidth()) {
+                Row(tick.fillMaxWidth().padding(end = CARD_END), verticalAlignment = Alignment.Bottom) {
+                    Column(Modifier.weight(1f)) { words() }
+                    box()
                 }
-                StoneText(text.line, style = Theme.type.body.copy(color = Tokens.Colors.inkSecondary))
-                if (module !in BuiltModules) {
-                    StoneText(
-                        "Arrives in a later update",
-                        Modifier.testTag("later:${module.name}"),
-                        style = Theme.type.label.copy(color = Tokens.Colors.inkSecondary),
-                    )
-                }
-                if (stacked) {
-                    Row(
-                        Modifier.align(Alignment.End),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) { controls() }
-                }
+                Box(Modifier.align(Alignment.End).padding(top = CHIP_GAP, end = CARD_END)) { chip() }
             }
-            if (!stacked) controls()
+        } else {
+            // The tick area takes the card's minimum height, so it reaches the card's top and bottom: the chip's strip
+            // (48 dp at most) is never the taller.
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    Modifier.weight(1f).heightIn(min = Theme.size.card).then(tick),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(Modifier.weight(1f)) { words() }
+                    box()
+                }
+                Box(Modifier.padding(start = CHIP_GAP, end = CARD_END)) { chip() }
+            }
         }
     }
 }
+
+// Between the tick area and the chip's target (SPEC:R91: at least 5 dp), and the card's end padding (as WornCard's).
+private val CHIP_GAP = 8.dp
+private val CARD_END = 8.dp
 
 /**
  * What a module includes, in a small raised card over the list: under the module's mark, as wide as its card less the

@@ -1,13 +1,16 @@
 package com.hazia.sisyphusfit.ui.stone
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.R
@@ -22,13 +25,15 @@ private val CHIP_ICON = 13.dp
 /** The evidence-note chip (SPEC:R16, SPEC:R78): the circled "i" and the note's title between two carved lines. */
 @Composable
 fun Chip(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Box(modifier.press(onClick, label = "open the note"), contentAlignment = Alignment.Center) {
+    val source = remember { MutableInteractionSource() }
+    Box(modifier.press(onClick, label = "open the note", source = source), contentAlignment = Alignment.Center) {
         Row(
             Modifier
                 .testTag("piece:chip")
                 .heightIn(min = CHIP_HEIGHT)
                 .carvedLine(CarvedEdge.Top)
                 .carvedLine(CarvedEdge.Bottom)
+                .stoneIndication(source, RectangleShape)
                 .padding(start = 7.dp, end = 10.dp),
             horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically,

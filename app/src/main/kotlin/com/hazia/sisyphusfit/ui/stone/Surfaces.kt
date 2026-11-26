@@ -16,18 +16,22 @@ import androidx.compose.ui.unit.dp
 import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 
-// Inside padding and gap of cards and rows in the decided mockups (".mcard": 12 8 12 pad; ".row1": 0 12 0 pad; gap 12).
+// Gap and end padding of cards and rows in the decided mockups (".mcard": 12 8 12 pad; ".row1": 0 12 0 pad; gap 12).
 private val GAP = 12.dp
+private val END = 8.dp
 
 /**
  * A worn surface (SPEC:R65): module cards, week sections, the resume card ([minHeight] `size.card`) and rows
- * (`size.row`). Cut on the left, worn on the right, lit toward the worn side.
+ * (`size.row`). Cut on the left, worn on the right, lit toward the worn side; padded `space.pad` at the start and
+ * `space.pad-y` above and below (SPEC:R126). One you press ([pressable], or with [onClick]) stands on the light pebbles'
+ * 1 dp step shadow, its edge on the page (SPEC:R126), and shows its press and focus in its shape (SPEC:R127).
  */
 @Composable
 fun WornCard(
     modifier: Modifier = Modifier,
     onClick: (() -> Unit)? = null,
     minHeight: Dp = Theme.size.card,
+    pressable: Boolean = onClick != null,
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
@@ -35,9 +39,13 @@ fun WornCard(
             .testTag("piece:worn-card")
             .fillMaxWidth()
             .heightIn(min = minHeight)
+            .then(if (pressable) Modifier.elevation(Tokens.Elevation.step, WornShape) else Modifier)
             .worn()
-            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(start = Theme.space.pad, top = 12.dp, end = 8.dp, bottom = 12.dp),
+            .then(
+                if (onClick != null) Modifier.clickable(interactionSource = stoneSource(), indication = StoneIndication(WornShape), onClick = onClick)
+                else Modifier,
+            )
+            .padding(start = Theme.space.pad, top = Theme.space.padY, end = END, bottom = Theme.space.padY),
         horizontalArrangement = Arrangement.spacedBy(GAP),
         verticalAlignment = Alignment.CenterVertically,
         content = content,
@@ -53,8 +61,11 @@ fun FlatRow(modifier: Modifier = Modifier, onClick: (() -> Unit)? = null, conten
             .fillMaxWidth()
             .heightIn(min = Theme.size.row)
             .elevation(Tokens.Elevation.edgeInset, WornShape)
-            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier)
-            .padding(start = Theme.space.pad, end = 12.dp),
+            .then(
+                if (onClick != null) Modifier.clickable(interactionSource = stoneSource(), indication = StoneIndication(WornShape), onClick = onClick)
+                else Modifier,
+            )
+            .padding(start = Theme.space.pad, end = GAP),
         horizontalArrangement = Arrangement.spacedBy(GAP),
         verticalAlignment = Alignment.CenterVertically,
         content = content,

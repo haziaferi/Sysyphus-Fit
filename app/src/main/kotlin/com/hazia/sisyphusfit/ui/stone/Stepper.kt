@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,10 +53,11 @@ fun stepperFit(full: TextUnit, min: TextUnit, room: Dp, valueWidth: (TextUnit) -
 }
 
 /**
- * A set value with its − / + pebbles (SPEC:R68, SPEC:R65): borderless light pebbles on the 1 dp step shadow, the number you
- * tap to type underlined 1.5 dp in `line.edge`, its unit beside it. [small] is the partials row (smaller pebbles and
- * value); [pebble] is `radius.pebble-b` for weight and partials, `radius.pebble-a` for reps. [name] names the
- * pebbles for TalkBack ("Decrease kg").
+ * A set value with its − / + pebbles (SPEC:R68, SPEC:R65): borderless light pebbles on the 1 dp step shadow, their edge on
+ * the page (SPEC:R126), the number you tap to type underlined 1.5 dp in `line.edge`, its unit beside it. [onMinus] and
+ * [onPlus] move the value by its step (2.5 kg, 1 rep or partial, 5 s), which the screen owns. [small] is the partials row
+ * (smaller pebbles, and the value in the heading role); [pebble] is `radius.pebble-b` for weight and partials,
+ * `radius.pebble-a` for reps. [name] names the pebbles for TalkBack ("Decrease kg").
  */
 @Composable
 fun Stepper(
@@ -107,7 +109,7 @@ fun Stepper(
 @Composable
 private fun TappableValue(value: String, style: TextStyle, onTap: () -> Unit) {
     Box(
-        Modifier.testTag("piece:value").sizeIn(minWidth = VALUE_MIN, minHeight = VALUE_MIN).press(onTap, label = "type a value").padding(horizontal = VALUE_PAD),
+        Modifier.testTag("piece:value").sizeIn(minWidth = VALUE_MIN, minHeight = VALUE_MIN).press(onTap, label = "type a value", shape = RoundedCornerShape(Tokens.Radius.box)).padding(horizontal = VALUE_PAD),
         contentAlignment = Alignment.Center,
     ) {
         StoneText(
@@ -131,7 +133,7 @@ private fun StepPebble(icon: Int, label: String, onClick: () -> Unit, size: Dp, 
             .size(size)
             .elevation(Tokens.Elevation.step, shape)
             .background(Tokens.Colors.surfaceCard, shape)
-            .press(onClick, description = label),
+            .press(onClick, description = label, shape = shape),
         contentAlignment = Alignment.Center,
     ) { StoneIcon(icon) }
 }

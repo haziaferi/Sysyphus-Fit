@@ -66,6 +66,12 @@ object Tokens {
         val shadowFloatFar = Color(0x33000000)
         /** behind a sheet */
         val shadowScrim = Color(0x6B000000)
+        /** drawn over a light piece while it is pressed, in its own shape (R127) */
+        val statePressed = Color(0x0F000000)
+        /** a dark piece's fill while it is pressed, under its label (R127) */
+        val statePressedDark = Color(0xFF3B3B3B)
+        /** the focus ring, outside the piece's shape (R127) */
+        val stateFocus = Color(0xFF1C1C1C)
         /** the boulder and the figure (R75, R76) */
         val restStone = Color(0xFF1C1C1C)
         /** the figure's near leg (R75) */
@@ -126,6 +132,10 @@ object Tokens {
         val underline = 4.dp
         /** the rest round's white ring and its track */
         val ring = 2.6.dp
+        /** the focus ring (R127) */
+        val focus = 2.dp
+        /** between a piece's shape and its focus ring (R127) */
+        val focusGap = 2.dp
     }
 
     object Elevation {

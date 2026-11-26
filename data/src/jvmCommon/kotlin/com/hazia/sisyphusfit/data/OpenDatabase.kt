@@ -56,6 +56,17 @@ private class TrackingDriver(private val driver: SQLiteDriver) : SQLiteDriver by
 }
 
 /**
+ * The stamp of the newest database file [setAsideDatabaseFiles] set aside beside [dbPath], or null when there is none.
+ * The file itself is the lasting mark that the person is owed the notice of SPEC:R122: it outlives a failed open, a
+ * process killed before anything was written, and a restore.
+ */
+fun newestSetAside(dbPath: String): Long? {
+    val file = File(dbPath)
+    val prefix = file.name + UNOPENABLE_SUFFIX
+    return file.parentFile?.listFiles()?.mapNotNull { it.name.removePrefix(prefix).takeIf { _ -> it.name.startsWith(prefix) }?.toLongOrNull() }?.maxOrNull()
+}
+
+/**
  * Renames [dbPath] and its `-journal`, `-wal` and `-shm` files to `<name>.unopenable-<stamp>`, so the
  * new database is never opened beside the old one's journal. The database file moves last: if a
  * rename fails, it is still in place and the next start tries again.

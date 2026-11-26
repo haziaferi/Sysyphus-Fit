@@ -16,9 +16,9 @@ import com.hazia.sisyphusfit.ui.theme.Theme
 import com.hazia.sisyphusfit.ui.theme.Tokens
 
 /**
- * When the data cannot be opened with nothing set aside, such as after a failed migration (SPEC:R92): said plainly, on any
- * launch, with one way on. The file is left as it was (SPEC:R33), so "nothing has been deleted" is true; a file set aside
- * leads to SetAsideScreen instead (SPEC:R122).
+ * When the data cannot be opened, such as after a failed migration (SPEC:R92): said plainly, on any launch, with one way
+ * on. The file is left as it was (SPEC:R33) or set aside (SPEC:R35), never deleted, so "nothing has been deleted" is true;
+ * a file set aside is told by SetAsideScreen once an open succeeds (SPEC:R122).
  */
 @Composable
 fun CantOpenScreen(onRetry: () -> Unit, modifier: Modifier = Modifier) {

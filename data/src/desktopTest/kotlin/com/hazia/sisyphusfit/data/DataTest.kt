@@ -222,6 +222,18 @@ class CorruptionTest {
         assertTrue(file.exists())
     }
 
+    // SPEC:R122: the file set aside is the lasting mark that the person is owed the notice; the newest one counts.
+    @Test
+    fun theNewestSetAsideFileIsFound() {
+        val dir = Files.createTempDirectory("sisyphus").toFile().also { dirs += it }
+        val file = File(dir, DATABASE_NAME)
+        assertEquals(null, newestSetAside(file.path))
+        File(file.path + UNOPENABLE_SUFFIX + 7).writeText("old")
+        File(file.path + "-wal" + UNOPENABLE_SUFFIX + 99).writeText("a journal, not the database")
+        File(file.path + UNOPENABLE_SUFFIX + 42).writeText("newer")
+        assertEquals(42L, newestSetAside(file.path))
+    }
+
     @Test
     fun aHealthyFileIsNotRecovered() {
         val dir = Files.createTempDirectory("sisyphus").toFile().also { dirs += it }

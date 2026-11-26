@@ -662,7 +662,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** Android opens the database through `KeepFileOnCorruptionDriver`, because the stock driver's default handler deletes a corrupt file. `openOrRecover` sets an unopenable file aside as `<name>.unopenable-<stamp>` and opens a fresh one, and the person is told before anything else shows (R122).
 
-**Evidence:** A Robolectric test writes garbage and finds the bytes set aside, with the stock driver as the failing control. `AppContainer` notes a recovered open for R122's screen (2026-11-26).
+**Evidence:** A Robolectric test writes garbage and finds the bytes set aside, with the stock driver as the failing control. `newestSetAside` finds the file set aside, which R122's screen is keyed to (`CorruptionTest.theNewestSetAsideFileIsFound`, 2026-11-26).
 
 **Acceptance:** That Robolectric test passes, and a set-aside file leads to R122's screen.
 
@@ -1643,7 +1643,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R92 · When the data cannot be opened
 
-**Rule:** When the data cannot be opened with nothing set aside, such as after a failed migration (R33), a screen says so on any launch in place of the choice or the tabs, with the wording below; a file R35 sets aside leads to R122 instead. "Try again" opens again, and a failed open is not kept. Restoring from a backup joins this screen with the backup package.
+**Rule:** When the data cannot be opened, such as after a failed migration (R33), a screen says so on any launch in place of the choice or the tabs, with the wording below; a file R35 set aside is told by R122 once an open succeeds. "Try again" opens again, and a failed open is not kept. Restoring from a backup joins this screen with the backup package.
 
 **Values:**
 
@@ -1673,7 +1673,7 @@ Shape, line, elevation and motion (the same at both densities):
 | line | "It couldn't be read, so it was set aside on your phone, not deleted. The app starts again from the beginning; restoring a backup comes in a later update." |
 | bar | "Continue" |
 
-**Evidence:** The open notes it in the fresh database's `setting` table (`set_aside_notice`), and "Continue" clears it; goldens `set-aside-balanced-{100,200}` (2026-11-26).
+**Evidence:** The set-aside file on disk is the mark (`newestSetAside`), so a failed open or a killed process after the set-aside cannot lose the notice; "Continue" records its stamp as seen (`set_aside_seen`), and a later file is told again. Goldens `set-aside-balanced-{100,200}` (2026-11-26). Not checked: restoring a backup made before the damage brings back no seen stamp, so the notice shows once more.
 
 **Acceptance:** A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed (`ShellViewModelTest.aSetAsideFileIsToldUntilDismissed`, `SetAsideTest`); the set-aside file is still on disk.
 
@@ -1729,7 +1729,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R96 · The resume card
 
-**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens on a session with sets that began on an earlier counting day and whose last set is over 3 h old, Start closes it as stopped early at its last set and shows the module cards. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
+**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens, every open session with sets that began on an earlier counting day, in the zone it was recorded in (R30), and whose last set is over 3 h old is closed as stopped early at its last set, and the module cards show. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
 
 **Values:**
 
@@ -1740,7 +1740,7 @@ Shape, line, elevation and motion (the same at both densities):
 | main bar | "Resume this session" |
 | pill | "End/Save" |
 
-**Evidence:** `SessionStore.endAndSave` ends at the last set, or at the time given for a session without sets, and `SessionStore.closeIfIdle` closes an idle one when Start opens (`SessionsTest`, `StartViewModelTest`, 2026-11-26). Not checked: the resume card and its end-time question are not built, and the app records no pause time to propose yet.
+**Evidence:** `SessionStore.endAndSave` ends at the last set, or at a time given for a session without sets that lies between its start and the tap, and `SessionStore.closeIfIdle` closes every idle one when Start opens, judged in each session's own zone (`SessionsTest`, `StartViewModelTest`, 2026-11-26). Not checked: the resume card and its end-time question are not built, and the app records no pause time to propose yet.
 
 **Acceptance:** With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
 

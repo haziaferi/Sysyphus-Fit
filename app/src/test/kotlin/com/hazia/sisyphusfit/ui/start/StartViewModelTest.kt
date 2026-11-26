@@ -76,7 +76,9 @@ class StartViewModelTest {
         }
         now += 14 * 3_600_000L
         val vm = StartViewModel(timed.sessions, timed.settings)
-        assertEquals(null, waitFor { vm.state.first { !it.loading } }.resume)
+        val shown = waitFor { vm.state.first { !it.loading } }
+        assertEquals(false, shown.failed)
+        assertEquals(null, shown.resume)
         assertEquals(null, waitFor { timed.sessions.open().first() })
     }
 

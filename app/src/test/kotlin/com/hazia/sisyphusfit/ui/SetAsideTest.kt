@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 @RunWith(AndroidJUnit4::class)
 @Config(sdk = [36], qualifiers = "w384dp-h756dp-xxhdpi")
 class SetAsideTest {
-    @get:Rule(order = 0) val container = TestContainerRule(chosen = null, recovered = true)
+    @get:Rule(order = 0) val container = TestContainerRule(chosen = null, setAsideStamp = 42L)
     @get:Rule(order = 1) val rule = createAndroidComposeRule<MainActivity>()
 
     private fun waitForText(text: String) = rule.waitUntil(5_000) { rule.onAllNodesWithText(text).fetchSemanticsNodes().isNotEmpty() }

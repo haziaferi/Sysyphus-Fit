@@ -15,12 +15,12 @@ import org.junit.rules.ExternalResource
  * Gives the app a container on an in-memory database before any activity starts (an activity rule launches
  * before @Before), and counts the opens and where they ran. [chosen] is the module choice already recorded, as after
  * a first launch; null leaves it unrecorded, so the app opens on the choice (SPEC:R90). While [broken], every open fails.
- * With [recovered], the open reports a damaged file set aside (SPEC:R122).
+ * [setAsideStamp] is the stamp of a damaged file set aside on disk, or null for none (SPEC:R122).
  */
 class TestContainerRule(
     private val chosen: Set<Module>? = emptySet(),
     @Volatile var broken: Boolean = false,
-    private val recovered: Boolean = false,
+    private val setAsideStamp: Long? = null,
 ) : ExternalResource() {
     lateinit var db: SisyphusDatabase
     @Volatile var opens = 0
@@ -35,8 +35,8 @@ class TestContainerRule(
             opens++
             openedOnMain = Looper.myLooper() == Looper.getMainLooper()
             check(!broken) { "the database could not be opened" }
-            DatabaseOpen(db, recovered = recovered)
-        })
+            DatabaseOpen(db, recovered = setAsideStamp != null)
+        }, setAsideStampOnDisk = { setAsideStamp })
     }
 
     override fun after() = db.close()

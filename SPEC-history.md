@@ -234,3 +234,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R87 · changed · evidence: closeIfIdle built · builder
 - 2026-11-26 · R92 · changed · evidence: goldens re-recorded with the new line · builder
 - 2026-11-26 · R96 · changed · evidence: endAndSave and closeIfIdle built · builder
+- 2026-11-26 · R96 · changed · every idle open session, judged in its own zone; end not in the future · builder
+- 2026-11-26 · R122 · changed · the file set aside on disk marks the notice; Continue records its stamp · builder
+- 2026-11-26 · R35 · changed · evidence: newestSetAside finds the file set aside · builder
+- 2026-11-26 · R92 · changed · a file set aside is told by R122 once an open succeeds · builder

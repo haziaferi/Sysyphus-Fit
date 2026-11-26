@@ -99,18 +99,18 @@ object Tokens {
     object Radius {
         /** cut on the left, worn on the right (R65) */
         val worn = CornerRadii(0.dp, 8.dp, 8.dp, 0.dp)
-        /** facts, segmented choices, label chips */
+        /** facts; a tab's pressed look */
         val card = 14.dp
+        /** choices: choice chips (modules, categories, labels) and segmented choices (R112) */
+        val chip = 8.dp
         /** the comparison card (R65) */
         val comparison = 4.dp
         /** a checkbox */
         val box = 8.dp
         /** a sheet's top corners */
         val sheet = 22.dp
-        /** round ends: the grab handle, close and note chips */
+        /** round ends: action pills (R112), the grab handle, the close chip */
         val full = 999.dp
-        /** secondary buttons (R65) */
-        val pebblePill = PebbleRadii(listOf(52f, 48f, 50f, 46f), listOf(50f, 54f, 46f, 50f))
         /** light pebbles: the reps steppers, the rest round's control, the current set's outline */
         val pebbleA = PebbleRadii(listOf(49f, 51f, 56f, 44f), listOf(52f, 46f, 54f, 48f))
         /** light pebbles: the weight and partials steppers */

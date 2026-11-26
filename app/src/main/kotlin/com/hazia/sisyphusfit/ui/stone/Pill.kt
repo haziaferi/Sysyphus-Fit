@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -24,12 +25,12 @@ import com.hazia.sisyphusfit.ui.theme.sisifo
 private val PILL_HEIGHT = 36.dp
 
 /**
- * A secondary button (SPEC:R65): a worn pebble in `surface.sunk` standing on the 2 dp ground shadow. [quiet] drops the
- * pebble and keeps the label (the header's Finish). The touch area is at least `size.hit`.
+ * A secondary button (SPEC:R65, SPEC:R112): round ends (`radius.full`), in `surface.sunk`, standing on the 2 dp ground
+ * shadow. [quiet] drops the fill and keeps the label (the header's Finish). The touch area is at least `size.hit`.
  */
 @Composable
 fun Pill(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @DrawableRes icon: Int? = null, quiet: Boolean = false) {
-    val shape = remember { PebbleShape(Tokens.Radius.pebblePill) }
+    val shape = RoundedCornerShape(Tokens.Radius.full)
     val style = Theme.type.body.copy(fontWeight = FontWeight(500), fontFamily = sisifo(500, Theme.type.roles.body.carve))
     val source = remember { MutableInteractionSource() }
     Box(modifier.press(onClick, source = source), contentAlignment = Alignment.Center) {

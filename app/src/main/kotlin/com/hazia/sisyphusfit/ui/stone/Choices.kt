@@ -94,12 +94,12 @@ fun Switch(checked: Boolean, onChange: (Boolean) -> Unit, label: String, modifie
 }
 
 /**
- * Segmented choices: round-ended, a hairline `line.edge`; the selected one in `surface.card` with a 2 dp `ink.primary`
+ * Segmented choices: 8 dp corners (`radius.chip`, SPEC:R112), a hairline `line.edge`; the selected one in `surface.card` with a 2 dp `ink.primary`
  * outline and its label at 500, never the main bar's fill (SPEC:R126). At least `size.hit` high (SPEC:R50 step 1).
  */
 @Composable
 fun Segmented(options: List<String>, selected: Int, onSelect: (Int) -> Unit, modifier: Modifier = Modifier) {
-    val shape = RoundedCornerShape(Tokens.Radius.full)
+    val shape = RoundedCornerShape(Tokens.Radius.chip)
     Row(modifier, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         options.forEachIndexed { i, label ->
             val on = i == selected

@@ -129,8 +129,8 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R107 | How optional fields show | 16. Exercises and routines |
 | D-R108 | How the default rest is picked | 16. Exercises and routines |
 | D-R109 | How notes are written | 16. Exercises and routines |
-| Q-R111 | How the add sheet adds | 16. Exercises and routines |
-| Q-R112 | Pill and chip ends | 16. Exercises and routines |
+| D-R111 | How the add sheet adds | 16. Exercises and routines |
+| D-R112 | Pill and chip ends | 16. Exercises and routines |
 | D-R113 | How the add sheet's search reaches categories | 16. Exercises and routines |
 | D-R114 | Categories and labels | 16. Exercises and routines |
 | D-R115 | No streaks | Out of scope |
@@ -1215,12 +1215,12 @@ Shape, line, elevation and motion (the same at both densities):
 | Token | Value | Used for |
 |---|---|---|
 | radius.worn | 0 8 8 0 | cut on the left, worn on the right (R65) |
-| radius.card | 14 dp | facts, segmented choices, label chips |
+| radius.card | 14 dp | facts; a tab's pressed look |
+| radius.chip | 8 dp | choices: choice chips (modules, categories, labels) and segmented choices (R112) |
 | radius.comparison | 4 dp | the comparison card (R65) |
 | radius.box | 8 dp | a checkbox |
 | radius.sheet | 22 dp | a sheet's top corners |
-| radius.full | 999 dp | round ends: the grab handle, close and note chips |
-| radius.pebble-pill | 52% 48% 50% 46% / 50% 54% 46% 50% | secondary buttons (R65) |
+| radius.full | 999 dp | round ends: action pills (R112), the grab handle, the close chip |
 | radius.pebble-a | 49% 51% 56% 44% / 52% 46% 54% 48% | light pebbles: the reps steppers, the rest round's control, the current set's outline |
 | radius.pebble-b | 55% 45% 52% 48% / 46% 52% 48% 54% | light pebbles: the weight and partials steppers |
 | stroke.hair | 1 dp | unselected choices' outlines |
@@ -1330,7 +1330,7 @@ Shape, line, elevation and motion (the same at both densities):
 | Element | Form |
 |---|---|
 | main bar | square corners; its top edge sinks 8 dp across the middle third in one soft dip, lit faintly inside the dip |
-| secondary buttons | pills as worn pebbles (each corner a slightly different radius) on a 2 dp ground shadow |
+| secondary buttons | pills with round ends (R112) on a 2 dp ground shadow |
 | steppers (− and +) | borderless light pebbles (#ffffff), − and + with different outlines, on a 1 dp shadow that is their edge on the page (R126); the number you tap to type is underlined 1.5 dp in #6b6b6b |
 | module cards, week sections, the resume card, rows | cut on the left (square), worn on the right (8 dp corners), #f5f5f5 lit softly toward the right; those you press stand on the pebbles' 1 dp shadow |
 | comparison card | 4 dp corners; its column heads sit on a carved line (3 dp); the current set is circled by a 1.5 dp pebble outline |
@@ -1938,7 +1938,7 @@ Shape, line, elevation and motion (the same at both densities):
 | a typed word with no tag | searches every exercise's name and categories (R113) |
 | "New exercise" | always shown; starts with the picked tags |
 | an exercise in the session when the sheet opens | not listed |
-| a row tapped | stays in place, its pill reading "Added" with a tick; a second tap takes it back out; rows never move while the sheet is open |
+| a row tapped | stays in place, its pill reading "Added" with a tick; a second tap takes it back out; rows never move while the sheet is open, each laid out at its "Added" height (R111) |
 | an exercise made, or brought back (R102), from "New exercise" | joins the list's end as an "Added" row; the rows above it stay |
 | "X added to this session." | screen-reader text only, never shown |
 
@@ -2095,25 +2095,33 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Since:** 2026-11-26 · builder · own words
 
-### Q-R111 · How the add sheet adds
+### D-R111 · How the add sheet adds
 
-**Rule:** How does the add sheet take several exercises?
+**Rule:** The add sheet takes several exercises as a checklist that stays open (pattern A.1): a row's "Add" pill adds it at once and then reads "Added" with a tick, and a second tap takes it out. Every row is laid out at the height of its "Added" form from the start, so picking one never moves the rows below it (R100).
 
-**Default:** Pattern A.1, the checklist that stays open with rows that stay put (3.14), as R100 has it. Changes: none. Next: A.4, tick several then confirm with "Add 2" (3.12). `app-register-layout` finds a plateau and leans to A.4 on scroll (2068 dp against 3420 at 360 dp and font size 2.0), measured with exercises A-Z; it is measured again with R100's order by last use before the exercises plan.
+**Why:** Each pick lands in the session as it is made and is read out to TalkBack (R100), so closing the sheet early loses nothing.
 
-**Why:** Scored on the owner's axes (`research/refs-2026-11-01/score/results.html`).
+**Evidence:** Scored on the owner's axes, A.1 3.14 against A.4 3.12 (`research/refs-2026-11-01/score/results.html`). Measured again with R100's order by last use and Strength picked on opening (`measure_lastuse.py`, 2026-11-26): adding the two exercises at the top of that order costs 4 taps and 0-27 dp of scrolling in both A.1 and A.4, at 384 dp and font size 1.0 and at 360 dp and 2.0; adding one recent and one never-used exercise costs 4 taps in both, with 690 against 730 dp of scrolling at 384 dp and 1.0, and 2940 against 1992 at 360 dp and 2.0. The same run found that A.1 as drawn grows a picked row (72 to 88 dp at 1.0, 180 to 218 at 2.0) and so moved every row below it, which the A-Z order hid; the reserved height removes that. `app-register-layout` weighs route cost by frequency, so the everyday case decides and ties, and mis-tap safety breaks the tie.
 
-**Since:** 2026-11-26 · builder · own words
+**Acceptance:** Tapping "Add" on the first of twelve rows leaves the other eleven where they were, at 384 dp and font size 1.0 and at 360 dp and 2.0; dismissing the sheet after two adds leaves both in the session.
 
-### Q-R112 · Pill and chip ends
-
-**Rule:** What ends do action pills and choice chips take?
-
-**Default:** Action pills with round ends (P.1, which the judges preferred) and choice chips as 8 dp rounded rectangles sized to their label (P.2, 3.18), so the two roles do not share one shape. Changes: `radius.pebble-pill`, the pills of R65 and the chips.
-
-**Why:** `radius.pebble-pill` is in % of the pill's size, so the ends change shape with width and look uneven across label lengths, and the owner is rethinking the pebble pills. The skills leave the ends to taste and ask only that roles which differ look different (`design-critique-plus`); the picked state is settled by R126 and R105.
+**Not:** A.4, tick several then confirm with "Add 2": the same taps for the usual case, and less scrolling to a never-used exercise at font size 2.0, but a tap outside the sheet before "Add 2", likely with a hand busy with a bar, drops every tick. A.2 and A.3, rows that move or leave the list: rows moving under the finger (R100).
 
 **Since:** 2026-11-26 · builder · own words
+
+### D-R112 · Pill and chip ends
+
+**Rule:** Action pills (secondary buttons, the add sheet's "Add") have round ends, `radius.full`, sized to their label. Choices (choice chips and segmented choices) are 8 dp rounded rectangles, `radius.chip`, so a thing you do never shares a shape with a thing you pick.
+
+**Why:** The pebble pill's corners were set in % of its size, so its ends changed shape with the label's width and looked uneven across label lengths.
+
+**Evidence:** The judges preferred P.1's round ends; P.2's 8 dp chips scored 3.18 (`research/refs-2026-11-01/score/results.html`). The skills leave the ends to taste and ask only that roles which differ look different (`design-critique-plus`, `design-system-plus`), and the owner picked round-ended pills over a pebble fixed in dp (2026-11-26); the picked state is settled by R126 and R105.
+
+**Acceptance:** The pill's and the segment's goldens show round-ended pills and 8 dp segments; `radius.pebble-pill` is gone from `design/tokens.json`.
+
+**Not:** Pebble pills with each corner in dp: the stone look kept, at the cost of a second shape for one role beside the round sheet handle and close chips. Round chips beside round pills: two roles in one shape.
+
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R113 · How the add sheet's search reaches categories
 
@@ -2241,6 +2249,8 @@ Shape, line, elevation and motion (the same at both densities):
 - R107 · How optional fields show: At 384 dp and font size 1.0, every field of a new exercise's form starts within 46 dp of the first screen.
 - R108 · How the default rest is picked: Tapping the row, then "60 s", closes the list and the row reads "Default rest · 60 s".
 - R109 · How notes are written: A five-line note shows whole in the form, with no scrolling inside the box.
+- R111 · How the add sheet adds: Tapping "Add" on the first of twelve rows leaves the other eleven where they were, at 384 dp and font size 1.0 and at 360 dp and 2.0; dismissing the sheet after two adds leaves both in the session.
+- R112 · Pill and chip ends: The pill's and the segment's goldens show round-ended pills and 8 dp segments; `radius.pebble-pill` is gone from `design/tokens.json`.
 - R113 · How the add sheet's search reaches categories: Typing "legs" with no tag picked lists every exercise named or categorised with a word starting "legs".
 - R114 · Categories and labels: No exercise carries a label and no session a category; the add sheet's tags are modules and categories.
 - R115 · No streaks: No table or column counts days in a row or missed days, and no screen shows one.

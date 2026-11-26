@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,6 +53,7 @@ import com.hazia.sisyphusfit.ui.stone.CheckMark
 import com.hazia.sisyphusfit.ui.stone.MainBar
 import com.hazia.sisyphusfit.ui.stone.StoneIcon
 import com.hazia.sisyphusfit.ui.stone.StoneIndication
+import com.hazia.sisyphusfit.ui.stone.stoneIndication
 import com.hazia.sisyphusfit.ui.stone.stoneSource
 import com.hazia.sisyphusfit.ui.stone.worn
 import com.hazia.sisyphusfit.ui.stone.WornShape
@@ -139,17 +141,23 @@ private fun ModuleCard(
     val title = Theme.type.rowTitle
     val oneLine = with(LocalDensity.current) { title.fontSize.toPx() * title.lineHeight.value / title.fontSize.value }
     // SPEC:R91, SPEC:R52 G3: the chip's target sits in a strip of its own, CHIP_GAP from the tick area, never inside it.
+    // Its press and focus are drawn on the carved chip, not on its larger touch box (SPEC:R127).
     val chip: @Composable () -> Unit = {
+        val source = stoneSource()
         Box(
             Modifier
                 .testTag("includes:${module.name}")
                 .onGloballyPositioned { onMarkPlaced(it.boundsInRoot()) }
-                .press(onMark, label = "show what it includes", description = "What ${text.name} includes", shape = RectangleShape),
+                .press(onMark, label = "show what it includes", description = "What ${text.name} includes", source = source),
             contentAlignment = Alignment.Center,
         ) {
             StoneText(
                 "info",
-                Modifier.carvedLine(CarvedEdge.Top).carvedLine(CarvedEdge.Bottom).padding(horizontal = 8.dp, vertical = 4.dp),
+                Modifier
+                    .carvedLine(CarvedEdge.Top)
+                    .carvedLine(CarvedEdge.Bottom)
+                    .stoneIndication(source, RectangleShape)
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
                 style = Theme.type.chip,
             )
         }
@@ -172,9 +180,12 @@ private fun ModuleCard(
             )
         }
     }
+    // The tick area's press and focus follow the card where they share an edge: stacked, it takes the card's worn top
+    // right corner; beside the chip's strip, it is square on every side (SPEC:R127).
+    val tickShape = if (stacked) RoundedCornerShape(topEnd = Tokens.Radius.worn.topRight) else RectangleShape
     val tick = Modifier
         .testTag("module:${module.name}")
-        .toggleable(checked, interactionSource = stoneSource(), indication = StoneIndication(RectangleShape), role = Role.Checkbox, onValueChange = onChange)
+        .toggleable(checked, interactionSource = stoneSource(), indication = StoneIndication(tickShape), role = Role.Checkbox, onValueChange = onChange)
         .padding(start = Theme.space.pad, top = Theme.space.padY, bottom = Theme.space.padY)
     val box: @Composable () -> Unit = { Box(Modifier.testTag("box:${module.name}")) { CheckMark(checked) } }
     Box(

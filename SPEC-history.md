@@ -319,3 +319,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R91 · changed · the chip in a strip of its own after the box · owner
 - 2026-11-26 · R127 · changed · evidence: StoneIndication and its goldens · builder
 - 2026-11-26 · R128 · changed · evidence: MessageScreen and its test · builder
+- 2026-11-26 · R96 · changed · note, intensity or labels keep a session; End/Save ends at the last set or track point · owner
+- 2026-11-26 · R87 · changed · evidence: starting closes an idle session first · builder
+- 2026-11-26 · R126 · changed · the gap rule names section heads · builder
+- 2026-11-26 · R65 · changed · acceptance: segments at size.hit, not the mockups' 44 · builder

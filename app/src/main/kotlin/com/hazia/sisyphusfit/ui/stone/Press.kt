@@ -81,6 +81,12 @@ private class StoneIndicationNode(
         }
     }
 
+    // A Release or Unfocus sent while detached is never seen, so a reused node would come back drawn pressed or focused.
+    override fun onDetach() {
+        presses.clear()
+        focuses.clear()
+    }
+
     override fun ContentDrawScope.draw() {
         val shown = currentValueOf(LocalShownState)
         val pressed = presses.isNotEmpty() || shown == ShownState.Pressed

@@ -169,20 +169,22 @@ def targets(t):
         return []
     tab, tg, f = table(t), t["targets"], []
     col = lambda name: resolve(tab[name], tab)
+    # A colour with an alpha is measured as it shows: composited over the ground it sits on.
+    seen = lambda name, ground: over(col(name), ground)
     for row in tg["text"]:
         for s in row["on"]:
-            r = contrast(col(row["text"]), col(s))
+            r = contrast(seen(row["text"], col(s)), col(s))
             if r < TEXT_MIN:
                 f.append(f"R126 text contrast: {row['text']} on {s} is {r:.2f}:1, under {TEXT_MIN:g}:1")
     for row in tg["marks"]:
         for s in row["on"]:
-            r = contrast(col(row["mark"]), col(s))
+            r = contrast(seen(row["mark"], col(s)), col(s))
             if r < MARK_MIN:
                 f.append(f"R126 marks: {row['mark']} on {s} is {r:.2f}:1, under {MARK_MIN:g}:1")
     for row in tg["controls"]:
         ground = col(row["on"])
-        fill_de = de2000(col(row["fill"]), ground)
-        edge_de = de2000(over(col(row["edge"]), ground), ground) if "edge" in row else 0.0
+        fill_de = de2000(seen(row["fill"], ground), ground)
+        edge_de = de2000(seen(row["edge"], ground), ground) if "edge" in row else 0.0
         if max(fill_de, edge_de) < SEPARATION_MIN:
             f.append(f"R126 control separation: {row['what']}: fill {fill_de:.2f}, edge {edge_de:.2f} dE2000 from {row['on']}, "
                      f"under {SEPARATION_MIN:g}")
@@ -194,11 +196,14 @@ def targets(t):
             if d < CLOSE_MIN:
                 f.append(f"R126 close greys: {a} {greys[a]} and {b} {greys[b]} are {d:.2f} dE2000 apart: merge or move apart")
     for row in tg["picked"]:
-        r = contrast(col(row["picked"]), col(row["unpicked"]))
+        ground = col(row["on"])
+        picked, unpicked = seen(row["picked"], ground), seen(row["unpicked"], ground)
+        r = contrast(picked, unpicked)
         if r < PICKED_MIN:
-            f.append(f"R126 picked state: {row['picked']} against {row['unpicked']} is {r:.2f}:1, under {PICKED_MIN:g}:1")
-    if tab.get("color.fill.dark") in [tab.get(r["picked"]) for r in tg["picked"]]:
-        f.append("R126 picked state: drawn in the main bar's fill.dark")
+            f.append(f"R126 picked contrast: {row['picked']} against {row['unpicked']} is {r:.2f}:1, under {PICKED_MIN:g}:1")
+        # compared as the colours that show, so a role that resolves to the bar's grey by another name is caught too
+        if picked == seen("color.fill.dark", ground):
+            f.append(f"R126 picked fill: {row['picked']} shows as the main bar's fill.dark")
     for name, tok in leaves(t["space"], ("space",)):
         if name in tg.get("unit-exceptions", []):
             continue
@@ -446,27 +451,41 @@ def type_table(t):
 def selftest():
     good = load()
     assert not check(good), check(good)
-    cases = {
-        "unknown reference": lambda t: t["color"]["ink"]["primary"].__setitem__("$value", "{grey.12}"),
-        "not #rrggbb": lambda t: t["raw"]["grey"].__setitem__("10", "#1c1c1"),
-        "raw value no role uses": lambda t: t["raw"]["grey"].__setitem__("50", "#777777"),
-        "density pair": lambda t: t["space"]["gap"].__setitem__("$value", 8),
-        "cycle": lambda t: t["color"]["rest"]["near-leg"].__setitem__("$value", "{color.rest.ring-track}"),
-        # SPEC:R126 and SPEC:R60, each with the value the palette round moved away from
-        "R126 text contrast": lambda t: t["raw"]["grey"].__setitem__("31", "#575757"),
-        "R126 control separation": lambda t: t["raw"]["black"].__setitem__("20", "#0000002e") or t["raw"]["grey"].__setitem__("76", "#c4c4c4"),
-        "R126 close greys": lambda t: t["raw"]["grey"].__setitem__("96", "#f0f0f0"),
-        "R126 picked state": lambda t: t["targets"]["picked"][0].__setitem__("picked", "color.fill.dark"),
-        "R126 spacing unit": lambda t: t["space"]["gutter"].__setitem__("$value", [16, 10]),
-        "R126 gap under a head": lambda t: t["space"]["eyebrow"].__setitem__("$value", [8, 4]),
-        "R60 set number": lambda t: t["type"]["set-number"]["$value"].__setitem__("size", [40, 34]),
-        "R60 body lines": lambda t: t["type"]["body"]["$value"].__setitem__("line", [24, 20]),
-    }
-    for what, plant in cases.items():
+    def two(*plants):
+        return lambda t: [p(t) for p in plants]
+
+    # Each case plants one defect, so a row that stopped working cannot hide behind another that still fires.
+    cases = [
+        ("unknown reference", lambda t: t["color"]["ink"]["primary"].__setitem__("$value", "{grey.12}")),
+        ("not #rrggbb", lambda t: t["raw"]["grey"].__setitem__("10", "#1c1c1")),
+        ("raw value no role uses", lambda t: t["raw"]["grey"].__setitem__("50", "#777777")),
+        ("density pair", lambda t: t["space"]["gap"].__setitem__("$value", 8)),
+        ("cycle", lambda t: t["color"]["rest"]["near-leg"].__setitem__("$value", "{color.rest.ring-track}")),
+        # SPEC:R126 and SPEC:R60, most with the value the palette round moved away from
+        ("R126 text contrast", lambda t: t["raw"]["grey"].__setitem__("31", "#575757")),
+        ("R126 control separation: light pebbles", lambda t: t["raw"]["black"].__setitem__("20", "#0000002e")),
+        ("R126 control separation: pills", lambda t: t["raw"]["grey"].__setitem__("76", "#c4c4c4")),
+        # an alpha colour is measured as it shows: black at 42% over the page is under 3:1, solid black would pass
+        ("R126 marks: color.state.focus", lambda t: t["color"]["state"]["focus"].__setitem__("$value", "{black.42}")),
+        ("R126 close greys", lambda t: t["raw"]["grey"].__setitem__("96", "#f0f0f0")),
+        ("R126 picked contrast", lambda t: t["targets"]["picked"][0].__setitem__("unpicked", "color.ink.secondary")),
+        # the bar's grey under another role's name, against an unpicked form it clears 3:1 from
+        ("R126 picked fill", two(lambda t: t["color"]["ink"]["primary"].__setitem__("$value", "{grey.17}"),
+                                 lambda t: t["targets"]["picked"][0].__setitem__("unpicked", "color.surface.page"))),
+        ("R126 spacing unit", lambda t: t["space"]["gutter"].__setitem__("$value", [16, 10])),
+        ("R126 gap under a head", lambda t: t["space"]["eyebrow"].__setitem__("$value", [8, 4])),
+        ("R60 set number", lambda t: t["type"]["set-number"]["$value"].__setitem__("size", [40, 34])),
+        ("R60 body lines", lambda t: t["type"]["body"]["$value"].__setitem__("line", [24, 20])),
+    ]
+    for what, plant in cases:
         t = copy.deepcopy(good)
         plant(t)
         f = check(t)
         assert any(what in x for x in f), (what, f)
+    # the picked-fill case fires only its own row
+    t = copy.deepcopy(good)
+    cases[11][1](t)
+    assert [x for x in check(t) if x.startswith("R126 picked")] == [x for x in check(t) if "picked fill" in x], check(t)
     t = copy.deepcopy(good)
     t["type"]["body"]["$value"]["size"] = [17, 14]
     assert any("type.body" in x for x in type_table(t)), "a type role that differs from SPEC's table"

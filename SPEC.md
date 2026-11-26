@@ -1261,7 +1261,7 @@ Shape, line, elevation and motion (the same at both densities):
 | close greys | two greys under 2 ΔE2000 apart serve one role and merge, or move apart | `design-system-plus` |
 | picked state | a picked chip, segment or box differs from its unpicked form by at least 3:1, by outline and weight, never by the main bar's fill; the checkbox's tick keeps `fill.dark` | `design-critique-plus` |
 | spacing unit | balanced spaces are multiples of 8 dp (4 allowed), compact ones of 4 dp; `space.note-head` is the one exception (R63) | `typography-spacing-core` |
-| gap under a head | at least half the head's line height | `typography-spacing-core` |
+| gap under a head | under a section head (`type.eyebrow`, an evidence note's eyebrow), at least half the head's line height; a screen title over its own line keeps `space.gap`, as one group | `typography-spacing-core` |
 | padding | a card's or row's vertical padding is a space token with a compact value, never a number in code | `design-system-plus` |
 
 **Evidence:** From the skill review of 2026-11-26 (`research/skill-review-2026-11-26.md`). The palette round with `visual-craft` (2026-11-26) kept each grey's hue and moved only lightness, keeping the page `#ebebeb`, and searched the light greys for the least change that meets every row: secondary text `#575757` became `#4a4a4a` (7.43:1 on the page, 8.13 on worn cards), worn cards `#f0f0f0` became `#f5f5f5`, the light pebbles merged into white, and the stone merged into the text's grey. The fills stay light, so light pebbles and the worn cards you press stand on a 1 dp shadow of 20% black (11.1 ΔE2000 on the page) and pills on a `#bdbdbd` ground (10.8); a picked segment's 2 dp `ink.primary` outline stands 3.20:1 from the unpicked hairline. `design/tokens.json`'s `targets` block lists each pair `tokens.py check` computes. Not checked: how the worn side's light reads at 2.0 ΔE2000 over the card (3 before) on the 6T.
@@ -1342,7 +1342,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Scored in three stages from the owner's per-element picks (69 designs, G1-G4 passing on all 20 screens): 0.785 on the eleven axes of `results_vl/axes2.json`, next the same with relief rows 0.783 and with the hill tab bar 0.773; the valley as a sunken surface 0.74; the design before and stock Material 0.592 (last, tied). Judged blind on 3× renders, then checked on the 6T at true size. At compact, G1-G5 pass on the exercise screens at 360-412 dp and font sizes 1.0-2.0 (2026-10-28).
 
-**Acceptance:** The goldens of the gallery pass, and the pieces' sizes match the decided mockups within 1 dp.
+**Acceptance:** The goldens of the gallery pass, and the pieces' sizes match the decided mockups within 1 dp, but where a later rule sets them: segmented choices at `size.hit` (R50, 48 dp where the mockups drew 44).
 
 **Not:** A vein on the comparison card, from its corner (passes a few dp from "TODAY") or down its middle gap (within 6 dp of text on 36 of 144 pages); relief rows.
 
@@ -1716,7 +1716,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** Starting a session while one is open resumes it instead of failing: `SessionStore.start` returns the open session's id and adds nothing. A session left idle is closed first, or dropped when nothing was logged in it, as R96 says, so only one still in use is resumed. A database rule allowing only one open session (a partial unique index) waits for the backup plan's schema, where a restore that brings two is settled.
 
-**Evidence:** `SessionStore.closeIfIdle`, run by Start when it opens; `SessionsTest` and `StartViewModelTest` (2026-11-26).
+**Evidence:** `closeIfIdle`, run by Start when it opens and by `SessionStore.start` before it starts or resumes (`SessionsTest.startingClosesAnIdleSessionFirst`); `SessionsTest` and `StartViewModelTest` (2026-11-26).
 
 **Acceptance:** `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal.
 
@@ -1873,7 +1873,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R96 · The resume card
 
-**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens, every open session idle for over 3 h, counted from its last set or track point or, with none, from its start, is closed as stopped early at that moment (with only a time of its own, that long after its start), or dropped when nothing was logged in it, and the module cards show; one with only a note waits for the question below, so the note is kept. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
+**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens, every open session idle for over 3 h, counted from its last set or track point or, with none, from its start, is closed as stopped early at that moment (with only a time of its own, that long after its start, never later than the moment Start opens), or dropped when nothing was logged in it, and the module cards show; one with only a note, an intensity or labels waits for the question below, so they are kept. "End/Save" records the session as stopped early (`KA2`), ending at its last set or track point. A session without either asks when it ended, proposing the time it was paused, and records that.
 
 **Values:**
 
@@ -2198,7 +2198,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R126 · Colour and spacing targets: `python tools/tokens.py check` computes each row and passes.
 - R63 · Evidence note sheet spacing: The note sheet's golden matches these values.
 - R64 · Icons: `IconsTest` and `StoneIconTest` pass, and every icon stays distinct at 16 dp and 48 dp.
-- R65 · Stone language: The goldens of the gallery pass, and the pieces' sizes match the decided mockups within 1 dp.
+- R65 · Stone language: The goldens of the gallery pass, and the pieces' sizes match the decided mockups within 1 dp, but where a later rule sets them: segmented choices at `size.hit` (R50, 48 dp where the mockups drew 44).
 - R66 · The tab bar's valley: `TabBarTest` checks the valley's geometry and motion; the tab goldens pass.
 - R67 · The live comparison: On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Isometric to Timed, the card shows none of the Isometric sets as last time.
 - R68 · Set input: Each stepper tap moves the value by its step (60 → 62.5 kg, 5 → 6 reps, 30 → 35 s); a tap on the number raises the system numeric keyboard with the number and its row in view at font sizes 1.0 and 2.0; 61.25 kg is stored as 61250 g.

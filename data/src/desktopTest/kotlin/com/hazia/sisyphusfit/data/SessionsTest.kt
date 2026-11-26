@@ -215,6 +215,72 @@ class SessionsTest {
         assertEquals("noted", store.open().first()!!.session.id)
     }
 
+    private suspend fun openSession(id: String, startedAt: String, seconds: String = "NULL", intensity: String = "NULL") = db.execute(
+        "INSERT INTO session (id, routine_id, activity, started_at, ended_at, zone, day, state, intensity, seconds, note) " +
+            "VALUES ('$id', NULL, 'Walk', $startedAt, NULL, 'UTC', '2025-10-28', 'OPEN', $intensity, $seconds, NULL)",
+    )
+
+    // Review of PR #18: a walk's track is logged too; idle is counted from its last point.
+    @Test fun aTrackPointCountsAsLogged() = runBlocking {
+        openSession("walk", "$TUE_1900")
+        db.execute("INSERT INTO track_point VALUES ('T1', 'walk', ${TUE_1900 + HOUR}, 419028000, 124964000, NULL, 5, 0)")
+        time.now = TUE_1900 + 5 * HOUR
+        assertEquals(true, store.closeIfIdle())
+        assertEquals(TUE_1900 + HOUR, db.floorDao().sessionsBetween("0000-01-01", "9999-12-31").single().endedAt)
+    }
+
+    // Review of PR #18: labels and an intensity are the person's own, like a note: the session waits for the question.
+    @Test fun labelsOrAnIntensityKeepASessionWithoutSets() = runBlocking {
+        openSession("rated", "$TUE_1900", intensity = "3")
+        openSession("labelled", "$TUE_1900")
+        db.floorDao().addLabel(LabelEntity("B1", "Gym", position = 0, archived = false))
+        db.floorDao().addSessionLabels(listOf(SessionLabelEntity("SL1", "labelled", "B1")))
+        time.now = TUE_1900 + 5 * HOUR
+        assertEquals(false, store.closeIfIdle())
+        assertEquals(2L, db.count("SELECT count(*) FROM session WHERE state = 'OPEN'"))
+    }
+
+    // Review of PR #18: a session with no start (from a restore) and nothing logged is never "in use": it is dropped.
+    @Test fun aSessionWithoutAStartIsNotKeptForever() = runBlocking {
+        openSession("nostart", "NULL")
+        time.now = TUE_1900
+        assertEquals(true, store.closeIfIdle())
+        assertEquals(0L, db.count("SELECT count(*) FROM session"))
+    }
+
+    // Review of PR #18: a time of its own longer than the session has lasted never ends it in the future.
+    @Test fun aTimeOfItsOwnNeverEndsInTheFuture() = runBlocking {
+        openSession("long", "$TUE_1900", seconds = "${5 * 3600}")
+        time.now = TUE_1900 + 4 * HOUR
+        assertEquals(true, store.closeIfIdle())
+        assertEquals(TUE_1900 + 4 * HOUR, db.floorDao().sessionsBetween("0000-01-01", "9999-12-31").single().endedAt)
+    }
+
+    // Review of PR #18: "End/Save" ends where the idle close would, at the last set or track point.
+    @Test fun endAndSaveEndsAtTheLastTrackPoint() = runBlocking {
+        time.zone = "UTC"
+        time.now = TUE_1900
+        val s = store.start()
+        time.now = TUE_1900 + 10 * MINUTE
+        store.logSet(s, exercise(), SetValues(reps = 5))
+        db.execute("INSERT INTO track_point VALUES ('T1', '$s', ${TUE_1900 + HOUR}, 419028000, 124964000, NULL, 5, 0)")
+        time.now = TUE_1900 + 90 * MINUTE
+        store.endAndSave(s)
+        assertEquals(TUE_1900 + HOUR, db.floorDao().sessionsBetween("0000-01-01", "9999-12-31").single().endedAt)
+    }
+
+    // SPEC:R87: starting closes an idle session first, so a new one begins rather than resuming it.
+    @Test fun startingClosesAnIdleSessionFirst() = runBlocking {
+        time.zone = "UTC"
+        time.now = TUE_1900
+        val old = store.start()
+        store.logSet(old, exercise(), SetValues(reps = 5))
+        time.now = TUE_1900 + 4 * HOUR
+        val fresh = store.start()
+        assertEquals(true, fresh != old)
+        assertEquals(1L, db.count("SELECT count(*) FROM session WHERE state = 'STOPPED_EARLY'"))
+    }
+
     // Review of PR #16: "over 3 h" (SPEC:R96) leaves a session idle exactly 3 h open.
     @Test fun exactlyThreeHoursIdleStaysOpen() = runBlocking {
         time.zone = "UTC"

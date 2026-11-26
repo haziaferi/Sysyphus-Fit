@@ -38,7 +38,7 @@ class ExercisesTest {
     @Test fun archivedLeavesTheListButKeepsItsSets() = runBlocking {
         val id = store.add("Dip", ExerciseKind.DYNAMIC, false, setOf(Module.STRENGTH))
         db.floorDao().addSession(SessionEntity("S1", null, null, 1_000, 2_000, "Europe/Rome", "2026-10-28", "FINISHED", null, null))
-        db.floorDao().addSets(listOf(LoggedSetEntity("L1", "S1", id, 0, null, 8, null, null, null, null, null, 1_500)))
+        db.floorDao().addSets(listOf(LoggedSetEntity("L1", "S1", id, 0, null, 8, null, null, null, null, null, 1_500, kind = "DYNAMIC")))
         store.archive(id)
         assertTrue(store.active().first().isEmpty())
         assertEquals(1L, db.count("SELECT count(*) FROM logged_set"))

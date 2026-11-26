@@ -25,8 +25,11 @@ import kotlinx.serialization.json.longOrNull
  */
 
 const val BACKUP_FORMAT = "sisyphusfit-backup"
-/** 2 since schema 2 (four more tables, three more columns); a version-1 file still restores. */
-const val BACKUP_VERSION = 2
+/**
+ * 3 since schema 3 (three more tables, five more columns); 2 was schema 2's. A version-1 or version-2 file still restores
+ * (SPEC:R36, SPEC:R121).
+ */
+const val BACKUP_VERSION = 3
 
 class BackupException(message: String) : Exception(message)
 
@@ -58,7 +61,8 @@ suspend fun exportBackup(db: SisyphusDatabase): String = db.useReaderConnection 
 /**
  * Replaces everything with [text] in one transaction: on any refusal or failure nothing changes.
  * Refuses another format, a newer backup or schema, an unknown table and a column this database
- * does not have; a table or column the backup lacks is left empty or null.
+ * does not have; a table or column the backup lacks is left empty or at its default, except that a set without a type
+ * (every set of a backup older than version 3) takes its exercise's type (SPEC:R121), as the migration gives it.
  */
 suspend fun restoreBackup(db: SisyphusDatabase, text: String) {
     val root = runCatching { json.parseToJsonElement(text).jsonObject }.getOrElse { throw BackupException("not a backup file") }
@@ -86,6 +90,7 @@ suspend fun restoreBackup(db: SisyphusDatabase, text: String) {
                     }
                 }
             }
+            exec(this, FILL_SET_KINDS)
         }
     }
 }

@@ -7,7 +7,7 @@ import androidx.sqlite.execSQL
 /*
  * Every migration the app knows, applied by the one open (openDatabase). There is deliberately no
  * destructive fallback: a missing or failing migration stops the open with the file untouched.
- * The SQL is Room's own, copied from the exported schema (schemas/.../2.json), so Room's check
+ * The SQL is Room's own, copied from the exported schemas (schemas/.../2.json, 3.json), so Room's check
  * after migrating finds exactly the tables it would have created.
  */
 
@@ -43,4 +43,42 @@ val MIGRATION_1_2 = object : Migration(1, 2) {
     }
 }
 
-val MIGRATIONS = arrayOf(MIGRATION_1_2)
+/**
+ * Gives every set whose kind is still empty its exercise's type (SPEC:R121): the sets logged before schema 3, after
+ * the migration adds the column and after any restore. An exercise always exists: foreign keys are on for every
+ * connection since schema 1 and a set's exercise is RESTRICT. Were one missing, the NOT NULL column refuses the fill
+ * and the open stops with the file kept (SPEC:R33), rather than storing a set under no type.
+ */
+const val FILL_SET_KINDS =
+    "UPDATE `logged_set` SET `kind` = (SELECT `kind` FROM `exercise` WHERE `exercise`.`id` = `logged_set`.`exercise_id`) WHERE `kind` = ''"
+
+/**
+ * Schema 2 -> 3 (SPEC:R121, SPEC:R33): additive. An amount's time and module on a session, a set's type, an exercise's
+ * rest and note (SPEC:R103), and three new tables: steps, categories and their exercise links. No schema-2 cell changes;
+ * the new `kind` column is filled from each set's exercise.
+ */
+val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(connection: SQLiteConnection) {
+        listOf(
+            "ALTER TABLE `exercise` ADD COLUMN `rest_seconds` INTEGER",
+            "ALTER TABLE `exercise` ADD COLUMN `note` TEXT",
+            "ALTER TABLE `session` ADD COLUMN `seconds` INTEGER",
+            "ALTER TABLE `session` ADD COLUMN `module` TEXT",
+            "ALTER TABLE `logged_set` ADD COLUMN `kind` TEXT NOT NULL DEFAULT ''",
+            FILL_SET_KINDS,
+            "CREATE TABLE IF NOT EXISTS `steps` (`id` TEXT NOT NULL, `day` TEXT NOT NULL, `steps` INTEGER NOT NULL, " +
+                "`source` TEXT NOT NULL, PRIMARY KEY(`id`))",
+            "CREATE UNIQUE INDEX IF NOT EXISTS `index_steps_day_source` ON `steps` (`day`, `source`)",
+            "CREATE TABLE IF NOT EXISTS `category` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, PRIMARY KEY(`id`))",
+            "CREATE TABLE IF NOT EXISTS `exercise_category` (`id` TEXT NOT NULL, `exercise_id` TEXT NOT NULL, " +
+                "`category_id` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`exercise_id`) REFERENCES `exercise`(`id`) " +
+                "ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`category_id`) REFERENCES `category`(`id`) " +
+                "ON UPDATE NO ACTION ON DELETE CASCADE )",
+            "CREATE UNIQUE INDEX IF NOT EXISTS `index_exercise_category_exercise_id_category_id` ON `exercise_category` " +
+                "(`exercise_id`, `category_id`)",
+            "CREATE INDEX IF NOT EXISTS `index_exercise_category_category_id` ON `exercise_category` (`category_id`)",
+        ).forEach(connection::execSQL)
+    }
+}
+
+val MIGRATIONS = arrayOf(MIGRATION_1_2, MIGRATION_2_3)

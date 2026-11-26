@@ -58,6 +58,16 @@ class SessionsTest {
         assertEquals(listOf(0, 1, 2), store.sets(s).first().map { it.position })
     }
 
+    // SPEC:R121: a set keeps the type its exercise had when it was logged; changing the type later (R101) leaves it.
+    @Test fun aSetKeepsTheTypeItWasLoggedUnder() = runBlocking {
+        val ex = exercise("Hollow hold")
+        val s = store.start()
+        store.logSet(s, ex, SetValues(reps = 5))
+        exercises.update(exercises.active().first().single().copy(kind = ExerciseKind.ISOMETRIC))
+        store.logSet(s, ex, SetValues(seconds = 30))
+        assertEquals(listOf("DYNAMIC", "ISOMETRIC"), store.sets(s).first().map { it.kind })
+    }
+
     @Test fun partialRepsStayTheirOwnCount() = runBlocking {
         val s = store.start()
         store.logSet(s, exercise(), SetValues(reps = 7, partialReps = 1))
@@ -220,6 +230,25 @@ class SessionsTest {
         val s = runBlocking { time.now = 1_000_000; store.start(activity = "Walk") }
         time.now = 2_000_000
         assertFailsWith<IllegalArgumentException> { runBlocking { store.endAndSave(s, askedEnd = 2_000_001) } }
+    }
+
+    // SPEC:R67: last time is the last session that logged the exercise under its current type, so reps never face seconds.
+    @Test fun lastSetsAreThoseOfTheExercisesCurrentType() = runBlocking {
+        val ex = exercise("Hollow hold")
+        val a = store.start()
+        store.logSet(a, ex, SetValues(reps = 8))
+        store.finish(a)
+        time.now += 1_000
+        exercises.update(exercises.active().first().single().copy(kind = ExerciseKind.ISOMETRIC))
+        assertEquals(emptyList(), store.lastSets(ex))
+
+        val b = store.start()
+        store.logSet(b, ex, SetValues(seconds = 30))
+        store.finish(b)
+        time.now += 1_000
+        assertEquals(listOf(30), store.lastSets(ex).map { it.seconds })
+        exercises.update(exercises.active().first().single().copy(kind = ExerciseKind.DYNAMIC))
+        assertEquals(listOf(8), store.lastSets(ex).map { it.reps })
     }
 
     @Test fun lastSetsComeFromTheLastClosedSession() = runBlocking {

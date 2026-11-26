@@ -238,3 +238,19 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R122 · changed · the file set aside on disk marks the notice; Continue records its stamp · builder
 - 2026-11-26 · R35 · changed · evidence: newestSetAside finds the file set aside · builder
 - 2026-11-26 · R92 · changed · a file set aside is told by R122 once an open succeeds · builder
+- 2026-11-26 · R121 · changed · R103's rest, note and categories join schema 3; restored older sets take their exercise's type · owner
+- 2026-11-26 · R121 · changed · evidence: schema 3 built, migration and backup tests · builder
+- 2026-11-26 · R36 · changed · version 3; version-1 and version-2 backups restore · owner
+- 2026-11-26 · R28 · renamed · "Tables, schema version 2" → "Tables" · builder
+- 2026-11-26 · R28 · changed · schema version 3 · builder
+- 2026-11-26 · R26 · changed · acceptance reads 3.json · builder
+- 2026-11-26 · R27 · changed · acceptance reads 3.json · builder
+- 2026-11-26 · R23 · changed · evidence: session.module exists · builder
+- 2026-11-26 · R25 · changed · evidence: weekByModule reads none of schema 3's parts · builder
+- 2026-11-26 · R39 · changed · stage 1a holds schema 3 · builder
+- 2026-11-26 · R71 · changed · exercise.rest_seconds is in schema 3 · builder
+- 2026-11-26 · R86 · changed · the stores run on schema 3 · builder
+- 2026-11-26 · R103 · changed · evidence: schema 3 holds the editor's fields · builder
+- 2026-11-26 · R121 · changed · every restore fills a missing set type; shape compared on the desktop only · builder
+- 2026-11-26 · R33 · changed · evidence: schema-2 files, refused shape told by Room's message · builder
+- 2026-11-26 · R67 · changed · evidence: lastSets matches the exercise's current type · builder

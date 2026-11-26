@@ -38,7 +38,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R25 | Each module's own units in This week | 4. Training modules |
 | D-R26 | Units | 5. Data model |
 | D-R27 | Ids | 5. Data model |
-| D-R28 | Tables, schema version 2 | 5. Data model |
+| D-R28 | Tables | 5. Data model |
 | D-R121 | Schema 3 additions | 5. Data model |
 | D-R29 | An amount is a session without times | 5. Data model |
 | D-R30 | The counting day | 5. Data model |
@@ -483,7 +483,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** A module is a tag on an exercise, and an exercise may carry several. A session with sets carries the tags of its exercises, never stored on the session; a session without sets carries the one module it is logged under (R25). A session can be given several labels from a reusable list the person keeps, and labels tag sessions only.
 
-**Evidence:** Schema 2's `exercise_module`, `label` and `session_label` tables (R28). Not checked: schema 2 has no column for a set-less session's module; R121 adds it.
+**Evidence:** Schema 2's `exercise_module`, `label` and `session_label` tables and schema 3's `session.module` (R28, R121). Not checked: nothing writes a set-less session's module yet.
 
 **Acceptance:** A session with sets has the modules of its exercises' tags; a set-less session has exactly the module it was logged under; no exercise carries a label.
 
@@ -515,7 +515,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | Mobility and balance | sets, holds, time |
 | Body measures | none: a measure is not a weekly total; each shows in History on its day, as a plain value, and in the body-measure chart once it exists (stage 8) |
 
-**Evidence:** Not checked: `weekByModule` counts logged sets only, and a set-less session has no module column yet (R121).
+**Evidence:** Not checked: `weekByModule` counts logged sets only; it reads neither schema 3's `session.seconds` and `session.module` nor the `steps` table (R121).
 
 **Acceptance:** A 30-minute walk logged under Daily movement adds 30 min to Daily movement's time and nothing to any other module; steps never appear as sets or minutes; This week has no Body measures section.
 
@@ -540,31 +540,31 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | distance | metres |
 | coordinates | 1e-7 degrees |
 
-**Acceptance:** Every column for these quantities is INTEGER in Room's exported `2.json`.
+**Acceptance:** Every column for these quantities is INTEGER in Room's exported `3.json`.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R27 · Ids
 
 **Rule:** Every table has `id TEXT PRIMARY KEY`, holding a ULID from `:core` `Ids`. A restored or imported row then never collides with a local one, and a later Windows copy can merge.
 
-**Acceptance:** `CoreTest`'s ULID tests pass, and every table in `2.json` has a text primary key `id`.
+**Acceptance:** `CoreTest`'s ULID tests pass, and every table in `3.json` has a text primary key `id`.
 
-**Since:** 2026-10-19 · builder · migrated
+**Since:** 2026-11-26 · builder · migrated
 
-### D-R28 · Tables, schema version 2
+### D-R28 · Tables
 
-**Rule:** The database is schema version 2, with the tables below. Schema 1 was designed for the whole scope, so that no package needs a migration of logged data; schema 2 only adds to it.
+**Rule:** The database is schema version 3, with the tables below. Schema 1 was designed for the whole scope, so that no package needs a migration of logged data; schemas 2 and 3 only add to it.
 
 **Values:**
 
 | Table | Columns beyond id | Serves |
 |---|---|---|
-| `exercise` | name, kind (DYNAMIC, ISOMETRIC, TIMED, DISTANCE), sided (0/1, counted per side), archived, show_partial_reps (0/1, default 0; schema 2) | the floor; `CM2`; R32 |
+| `exercise` | name, kind (DYNAMIC, ISOMETRIC, TIMED, DISTANCE), sided (0/1, counted per side), archived, show_partial_reps (0/1, default 0; schema 2), rest_seconds? and note? (schema 3) | the floor; `CM2`; R32, R103 |
 | `routine` | name, weekdays (bit 0 = Monday … bit 6 = Sunday; 0 = unscheduled), position | the floor; `CM3`, `KA6` |
 | `routine_item` | routine_id, exercise_id, position, target_sets, target_reps, target_weight_g, target_seconds, target_distance_m, rest_seconds | the floor; `LO4`-style rest, `GM6` |
-| `session` | routine_id?, activity (free type, "Walk"), started_at?, ended_at?, zone, day, state (OPEN, FINISHED, STOPPED_EARLY), intensity? (1-5), note? | the floor; `FT2`, `GR4`, `FA13`, `KA2`, `GL1` (OPEN = in progress) |
-| `logged_set` | session_id, exercise_id, position, side? (L, R), reps?, weight_g?, seconds?, distance_m?, rpe? (×10), rir?, done_at, power (0/1, default 0; schema 2), partial_reps (default 0; schema 2) | the floor; `LL2`, `GM2`, `BC1`; R22, R32 |
+| `session` | routine_id?, activity (free type, "Walk"), started_at?, ended_at?, zone, day, state (OPEN, FINISHED, STOPPED_EARLY), intensity? (1-5), note?, seconds? and module? (schema 3) | the floor; `FT2`, `GR4`, `FA13`, `KA2`, `GL1` (OPEN = in progress); R29, R121 |
+| `logged_set` | session_id, exercise_id, position, side? (L, R), reps?, weight_g?, seconds?, distance_m?, rpe? (×10), rir?, done_at, power (0/1, default 0; schema 2), partial_reps (default 0; schema 2), kind (schema 3) | the floor; `LL2`, `GM2`, `BC1`; R22, R32, R121 |
 | `progression_rule` | routine_item_id, add_weight_g, add_reps, when (ALL_SETS_HIT) | `LL5`, `GM6` |
 | `interval_preset` | name, prepare_s, work_s, rest_s, rounds, sets, set_rest_s, last_used_at? | `TX1`, `FA1`, `SH1` |
 | `track_point` | session_id, t, lat_e7, lon_e7, alt_dm?, accuracy_m?, segment | `OT1`, `OT5` |
@@ -574,16 +574,19 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | `label` (schema 2) | name, position, archived | R23 |
 | `session_label` (schema 2) | session_id, label_id; unique per pair | R23 |
 | `body_measure` (schema 2) | kind (WEIGHT, WAIST and others), value, unit (G, MM), taken_at, zone, day, note? | `OS1`, R20 |
+| `steps` (schema 3) | day, steps, source (ENTERED, SENSOR); unique per day and source | R25, R121 |
+| `category` (schema 3) | name | R103 |
+| `exercise_category` (schema 3) | exercise_id, category_id; unique per pair | R103 |
 
-**Evidence:** Schema 2 built 2026-10-21 with `2.json` exported; ten planted mutants each turned the intended test red.
+**Evidence:** Schema 2 built 2026-10-21 with `2.json` exported; ten planted mutants each turned the intended test red. Schema 3 built 2026-11-26 with `3.json` exported.
 
-**Acceptance:** Room's exported `2.json` holds exactly these tables and columns.
+**Acceptance:** Room's exported `3.json` holds exactly these tables and columns.
 
-**Since:** 2026-10-21 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R121 · Schema 3 additions
 
-**Rule:** Schema 3 adds, by R33, the columns and the table below, so a session without sets keeps its time and its module, a set keeps the type it was logged under, and steps are kept per day. Steps, entered or counted by the sensor, are never stored as sessions. The backup format moves with it to `version` 3, and a version-2 backup still restores as R36 says.
+**Rule:** Schema 3 adds, by R33, the columns and tables below, so a session without sets keeps its time and its module, a set keeps the type it was logged under, steps are kept per day, and an exercise holds R103's rest, note and categories. A set's `kind` is its exercise's type when it was logged: the migration and every restore fill a missing one from the set's exercise (all the sets of a version-1 or version-2 backup), and a later change of type leaves it. Steps, entered or counted by the sensor, are never stored as sessions, and the backup format moves to `version` 3 (R36).
 
 **Values:**
 
@@ -591,14 +594,18 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 |---|---|---|
 | `session` | `seconds`, nullable | an amount's time (R29) |
 | `session` | `module`, nullable | the module a session without sets is logged under (R23, R25) |
-| `logged_set` | `kind`, the exercise's type when the set was logged; existing rows take their exercise's type | what the comparison matches on (R67) |
+| `logged_set` | `kind`, default empty only for the migration's ALTER TABLE | what the comparison matches on (R67) |
+| `exercise` | `rest_seconds`, nullable | the exercise's rest: null for Default (Settings' length, R72), 0 for None, else seconds (R71, R103) |
+| `exercise` | `note`, nullable | the exercise's notes (R103) |
 | `steps`, a new table | id, day, steps, source (ENTERED, SENSOR) | one row per day and source (R22); each entry adds to the day's ENTERED row |
+| `category`, a new table | id, name | the person's own categories (R103) |
+| `exercise_category`, a new table | id, exercise_id, category_id | a category on an exercise, several per exercise |
 
-**Evidence:** Not checked: none of it is built; schema 2's `session` has no time, steps or module column, and `logged_set` no type (`Tables.kt`, 2026-11-26).
+**Evidence:** `MigrationTest` and `AndroidMigrationTest` migrate a schema-1 and a schema-2 file keeping every cell, each set taking its exercise's type; on the desktop the migrated file also has the same shape as a fresh one, column order included, where the phone's path relies on Room's own check; `OldBackupTest` restores the pinned version-1 file and `backup-v2.json`, exported by the schema-2 app (acba13a); `SessionsTest.aSetKeepsTheTypeItWasLoggedUnder`. A mutant leaving the migration's fill out turned the migration test red (2026-11-26). Not checked: nothing writes steps, `session.module`, `session.seconds` or the exercise fields yet; their stores come with the screens that use them.
 
-**Acceptance:** Room's exported schema holds these columns and the table, the migration test from schema 2 keeps every cell (R33), and a version-2 backup restores with the new columns at their defaults.
+**Acceptance:** Room's exported `3.json` holds these columns and tables, `MigrationTest` and `AndroidMigrationTest` pass from schema 1 and schema 2, and `OldBackupTest` restores both pinned backups with every set under its exercise's type.
 
-**Not:** Steps on the session too: a sensor's count is not a session.
+**Not:** Steps on the session too: a sensor's count is not a session. R103's fields in a schema 4 with the exercises plan: one migration instead of two. Restored older sets at the empty default: the comparison would match none of them.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -640,11 +647,11 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** A new column goes last with a SQL default, so a fresh table matches a migrated one column for column. There is no destructive fallback: a failed migration stops the open with every cell, table shape and the version unchanged, nothing set aside and nothing wiped.
 
-**Evidence:** A test builds a schema-1 file from Room's exported `1.json`, fills every table, migrates through the app's own open and compares every cell (`quote()`) before and after, plus the migrated shape against a fresh one, on the desktop and under Robolectric on the phone's path (`KeepFileOnCorruptionDriver`). A throwing statement, a migration Room's check refuses and a file a newer app wrote each leave the file as it was. A destructive fallback is caught by the Robolectric test only (2026-10-21).
+**Evidence:** A test builds a schema-1 and a schema-2 file from Room's exported `1.json` and `2.json`, fills every table, migrates through the app's own open and compares every cell (`quote()`) before and after, on the desktop and under Robolectric on the phone's path (`KeepFileOnCorruptionDriver`); the desktop test also compares the migrated shape against a fresh one. From either file, a throwing statement, a migration Room's check refuses (told by its message) and a file a newer app wrote each leave the file as it was (2026-11-26). A destructive fallback is caught by the Robolectric test only (2026-10-21).
 
 **Acceptance:** `MigrationTest` passes on the desktop and `AndroidMigrationTest` under Robolectric.
 
-**Since:** 2026-10-21 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ## 6. Safety and gates
 
@@ -670,13 +677,13 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R36 · Backup format
 
-**Rule:** A backup is one JSON file holding every table, `format` `sisyphusfit-backup`, `version` 2. Restore replaces everything in one transaction, and a version-1 backup still restores, its rows unchanged, the new columns at their defaults and the new tables empty.
+**Rule:** A backup is one JSON file holding every table, `format` `sisyphusfit-backup`, `version` 3. Restore replaces everything in one transaction, and a version-1 or version-2 backup still restores, its rows unchanged, the new columns at their defaults, each set under its exercise's type (R121) and the new tables empty.
 
-**Evidence:** Pinned by a version-1 file the schema-1 app exported; mutants on restore outside a transaction and on a table missing from the backup list each turned a test red.
+**Evidence:** Pinned by a version-1 file the schema-1 app exported and a version-2 file the schema-2 app exported (2026-11-26); mutants on restore outside a transaction and on a table missing from the backup list each turned a test red.
 
-**Acceptance:** Export, restore into an empty database and export again give byte-identical files; the pinned version-1 file restores.
+**Acceptance:** Export, restore into an empty database and export again give byte-identical files; the pinned version-1 and version-2 files restore.
 
-**Since:** 2026-10-21 · builder · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R123 · Scheduled backups never replace a good one
 
@@ -736,7 +743,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 | Stage | Holds | Harvest rows |
 |---|---|---|
-| 1a | schema 2 (R28); the app shell; the module choice (R21); the app opens on Start (R83) | `X-MODULES` |
+| 1a | schema 3 (R28); the app shell; the module choice (R21); the app opens on Start (R83) | `X-MODULES` |
 | 1a | exercises, routines, one session model across modules, logged per calendar date; resume after the app is killed | `N-EXERCISES`, `N-ROUTINES`, `N-SESSION`, `FT2`, `FA13`, `GL1` |
 | 1a | history; "This week" per module (R24); no streak or missed-day count | `N-HISTORY`, `X-WEEK`, `FA15` |
 | 1a | evidence notes, brief by default, from the pack (R16) | `X-EVIDENCE` |
@@ -1257,6 +1264,8 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** While sets are logged, the past is shown only as the live comparison, today against last time (`SG2`). Last time's numbers show from the start of each set, and today's fill in as they are logged, which also does `LL2`'s job. Last time is the last session that logged the exercise under its current type, matched on each set's `kind` (R121, R101).
 
+**Evidence:** `FloorDao.lastSets` takes only sets of the exercise's current type, from the last closed session that has any (`SessionsTest.lastSetsAreThoseOfTheExercisesCurrentType`, 2026-11-26). Not checked: the exercise screen is not built.
+
 **Acceptance:** On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Isometric to Timed, the card shows none of the Isometric sets as last time.
 
 **Not:** Last time's numbers whatever their type: reps would face seconds.
@@ -1315,7 +1324,7 @@ Shape, line, elevation and motion (the same at both densities):
 |---|---|---|
 | the first side of a per-side exercise | none; the rest follows the second side | |
 | the plan sets a length (`LO4`) | that length | `routine_item.rest_seconds` |
-| the exercise sets one, ahead in Edit exercise (R103) | that length; "None" is no rest | `exercise.rest_seconds`, nullable, 0 for "None", added with the exercise editor or stage 6, whichever is built first |
+| the exercise sets one, ahead in Edit exercise (R103) | that length; "None" is no rest | `exercise.rest_seconds`, nullable, 0 for "None" (schema 3, R121) |
 | otherwise | the default in Settings (R72) | a `setting` key |
 
 **Acceptance:** With the plan, the exercise and the default all set, the plan's length wins, even over an exercise's "None"; with none but the default, the default runs; an exercise set to "None" starts no rest; a per-side hold rests only after its second side; ±30 s moves the remaining time by 30 s.
@@ -1552,7 +1561,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R86 · The shared data core
 
-**Rule:** The stores in `:data` behave as the rows below say, on schema 2 (R28). A database that cannot be opened is a state the screen shows, never a crash.
+**Rule:** The stores in `:data` behave as the rows below say, on schema 3 (R28). A database that cannot be opened is a state the screen shows, never a crash.
 
 **Values:**
 
@@ -1568,7 +1577,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Acceptance:** The `:data` store tests (`SettingsTest`, `ExercisesTest`, `SessionsTest`) pass.
 
-**Since:** 2026-10-29 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R87 · Starting while a session is open
 
@@ -1856,7 +1865,7 @@ Shape, line, elevation and motion (the same at both densities):
 | Notes | free text (self-notes, cues, equipment), readable from inside the session; whether it is also edited there, against R48 and R99, is settled in the Strength session plan |
 | Categories | the person's own words (dumbbells, core, push, legs), several per exercise, apart from modules and session labels; typed into a field that shows nothing until the first letter, then existing ones matching the start of any word, A-Z, and a "New: X" row, case ignored; none to start with |
 
-**Evidence:** Not checked: schema 2 has no column for notes or categories, and `exercise.rest_seconds` is not yet added (R71); the exercises plan brings the schema change, by R33.
+**Evidence:** Schema 3 holds `exercise.rest_seconds` (null for Default, 0 for None), `exercise.note` and the `category` and `exercise_category` tables (R121, 2026-11-26). Not checked: the editor is not built.
 
 **Acceptance:** Plank can be made with 60 s rest, a note and the category "core", and the session shows its note; a new exercise's rest reads "Default".
 
@@ -1988,10 +1997,10 @@ Shape, line, elevation and motion (the same at both densities):
 - R23 · Modules are tags: A session with sets has the modules of its exercises' tags; a set-less session has exactly the module it was logged under; no exercise carries a label.
 - R24 · This week counts a mixed session by its parts: `CoreTest`'s week tests pass: `aMixedSessionCountsByItsParts`, `anExerciseWithTwoTagsCountsWhollyUnderEach`, `aSessionCountsOnceInAModuleHoweverManyOfItsSetsAreThere`, `anUntaggedExerciseCountsNowhereAndAnEmptyWeekIsEmpty`.
 - R25 · Each module's own units in This week: A 30-minute walk logged under Daily movement adds 30 min to Daily movement's time and nothing to any other module; steps never appear as sets or minutes; This week has no Body measures section.
-- R26 · Units: Every column for these quantities is INTEGER in Room's exported `2.json`.
-- R27 · Ids: `CoreTest`'s ULID tests pass, and every table in `2.json` has a text primary key `id`.
-- R28 · Tables, schema version 2: Room's exported `2.json` holds exactly these tables and columns.
-- R121 · Schema 3 additions: Room's exported schema holds these columns and the table, the migration test from schema 2 keeps every cell (R33), and a version-2 backup restores with the new columns at their defaults.
+- R26 · Units: Every column for these quantities is INTEGER in Room's exported `3.json`.
+- R27 · Ids: `CoreTest`'s ULID tests pass, and every table in `3.json` has a text primary key `id`.
+- R28 · Tables: Room's exported `3.json` holds exactly these tables and columns.
+- R121 · Schema 3 additions: Room's exported `3.json` holds these columns and tables, `MigrationTest` and `AndroidMigrationTest` pass from schema 1 and schema 2, and `OldBackupTest` restores both pinned backups with every set under its exercise's type.
 - R29 · An amount is a session without times: `CoreTest`'s `overlappingSpansCountOnceAndAmountsAdd`, `aSpanInsideAnotherAddsNothing` and `emptyDayIsZero` pass.
 - R30 · The counting day: `CoreTest.aSessionCountsOnTheDayItStartsInItsOwnZone` passes, and a stored session keeps its `day` after the phone's zone changes.
 - R31 · Only done sets are stored: Stopping a session early leaves only the sets marked done.
@@ -1999,7 +2008,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R33 · Migrations add, never rewrite: `MigrationTest` passes on the desktop and `AndroidMigrationTest` under Robolectric.
 - R34 · Nothing logged is lost: Stage 1a is not done until the backup package (`KA9`, `OS8`) and resume after process death (`GL1`) pass their tests.
 - R35 · The database never deletes itself: That Robolectric test passes, and a set-aside file leads to R122's screen.
-- R36 · Backup format: Export, restore into an empty database and export again give byte-identical files; the pinned version-1 file restores.
+- R36 · Backup format: Export, restore into an empty database and export again give byte-identical files; the pinned version-1 and version-2 files restore.
 - R123 · Scheduled backups never replace a good one: Two scheduled runs leave two files; after a backup of 40 sessions and a fresh start, the next run still writes its file, the clean-up keeps the 40-session backup, and Settings shows that the data shrank.
 - R37 · Gates: `.github/workflows/ci.yml` runs the first three; the pre-push hook runs the fourth.
 - R43 · Where suggestions stop: With the setting off, no proposal appears; with it on and every set hit, the proposal equals last time's numbers plus the rule's step, and editing it changes nothing logged.

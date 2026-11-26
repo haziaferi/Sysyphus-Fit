@@ -59,7 +59,8 @@ private val roots = listOf(StartRoot, WeekRoot, HistoryRoot, MoreRoot)
 
 /**
  * The app's frame. Until a module choice is recorded it shows the choice (SPEC:R90), without the tab bar; while the setting
- * loads, only the page; when the data cannot be opened, a screen that says so (SPEC:R92). Then the current tab's screen above the fixed tab bar (SPEC:R88), which shows on the four roots. The
+ * loads, only the page; when the data cannot be opened, a screen that says so (SPEC:R92); when a damaged file was set
+ * aside, a screen that says so first, until dismissed (SPEC:R122). Then the current tab's screen above the fixed tab bar (SPEC:R88), which shows on the four roots. The
  * app opens on Start (SPEC:R83). Changing tab keeps each tab's place (the documented multiple-back-stacks pattern); Back from
  * another tab's root returns to Start, and from Start leaves the app. The screen changes at once (SPEC:R82): only the
  * valley moves.
@@ -73,6 +74,10 @@ fun AppShell(gate: ShellViewModel = viewModel(factory = ShellViewModel.Factory))
     SisyphusTheme {
         when (state) {
             ShellState.Loading -> Box(Modifier.fillMaxSize().background(Tokens.Colors.surfacePage))
+            ShellState.SetAside -> SetAsideScreen(
+                onContinue = gate::dismissSetAside,
+                Modifier.background(Tokens.Colors.surfacePage).windowInsetsPadding(screenInsets),
+            )
             ShellState.Choose -> ModuleChoiceScreen(
                 onStepForward = gate::choose,
                 Modifier.background(Tokens.Colors.surfacePage).windowInsetsPadding(screenInsets),

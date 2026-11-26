@@ -95,4 +95,15 @@ class ThemeTest {
         val dp = read { with(LocalDensity.current) { Theme.type.body.fontSize.toDp() } }
         assertEquals(28f, dp.value, 0.5f)
     }
+
+    // SPEC:R56: Compose applies Android 14's nonlinear curve itself, so the 6T on Android 11 scales text as Android 14 does:
+    // at 1.3 body 16 sp is 20.2 dp, not the 20.8 an even scale gives, and the 40 sp set number stays 40.
+    @Test
+    @Config(sdk = [30])
+    fun android11UsesTheSameNonlinearCurve() {
+        RuntimeEnvironment.setFontScale(1.3f)
+        val (b, n) = read { with(LocalDensity.current) { Theme.type.body.fontSize.toDp() to Theme.type.setNumber.fontSize.toDp() } }
+        assertEquals(20.2f, b.value, 0.1f)
+        assertEquals(40f, n.value, 0.1f)
+    }
 }

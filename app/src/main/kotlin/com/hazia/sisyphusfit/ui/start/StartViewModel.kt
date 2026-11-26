@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 
 /**
@@ -28,9 +30,16 @@ data class StartState(
 )
 
 class StartViewModel(sessions: SessionStore, settings: Settings) : ViewModel() {
-    val state: StateFlow<StartState> = combine(sessions.open(), settings.modules()) { open, modules ->
-        StartState(loading = false, resume = open, modules = modules.orEmpty())
-    }.catch { emit(StartState(loading = false, failed = true)) }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), StartState())
+    // Whenever Start's state starts being collected (it opens, or returns after more than 5 s away), an idle session from
+    // an earlier day is closed first (SPEC:R96), so it is not offered for resume. replayExpirationMillis = 0: back after
+    // more than 5 s, Start shows loading, never the last session it held, until that has run.
+    val state: StateFlow<StartState> = flow {
+        sessions.closeIfIdle()
+        emitAll(combine(sessions.open(), settings.modules()) { open, modules ->
+            StartState(loading = false, resume = open, modules = modules.orEmpty())
+        })
+    }.catch { emit(StartState(loading = false, failed = true)) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000, replayExpirationMillis = 0), StartState())
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

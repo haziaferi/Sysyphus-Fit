@@ -34,4 +34,14 @@ class CantOpenScreenshotTest {
 
     @Test @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi") fun balanced100() = golden(1f)
     @Test @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi") fun balanced200() = golden(2f)
+
+    // The set-aside screen (SPEC:R122), the same frame.
+    private fun setAside(scale: Float) {
+        RuntimeEnvironment.setFontScale(scale)
+        rule.setContent { SisyphusTheme(DensityMode.Balanced) { SetAsideScreen(onContinue = {}, Modifier.background(Tokens.Colors.surfacePage)) } }
+        rule.onRoot().captureRoboImage("set-aside-balanced-${(scale * 100).toInt()}.png", roborazziOptions = options)
+    }
+
+    @Test @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi") fun setAside100() = setAside(1f)
+    @Test @Config(sdk = [36], qualifiers = "w384dp-h756dp-450dpi") fun setAside200() = setAside(2f)
 }

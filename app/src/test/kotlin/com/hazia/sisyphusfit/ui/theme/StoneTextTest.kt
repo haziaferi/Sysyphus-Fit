@@ -56,4 +56,20 @@ class StoneTextTest {
         }
         assertEquals(height("plain"), height("stone"), 0.5f)
     }
+
+    // SPEC:R56: on Android 11 (the 6T) wrapped lines keep the plain text's spacing at 1.3, as on Android 14; the box
+    // rounds once (2 x 30.3 = 61) where Compose rounds per line (62), so they may differ by 1 dp.
+    @Test
+    @Config(sdk = [30])
+    fun lineBoxFollowsTheTextOnAndroid11() {
+        RuntimeEnvironment.setFontScale(1.3f)
+        val t = AppType(Tokens.Type.Balanced)
+        rule.setContent {
+            Column {
+                StoneText("Creating mindful\ninterludes", Modifier.testTag("stone"), t.body)
+                BasicText("Creating mindful\ninterludes", Modifier.testTag("plain"), style = t.body)
+            }
+        }
+        assertEquals(height("plain"), height("stone"), 1f)
+    }
 }

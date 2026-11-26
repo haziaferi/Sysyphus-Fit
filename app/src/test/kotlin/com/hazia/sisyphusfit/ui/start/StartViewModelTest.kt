@@ -14,6 +14,7 @@ import com.hazia.sisyphusfit.data.DatabaseOpen
 import com.hazia.sisyphusfit.data.ExerciseKind
 import com.hazia.sisyphusfit.data.SetValues
 import com.hazia.sisyphusfit.data.SisyphusDatabase
+import com.hazia.sisyphusfit.data.WallClock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -63,6 +64,22 @@ class StartViewModelTest {
             container.sessions.logSet(s, ex, SetValues(reps = 5))
         }
         assertEquals(1, waitFor { vm.state.first { it.resume?.sets?.size == 1 } }.resume!!.sets.size)
+    }
+
+    // SPEC:R96: opening Start the next morning closes yesterday's idle session, so the module cards show again.
+    @Test fun openingStartClosesAnIdleSessionFromAnEarlierDay() {
+        var now = 1_761_678_000_000L // Tuesday 2025-10-28 19:00 UTC
+        val timed = AppContainer({ DatabaseOpen(db, recovered = false) }, WallClock({ now }, { "UTC" }))
+        waitFor {
+            val ex = timed.exercises.add("Squat", ExerciseKind.DYNAMIC, false, setOf(Module.STRENGTH))
+            timed.sessions.logSet(timed.sessions.start(), ex, SetValues(reps = 5))
+        }
+        now += 14 * 3_600_000L
+        val vm = StartViewModel(timed.sessions, timed.settings)
+        val shown = waitFor { vm.state.first { !it.loading } }
+        assertEquals(false, shown.failed)
+        assertEquals(null, shown.resume)
+        assertEquals(null, waitFor { timed.sessions.open().first() })
     }
 
     @Test fun chosenModulesFlowThrough() {

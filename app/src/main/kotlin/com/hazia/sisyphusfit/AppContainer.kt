@@ -17,22 +17,26 @@ import kotlinx.coroutines.withContext
 /**
  * Everything the screens need, wired by hand (SPEC:R84). The database opens once, on first use, on [io]:
  * `openDatabase` blocks while it probes, and a corrupt file is set aside there, never on the main thread.
+ * [setAsideStampOnDisk] gives the stamp of the newest file set aside beside the database, or null (SPEC:R122).
  */
 class AppContainer(
     private val open: () -> DatabaseOpen<SisyphusDatabase>,
     clock: WallClock = WallClock.System,
     private val io: CoroutineDispatcher = Dispatchers.IO,
+    private val setAsideStampOnDisk: () -> Long? = { null },
 ) {
     private val lock = Mutex()
     @Volatile private var opened: DatabaseOpen<SisyphusDatabase>? = null
 
-    // NonCancellable: a screen left during a slow first open must not throw its result away (a leaked database, and a
-    // second open that no longer knows a corrupt file was set aside).
+    // NonCancellable: a screen left during a slow first open must not throw its result away (a leaked database).
     private val db: Db = {
         opened?.database ?: lock.withLock {
             opened?.database ?: withContext(io + NonCancellable) { open().also { opened = it } }.database
         }
     }
+
+    /** Reads the directory off the main thread. */
+    suspend fun setAsideStamp(): Long? = withContext(io) { setAsideStampOnDisk() }
 
     val settings = Settings(db, clock)
     val exercises = ExerciseStore(db, clock)

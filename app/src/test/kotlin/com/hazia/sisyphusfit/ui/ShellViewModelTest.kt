@@ -85,6 +85,35 @@ class ShellViewModelTest {
         assertEquals(ShellState.Choose, waitFor { vm.state.first { it != ShellState.Failed && it != ShellState.Loading } })
     }
 
+    private fun shown(vm: ShellViewModel) = waitFor { vm.state.first { it != ShellState.Loading } }
+
+    // SPEC:R122: a file set aside (stamp 42 on disk) is told before the choice, on every launch until dismissed.
+    @Test fun aSetAsideFileIsToldUntilDismissed() {
+        assertEquals(ShellState.SetAside, shown(ShellViewModel(container.settings) { 42L }))
+        val nextLaunch = ShellViewModel(container.settings) { 42L }
+        assertEquals(ShellState.SetAside, shown(nextLaunch))
+        nextLaunch.dismissSetAside()
+        assertEquals(ShellState.Choose, waitFor { nextLaunch.state.first { it == ShellState.Choose } })
+        assertEquals(ShellState.Choose, shown(ShellViewModel(container.settings) { 42L }))
+        // A later file set aside is told again.
+        assertEquals(ShellState.SetAside, shown(ShellViewModel(container.settings) { 43L }))
+    }
+
+    // Review of PR #16: an open that failed after setting the file aside must not lose the notice on the retry.
+    @Test fun theNoticeSurvivesAFailedOpenAfterTheSetAside() {
+        var fail = true
+        val flaky = AppContainer({ check(!fail) { "second open failed" }; DatabaseOpen(db, recovered = false) })
+        val vm = ShellViewModel(flaky.settings) { 42L }
+        waitFor { vm.state.first { it == ShellState.Failed } }
+        fail = false
+        vm.retry()
+        assertEquals(ShellState.SetAside, waitFor { vm.state.first { it != ShellState.Failed && it != ShellState.Loading } })
+    }
+
+    @Test fun nothingSetAsideTellsNothing() {
+        assertEquals(ShellState.Choose, shown(ShellViewModel(container.settings) { null }))
+    }
+
     // Back right after "Step forward" ends the ViewModel before the write lands; the choice must still be recorded.
     @Test fun aChoiceSurvivesLeavingAtOnce() {
         val store = ViewModelStore()

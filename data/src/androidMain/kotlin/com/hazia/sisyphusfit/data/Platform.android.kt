@@ -13,5 +13,8 @@ fun openSisyphusDatabase(context: Context): DatabaseOpen<SisyphusDatabase> {
     )
 }
 
+/** The stamp of the newest database file set aside on this phone, or null (SPEC:R122). Reads the directory: call off the main thread. */
+fun newestSetAsideStamp(context: Context): Long? = newestSetAside(context.applicationContext.getDatabasePath(DATABASE_NAME).path)
+
 actual fun isCorruptDatabase(failure: Throwable): Boolean =
     generateSequence(failure) { it.cause }.any { it is SQLiteDatabaseCorruptException }

@@ -172,3 +172,69 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-21 · R114 · kind · Q → D · owner
 - 2026-11-21 · R114 · changed · labels on sessions, categories on exercises · owner
 - 2026-11-21 · R117 · changed · acceptance names the one proposal · owner
+- 2026-11-26 · R46 · changed · wording: History listed among the showing screens · owner
+- 2026-11-26 · R50 · changed · wording: each control on the step its row names · owner
+- 2026-11-26 · R90 · changed · wording: modules not built yet, not "the four of stage 1a" · owner
+- 2026-11-26 · R43 · changed · wording: only an item of a routine gets a proposal · owner
+- 2026-11-26 · R114 · changed · wording: Not drops the schema-change reason · owner
+- 2026-11-26 · R87 · changed · a session open from an earlier day is closed at its last set; the new one starts today · owner
+- 2026-11-26 · R96 · changed · End/Save ends at the last set's time · owner
+- 2026-11-26 · R35 · changed · the person is told when a file was set aside · owner
+- 2026-11-26 · R122 · added · screen for data set aside · owner
+- 2026-11-26 · R123 · added · scheduled backups are dated files and never replace a good one · owner
+- 2026-11-26 · R121 · added · session seconds and module, a steps table · owner
+- 2026-11-26 · R29 · changed · an amount keeps its time in seconds · owner
+- 2026-11-26 · R71 · changed · no rest between sides; None is no rest · owner
+- 2026-11-26 · R103 · changed · rest choices gain Default; None is no rest · owner
+- 2026-11-26 · R108 · changed · default row reads Default · owner
+- 2026-11-26 · R124 · added · rest timer in the background, open · owner
+- 2026-11-26 · R52 · changed · G5 also at 1.15 and 1.3 scaled evenly · owner
+- 2026-11-26 · R56 · changed · even scaling on Android 11-13 · owner
+- 2026-11-26 · R50 · changed · maximum grows with the rest round · owner
+- 2026-11-26 · R100 · changed · exercises in the session when the sheet opens are not listed · owner
+- 2026-11-26 · R102 · changed · an archived name offers Bring it back · owner
+- 2026-11-26 · R67 · changed · last time skips sets of another type · owner
+- 2026-11-26 · R101 · changed · comparison skips sets of the old type · owner
+- 2026-11-26 · R120 · changed · never triggered by the person's gaps · owner
+- 2026-11-26 · R95 · changed · the day is the counting day · owner
+- 2026-11-26 · R92 · changed · line ends "the app may need an update"; restore joins with backups · owner
+- 2026-11-26 · R21 · changed · switching a module off hides it and keeps its data · owner
+- 2026-11-26 · R25 · changed · no Body measures section · owner
+- 2026-11-26 · R70 · changed · Undo cancels the rest · owner
+- 2026-11-26 · R23 · changed · evidence points to R121 for the module column · owner
+- 2026-11-26 · R121 · renamed · "Where amounts and steps are stored" → "Schema 3 additions" · owner
+- 2026-11-26 · R121 · changed · schema 3, backup version 3, logged_set.kind, entered steps add · owner
+- 2026-11-26 · R67 · changed · last time matches each set's kind · owner
+- 2026-11-26 · R120 · changed · the two-day note shows on Daily movement only; cites R51 · owner
+- 2026-11-26 · R70 · changed · Undo removes the saved hold; its clock runs from the hold's start · owner
+- 2026-11-26 · R71 · changed · acceptance: the plan beats an exercise's None · owner
+- 2026-11-26 · R74 · changed · the round also leaves on an Undo · owner
+- 2026-11-26 · R76 · changed · the touch target grows with the boulder · owner
+- 2026-11-26 · R80 · changed · touch target about 121 dp at 2.0 · owner
+- 2026-11-26 · R50 · changed · maximum about 121 dp at 2.0 · owner
+- 2026-11-26 · R56 · changed · unit tests at 1.15 too · owner
+- 2026-11-26 · R79 · changed · gated at G5's font sizes · owner
+- 2026-11-26 · R81 · changed · gated at G5's font sizes · owner
+- 2026-11-26 · R88 · changed · gated at the even-scaling sizes too · owner
+- 2026-11-26 · R92 · changed · for opens that fail with nothing set aside · owner
+- 2026-11-26 · R122 · changed · shows until dismissed · owner
+- 2026-11-26 · R39 · changed · stage 6 settles R124 · owner
+- 2026-11-26 · R45 · changed · This week has no Body measures section · owner
+- 2026-11-26 · R123 · changed · always write; the clean-up keeps the last backup before data shrank · owner
+- 2026-11-26 · R87 · changed · resumes; R96 closes an idle session from an earlier day · owner
+- 2026-11-26 · R96 · changed · closes after 3 h idle from an earlier day; no-set sessions ask the end · owner
+- 2026-11-26 · R25 · changed · steps take the larger count; measures show in History · owner
+- 2026-11-26 · R21 · changed · Daily movement off stops reminders, prompts and step counting · owner
+- 2026-11-26 · R102 · changed · Bring it back opens the exercise or joins the session · owner
+- 2026-11-26 · R56 · changed · correction: Compose uses the nonlinear curve on Android 11 too · builder
+- 2026-11-26 · R52 · changed · correction: no evenly scaled gate sizes · builder
+- 2026-11-26 · R88 · changed · correction: no evenly scaled tab pages · builder
+- 2026-11-26 · R122 · changed · wording: "Your data was damaged", "Continue" · owner
+- 2026-11-26 · R35 · changed · evidence: AppContainer notes a recovered open · builder
+- 2026-11-26 · R87 · changed · evidence: closeIfIdle built · builder
+- 2026-11-26 · R92 · changed · evidence: goldens re-recorded with the new line · builder
+- 2026-11-26 · R96 · changed · evidence: endAndSave and closeIfIdle built · builder
+- 2026-11-26 · R96 · changed · every idle open session, judged in its own zone; end not in the future · builder
+- 2026-11-26 · R122 · changed · the file set aside on disk marks the notice; Continue records its stamp · builder
+- 2026-11-26 · R35 · changed · evidence: newestSetAside finds the file set aside · builder
+- 2026-11-26 · R92 · changed · a file set aside is told by R122 once an open succeeds · builder

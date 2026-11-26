@@ -46,7 +46,16 @@ class Settings(private val db: Db, private val clock: WallClock) {
         }
     }
 
+    /**
+     * The stamp of the newest set-aside file the person has dismissed the notice for, or null when none (SPEC:R122). The
+     * notice is owed while a set-aside file on disk is newer than this.
+     */
+    fun setAsideSeen(): Flow<Long?> = flow { emitAll(db().settingDao().value(SET_ASIDE_SEEN)) }.map { it?.toLongOrNull() }
+
+    suspend fun seeSetAside(stamp: Long) = db().settingDao().put(Ids.ulid(clock.now()), SET_ASIDE_SEEN, stamp.toString())
+
     private companion object {
         const val MODULES = "modules"
+        const val SET_ASIDE_SEEN = "set_aside_seen"
     }
 }

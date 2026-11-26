@@ -291,11 +291,11 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R08 · Frontend before building
 
-**Rule:** Screens, layout, wording, navigation and palette are discussed with the owner before they are built; the code never decides them.
+**Rule:** Screens, layout, wording, navigation and palette are settled by the design skills' evaluations (R125), and the owner signs off the result before it is built; the code never decides them.
 
 **Acceptance:** none: a working practice; each stage's screens are signed off from mockups before they are built (R38).
 
-**Since:** 2026-10-19 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R09 · Compose Foundation only
 
@@ -974,7 +974,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R127 · Pressed and focused pieces
 
-**Rule:** Every piece you press shows a pressed look drawn in its own shape, and a 2 dp focus ring in `fill.dark` that follows that shape when keyboard or switch access reaches it; Foundation's rectangular default never shows. No control is drawn disabled: one that cannot act is not shown, or its screen says why, and the main bar always acts (R90).
+**Rule:** Every piece you press shows a pressed look drawn in its own shape, and a 2 dp focus ring in `ink.primary` that follows that shape 2 dp outside it, on the ground around it, when keyboard or switch access reaches it, so it shows round the main bar too; Foundation's rectangular default never shows. No control is drawn disabled: one that cannot act is not shown, or its screen says why, and the main bar always acts (R90).
 
 **Evidence:** Required by `design-system-plus` (component states, focus first) and `visual-craft` (pressed and focus-visible on every button); a visible focus is a floor of `app-register-layout`. Not checked: `Press.kt` uses Foundation's default indication, `ModuleChoiceScreen.kt` and `Sheet.kt` each pass `indication = null`, and each form's pressed look is drawn in the code pass with `visual-craft` (2026-11-26).
 
@@ -998,19 +998,19 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R129 · Ending, archiving and deleting
 
-**Rule:** A control that ends, archives or deletes sits last among its neighbours, apart from the main action, as the rows below say. Where the act can be undone, an Undo shows for 10 s, as after a rest (R70); a delete that cannot be undone asks first, naming what goes. More and Settings order their rows by R01's frequency, a setting before what depends on it, and deleting last.
+**Rule:** A control that ends, archives or deletes sits last among its neighbours, apart from the main action, as the rows below say. Where the act can be undone, an Undo shows for 10 s, or longer when Android's accessibility setting "Time to take action" asks for it, as after a hold (R70); a delete that cannot be undone asks first, naming what goes. More and Settings order their rows by R01's frequency, a setting before what depends on it, and deleting last.
 
 **Values:**
 
 | Control | Where | After it |
 |---|---|---|
 | "End/Save" (R96) | the resume card's pill, never the main bar | "Session ended · Undo", which reopens it |
-| archive (R102) | a quiet pill at the foot of Edit | "Archived · Undo" |
-| delete (R45) | last in Settings | a sheet naming what is deleted, with "Delete" and "Keep" |
+| archive (R102) | a quiet pill at the foot of Edit | "Archived · Undo"; later, "Bring it back" in More's "Archived" group (R99) |
+| delete (R45) | last on the import, export and delete screen | a sheet naming what is deleted, with "Delete" and "Keep" |
 
 **Evidence:** `app-register-layout`'s mis-tap safety and order requirements (a destructive row last, spaced or confirmed, so a tap aimed at a neighbour lands on it under 5% of the time), skill review 2026-11-26. Not checked: none of these controls is built.
 
-**Acceptance:** Each control's screen test finds it last in its group and at least 16 dp from the main action; Undo within 10 s restores the session or the exercise as it was; deleting asks first.
+**Acceptance:** Each control's screen test finds it last in its group and at least 16 dp from the main action; Undo within 10 s restores the session or the exercise as it was, and with a longer "Time to take action" the Undo stays that long; deleting asks first.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1022,7 +1022,9 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Acceptance:** Every colour role in `design/tokens.json` resolves to a grey or a black alpha, and with the phone in dark theme the app draws as in light.
 
-**Since:** 2026-11-26 · owner · migrated
+**Not:** A dark variant before the palette is discussed. Its cost, accepted (2026-11-26): on a dark-theme phone at night or in a dim gym, the light page glares between sets.
+
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R54 · Screen width
 
@@ -1058,7 +1060,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 | Element | When text does not fit |
 |---|---|
-| set value | shrinks to fit between its steppers, never below the compact token (set number 34, partials 20); then its unit moves under it, centred |
+| set value | shrinks to fit between its steppers, never below its role's compact size (set number 35 for weight and reps, heading 20 for partials); then its unit moves under it, centred |
 | header title | may end in "…", its full text on a tap |
 | session clock and Finish | never shorten |
 | main bar | may wrap to two lines |
@@ -1121,13 +1123,13 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 |---|---|---|---|---|---|---|
 | label | secondary text, values beside a row | 13 / 12 | 20 / 16 | 400 | 0 | |
 | eyebrow | section heads, dates, column heads, a note's fact names: capitals tracked 0.08 em | 13 / 12 | 16 / 16 | 500 | 0 | |
-| body | running text and rows | 16 / 14 | 24 / 20 | 400 | 0 | |
+| body | running text and rows | 16 / 14 | 24 / 21 | 400 | 0 | |
 | row title | names in rows, weekly amounts, the running timer | 19 / 17 | 24 / 24 | 500 | 100 | `tnum` on numbers |
-| heading | screen titles, large secondary values | 23 / 20 | 28 / 24 | 500 | 100 | |
+| heading | screen titles, large secondary values, the set's partials | 23 / 20 | 28 / 24 | 500 | 100 | |
 | exercise | the exercise's name on its own screen | 28 / 24 | 32 / 28 | 500 | 100 | |
-| set number | the set's weight, reps and partials | 40 / 34 | 44 / 40 | 500 | 100 | `tnum` |
+| set number | the set's weight and reps | 40 / 35 | 44 / 40 | 500 | 100 | `tnum` |
 
-**Evidence:** From the polish round's type scale; `python tools/tokens.py check` compares this table with `design/tokens.json`. `typography-spacing-core` finds the sizes a minor third (1.2) apart, its pick for dense interfaces, and the headings' lines within its band (2026-11-26). Not checked: compact set number 34 / 14 is 2.43 and compact body lines 20 / 14 are 1.43, so the code pass moves them to 35 sp and 21 sp; on R56's curve at 2.0, heading and exercise differ by 1.05 in size, untested on the exercise screen.
+**Evidence:** From the polish round's type scale; `python tools/tokens.py check` compares this table with `design/tokens.json`. `typography-spacing-core` finds the sizes a minor third (1.2) apart, its pick for dense interfaces, and the headings' lines within its band; the compact set number moved from 34 to 35 sp and compact body lines from 20 to 21 sp to meet both ratios, which `tokens.py check` computes (2026-11-26). Not checked: on R56's curve at 2.0, heading and exercise differ by 1.05 in size, untested on the exercise screen, which is not built.
 
 **Acceptance:** `python tools/tokens.py check` passes and checks both ratios; at font size 2.0 the exercise screen's golden shows each heading above its content in weight or carve.
 
@@ -1159,25 +1161,25 @@ Colour roles (screens use these; raw greys are named by CIE L*):
 | Role | Raw | Value | Used for |
 |---|---|---|---|
 | surface.page | grey.93 | `#ebebeb` | the screen behind everything |
-| surface.card | grey.98 | `#fafafa` | comparison card, facts, light pebbles (steppers, the rest round's control), the tab bar |
-| surface.worn | grey.94 | `#f0f0f0` | module cards, week sections, the resume card and rows: cut left, worn right (R65) |
+| surface.card | grey.100 | `#ffffff` | comparison card, facts, light pebbles (steppers, the rest round's control), the tab bar |
+| surface.worn | grey.96 | `#f5f5f5` | module cards, week sections, the resume card and rows: cut left, worn right (R65) |
 | surface.worn-light | grey.100 | `#ffffff` | the soft light toward their worn right side |
 | surface.sunk | grey.88 | `#dfdfdf` | the bottom zone behind the main bar; secondary pills |
 | fill.dark | grey.17 | `#2b2b2b` | every dark fill of the interface: main bar, tab bar line and underline, selected states (R65) |
 | fill.dark-light | grey.38 | `#5a5a5a` | the faint light inside the main bar's dip |
 | fill.on-dark | grey.100 | `#ffffff` | text and icons on fill.dark |
 | ink.primary | grey.10 | `#1c1c1c` | text, icons, the current set's pebble outline |
-| ink.secondary | grey.37 | `#575757` | secondary text, the evidence-note chip, tags |
+| ink.secondary | grey.31 | `#4a4a4a` | secondary text, the evidence-note chip, tags |
 | line.edge | grey.45 | `#6b6b6b` | outlines (flat rows), the 1.5 dp underline of a number you tap to type, the sheet's grab handle, switches |
 | line.carved-dark | grey.45 | `#6b6b6b` | a carved line's cut: column heads, the chip's lines (3 dp, dark over light) |
 | line.carved-light | grey.100 | `#ffffff` | a carved line's lit edge; the 0.7 dp light under object icons |
 | line.spindle | grey.45 | `#6b6b6b` | History's carved date divider (owner 2026-10-28: the edge grey, not a grey of its own) |
-| shadow.ground | grey.79 | `#c4c4c4` | the 2 dp ground under a pill |
-| shadow.step | black.18 | `#0000002e` | the 1 dp shadow under light pebbles |
+| shadow.ground | grey.76 | `#bdbdbd` | the 2 dp ground under a pill |
+| shadow.step | black.20 | `#00000033` | the 1 dp shadow under light pebbles and the worn cards you press: their edge on the page (R126) |
 | shadow.float-near | black.14 | `#00000024` | a sheet's near shadow |
 | shadow.float-far | black.20 | `#00000033` | a sheet's far shadow |
 | shadow.scrim | black.42 | `#0000006b` | behind a sheet |
-| rest.stone | grey.11 | `#1e1e1e` | the boulder and the figure (R75, R76) |
+| rest.stone | grey.10 | `#1c1c1c` | the boulder and the figure (R75, R76) |
 | rest.near-leg | grey.31 | `#4a4a4a` | the figure's near leg (R75) |
 | rest.ring-track | rest.near-leg | `#4a4a4a` | the white ring's track before it fills: the near leg's grey (R77) |
 | rest.ring | grey.100 | `#ffffff` | the ring and the time are the only white in the round (R74) |
@@ -1187,10 +1189,11 @@ Space and size, dp, balanced / compact:
 | Token | dp | Used for |
 |---|---|---|
 | space.gutter | 16 / 12 | screen side margin |
-| space.pad | 16 / 12 | inside a card or row |
+| space.pad | 16 / 12 | inside a card or row, at its sides |
+| space.pad-y | 12 / 8 | inside a worn card, above and below its content (R126) |
 | space.gap | 8 / 8 | between items in a list; compact keeps 8 as drawn and judged (the base compact scale had 4) |
 | space.section | 24 / 16 | between sections |
-| space.eyebrow | 8 / 4 | under a section head |
+| space.eyebrow | 8 / 8 | under a section head: at least half its line (R126) |
 | space.foot | 16 / 12 | around the main bar in the bottom zone |
 | space.note-head | 12 / 12 | an evidence note's sheet: under its eyebrow, before the claim (owner, 2026-10-28 walk) |
 | size.row | 56 / 48 | minimum height of a row (R56: text may make it taller) |
@@ -1224,8 +1227,8 @@ Shape, line, elevation and motion (the same at both densities):
 | stroke.carved | 3 dp | a carved line, dark over light (R65) |
 | stroke.underline | 4 dp | the current tab's underline on the valley floor (R66) |
 | stroke.ring | 2.6 dp | the rest round's white ring and its track |
-| elevation.ground | 0 2 0 0 #c4c4c4 | a pill standing on the ground |
-| elevation.step | 0 1 0 0 #0000002e | a light pebble |
+| elevation.ground | 0 2 0 0 #bdbdbd | a pill standing on the ground |
+| elevation.step | 0 1 0 0 #00000033 | a light pebble |
 | elevation.edge-inset | inset 0 0 0 1 #6b6b6b | a flat row's outline |
 | elevation.float | 0 6 16 0 #00000033, 0 1 4 0 #00000024 | a sheet |
 | motion.valley | duration 250 ms, easing cubic-bezier(0.2, 0, 0, 1) | the tab valley sliding to the new tab (R66) |
@@ -1234,7 +1237,7 @@ Shape, line, elevation and motion (the same at both densities):
 | motion.reduced | nothing turns or slides; the figure holds still; the ring and the time move once a second; the valley jumps (R74, R66) |  |
 <!-- tokens:end -->
 
-**Evidence:** `tools/tokens.py check` (CI runs it) checks every reference resolves, every raw value is used by a role, the density pairs, this spec's tables and `Tokens.kt`. Taken from the decided screens as drawn: rebuilt from the file, all 40 (20 per density) matched them pixel for pixel. The owner then merged #6a6a6a into #6b6b6b, drew History's date spindle in the edge grey and dropped the note's facts hairline. Kept apart though close: text #1c1c1c and the stone #1e1e1e, secondary text #575757 and the main bar's dip light #5a5a5a, the page #ebebeb and worn cards #f0f0f0, cards #fafafa and white. Contrast (WCAG 2.2, every text and icon on every surface it sits on, both densities): all pass AA, the lowest secondary text on the page at 6.1:1 (2026-10-28); R126 sets the targets the values must meet, which they miss.
+**Evidence:** `tools/tokens.py check` (CI runs it) checks every reference resolves, every raw value is used by a role, the density pairs, this spec's tables and `Tokens.kt`. Taken from the decided screens as drawn: rebuilt from the file, all 40 (20 per density) matched them pixel for pixel. The owner then merged #6a6a6a into #6b6b6b, drew History's date spindle in the edge grey and dropped the note's facts hairline (2026-10-28). The palette round of 2026-11-26 moved the values to R126's targets, which the same check computes.
 
 **Acceptance:** `python tools/tokens.py check` passes.
 
@@ -1256,7 +1259,7 @@ Shape, line, elevation and motion (the same at both densities):
 | gap under a head | at least half the head's line height | `typography-spacing-core` |
 | padding | a card's or row's vertical padding is a space token with a compact value, never a number in code | `design-system-plus` |
 
-**Evidence:** From the skill review of 2026-11-26 (`research/skill-review-2026-11-26.md`). Not checked: today's tokens miss these: secondary text `#575757` is 6.06:1 on the page and 5.42:1 on `surface.sunk`; worn cards stand 1.06 ΔE2000 from the page, light pebbles 3.1 and sunk pills 2.6; four pairs are under 2 (text and stone 0.63, secondary text and the dip light 1.07, page and worn 1.06, card and white 1.00); selected and unselected outlines differ by 2.66:1; compact `space.eyebrow` is 4 dp under 16 dp lines; `Surfaces.kt` pads cards with a literal 12 dp.
+**Evidence:** From the skill review of 2026-11-26 (`research/skill-review-2026-11-26.md`). The palette round with `visual-craft` (2026-11-26) kept each grey's hue and moved only lightness, keeping the page `#ebebeb`, and searched the light greys for the least change that meets every row: secondary text `#575757` became `#4a4a4a` (7.43:1 on the page, 8.13 on worn cards), worn cards `#f0f0f0` became `#f5f5f5`, the light pebbles merged into white, and the stone merged into the text's grey. The fills stay light, so light pebbles and the worn cards you press stand on a 1 dp shadow of 20% black (11.1 ΔE2000 on the page) and pills on a `#bdbdbd` ground (10.8); a picked segment's 2 dp `ink.primary` outline stands 3.20:1 from the unpicked hairline. `design/tokens.json`'s `targets` block lists each pair `tokens.py check` computes. Not checked: how the worn side's light reads at 2.0 ΔE2000 over the card (3 before) on the 6T.
 
 **Acceptance:** `python tools/tokens.py check` computes each row and passes.
 
@@ -1323,14 +1326,14 @@ Shape, line, elevation and motion (the same at both densities):
 |---|---|
 | main bar | square corners; its top edge sinks 8 dp across the middle third in one soft dip, lit faintly inside the dip |
 | secondary buttons | pills as worn pebbles (each corner a slightly different radius) on a 2 dp ground shadow |
-| steppers (− and +) | borderless light pebbles (#fafafa), − and + with different outlines, on a 1 dp shadow; the number you tap to type is underlined 1.5 dp in #6b6b6b |
-| module cards, week sections, the resume card, rows | cut on the left (square), worn on the right (8 dp corners), #f0f0f0 lit softly toward the right |
+| steppers (− and +) | borderless light pebbles (#ffffff), − and + with different outlines, on a 1 dp shadow that is their edge on the page (R126); the number you tap to type is underlined 1.5 dp in #6b6b6b |
+| module cards, week sections, the resume card, rows | cut on the left (square), worn on the right (8 dp corners), #f5f5f5 lit softly toward the right; those you press stand on the pebbles' 1 dp shadow |
 | comparison card | 4 dp corners; its column heads sit on a carved line (3 dp); the current set is circled by a 1.5 dp pebble outline |
 | History's date dividers | a carved 5 dp spindle that fades out over its first and last fifth |
 | object icons | faceted (each curve drawn as two straight cuts, square ends and mitred corners) with a 0.7 dp light below them |
 | tags | plain secondary text joined by a middle dot, no box: they sit lowest in the hierarchy |
 | evidence-note chip | no outline; a carved 3 dp line above and below it |
-| text and greys | text #1c1c1c, secondary text #575757; the boulder and the figure #1e1e1e; the figure's near leg and the ring's track #4a4a4a |
+| text and greys | text, the boulder and the figure #1c1c1c; secondary text, the figure's near leg and the ring's track #4a4a4a |
 
 **Evidence:** Scored in three stages from the owner's per-element picks (69 designs, G1-G4 passing on all 20 screens): 0.785 on the eleven axes of `results_vl/axes2.json`, next the same with relief rows 0.783 and with the hill tab bar 0.773; the valley as a sunken surface 0.74; the design before and stock Material 0.592 (last, tied). Judged blind on 3× renders, then checked on the 6T at true size. At compact, G1-G5 pass on the exercise screens at 360-412 dp and font sizes 1.0-2.0 (2026-10-28).
 
@@ -1338,7 +1341,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Not:** A vein on the comparison card, from its corner (passes a few dp from "TODAY") or down its middle gap (within 6 dp of text on 36 of 144 pages); relief rows.
 
-**Since:** 2026-10-28 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R66 · The tab bar's valley
 
@@ -1378,13 +1381,21 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R68 · Set input
 
-**Rule:** − and + change a value by 1 at a time, and tapping the number opens the phone's own numeric keyboard; the app draws no keypad of its own. With the keyboard up, the body scrolls so the number being typed and its set row stay above the keyboard. Weight accepts up to two decimals (61.25 kg), stored in grams.
+**Rule:** − and + change a value by its step below, and tapping the number opens the phone's own numeric keyboard for any other value; the app draws no keypad of its own. With the keyboard up, the body scrolls so the number being typed and its set row stay above the keyboard. Weight accepts up to two decimals (61.25 kg), stored in grams.
+
+**Values:**
+
+| Value | Step |
+|---|---|
+| weight | 2.5 kg, the smallest pair of plates in most gyms |
+| reps, partials | 1 |
+| seconds (holds, timed sets) | 5 s |
 
 **Evidence:** Not checked: on the 2026-10-22 mockups the keyboard covered the set value by 44 dp and the − stepper by 46 dp, and the body did not scroll (`ck layout`, skill review 2026-11-26).
 
-**Acceptance:** Each stepper tap moves the value by 1; a tap on the number raises the system numeric keyboard with the number and its row in view at font sizes 1.0 and 2.0; 61.25 kg is stored as 61250 g.
+**Acceptance:** Each stepper tap moves the value by its step (60 → 62.5 kg, 5 → 6 reps, 30 → 35 s); a tap on the number raises the system numeric keyboard with the number and its row in view at font sizes 1.0 and 2.0; 61.25 kg is stored as 61250 g.
 
-**Not:** The app's own keypad: replaced by the phone's keyboard.
+**Not:** The app's own keypad: replaced by the phone's keyboard. A step of 1 for every value: 60 → 62.5 kg needed the keyboard, and a hold from 30 to 45 s took 15 taps.
 
 **Since:** 2026-11-26 · owner · migrated
 
@@ -1410,13 +1421,22 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R70 · The running control on the exercise screen
 
-**Rule:** A hold starts from the main bar ("Start · set N"), and Done ends it and records its time, as it records a strength set; Done also starts the rest as R71 says. The only running control on this screen is the rest round, at the same height on every exercise screen of a density, in the band between the comparison card and the steppers, so nothing on the screen moves when it appears. A tap on the round opens −30 s and +30 s, a held press skips the rest, and after Done on a hold "Hold saved · Undo" shows for 10 s, so a stray Done can be taken back as if it was never tapped: the saved hold is removed, its clock runs on from the hold's start, and the rest it started stops (`FA4`'s undo).
+**Rule:** A hold starts from the main bar ("Start · set N"), and Done ends it and records its time, as it records a strength set; Done also starts the rest as R71 says. The only running control on this screen is the rest round, at the same height on every exercise screen of a density, in the band between the comparison card and the steppers, so nothing on the screen moves when it appears. The acts below each work as their row says, each Undo shown as long as R129 says.
+
+**Values:**
+
+| Act | What follows |
+|---|---|
+| a tap on the round | −30 s and +30 s open |
+| a held press on the round | the rest is skipped; "Rest skipped · Undo" brings it back with the time it had left |
+| Done on a hold | "Hold saved · Undo", so a stray Done is taken back as if never tapped: the saved hold is removed, its clock runs on from the hold's start, and the rest it started stops (`FA4`'s undo) |
+| a rest running | the screen stays on, so a glance from the bench finds the round |
 
 **Evidence:** Nothing moves when the round appears, checked within 0.5 dp (2026-10-23).
 
-**Acceptance:** The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s leaves no row for that hold, shows its clock counting from the hold's start, and the rest round leaves.
+**Acceptance:** The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s leaves no row for that hold, shows its clock counting from the hold's start, and the rest round leaves; an Undo after a skip shows the round with the time it had left; while a rest runs the window keeps the screen on, and after it does not.
 
-**Not:** A pill, an inline panel, and a sheet from the bar (the sheet lay over live steppers and failed G1). The rest running on after an Undo.
+**Not:** A pill, an inline panel, and a sheet from the bar (the sheet lay over live steppers and failed G1). The rest running on after an Undo. A skip with no way back: a thumb resting on the round while the phone is picked up or put down ends the rest.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1511,13 +1531,13 @@ Shape, line, elevation and motion (the same at both densities):
 | steps | 46 cm |
 | trunk | low, following Muybridge's plate 393 and the owner's own sketch |
 | near leg | #4a4a4a |
-| body | #1e1e1e |
+| body | #1c1c1c, the text's grey (R126) |
 
-**Evidence:** Martínez-Serrano 2021, Osterwald 2021 (2026-10-27).
+**Evidence:** Martínez-Serrano 2021, Osterwald 2021 (2026-10-27). The body's #1e1e1e merged into the text's #1c1c1c, 0.63 ΔE2000 apart (palette round, 2026-11-26).
 
 **Acceptance:** none: judged by eye on the 6T at true size; the figure is built with the rest-timer stage (stage 6).
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R76 · The boulder's form
 
@@ -1554,13 +1574,13 @@ Shape, line, elevation and motion (the same at both densities):
 | today | its column's right |
 | the partial note ("+ 1 ½") | the card's right edge, 16 dp in; with no partial (a plank, or none that day) the slot stays empty |
 | text sizes | R60 |
-| evidence-note chip | 28 dp high, below the card's text in the hierarchy, between two carved lines; its touch target stays 48 dp |
+| evidence-note chip | 28 dp high, below the card's text in the hierarchy, between two carved lines; its touch target on R50's step 1 |
 
 **Evidence:** The pieces' sizes match the decided mockups within 1 dp, all 15; that check found the chip at an older 32 dp (2026-10-28).
 
 **Acceptance:** The round's, the values' and the card gap's centres lie on the screen's centre on every exercise screen.
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R79 · The comparison card at larger font sizes
 
@@ -1689,13 +1709,13 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R87 · Starting while a session is open
 
-**Rule:** Starting a session while one is open resumes it instead of failing: `SessionStore.start` returns the open session's id and adds nothing. A session left idle from an earlier day is closed first, as R96 says, so only one still in use is resumed. A database rule allowing only one open session (a partial unique index) waits for the backup plan's schema, where a restore that brings two is settled.
+**Rule:** Starting a session while one is open resumes it instead of failing: `SessionStore.start` returns the open session's id and adds nothing. A session left idle is closed first, or dropped when nothing was logged in it, as R96 says, so only one still in use is resumed. A database rule allowing only one open session (a partial unique index) waits for the backup plan's schema, where a restore that brings two is settled.
 
 **Evidence:** `SessionStore.closeIfIdle`, run by Start when it opens; `SessionsTest` and `StartViewModelTest` (2026-11-26).
 
 **Acceptance:** `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal.
 
-**Not:** Resuming an idle session from an earlier day: today's sets would count on that day (R30).
+**Not:** Resuming an idle session: a morning's session would take the evening's sets, and one from an earlier day would count today's sets on that day (R30).
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1723,7 +1743,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R90 · The module choice screen
 
-**Rule:** Before the tabs, with no tab bar, the app asks once for the modules, with the wording below. All five modules start unticked and all five are offered, each one not built yet marked "Arrives in a later update"; stepping forward with none ticked is a choice, and a tap anywhere on a card but its "info" chip ticks it.
+**Rule:** Before the tabs, with no tab bar, the app asks once for the modules, with the wording below. All five modules start unticked and all five are offered, each one not built yet marked "Arrives in a later update"; stepping forward with none ticked is a choice, and a tap anywhere on a card outside its "info" chip's touch area ticks it (R91).
 
 **Values:**
 
@@ -1787,7 +1807,7 @@ Shape, line, elevation and motion (the same at both densities):
 | Part | Wording |
 |---|---|
 | title | "Your data was damaged" |
-| line | "It couldn't be read, so it was set aside on your phone, not deleted. The app starts again from the beginning; restoring a backup comes in a later update." |
+| line | "It couldn't be read, so it was set aside on your phone, not deleted. Your old data is kept and can be restored once backups arrive in a later update. Until then the app starts again from the beginning." |
 | bar | "Start fresh" |
 
 **Evidence:** The set-aside file on disk is the mark (`newestSetAside`), so a failed open or a killed process after the set-aside cannot lose the notice; "Start fresh" records its stamp as seen (`set_aside_seen`), and a later file is told again. Goldens `set-aside-balanced-{100,200}` (2026-11-26). Not checked: restoring a backup made before the damage brings back no seen stamp, so the notice shows once more.
@@ -1821,7 +1841,7 @@ Shape, line, elevation and motion (the same at both densities):
 | Case | Start shows |
 |---|---|
 | a chosen module not built yet | "Arrives in a later update" in place of its pill |
-| no module chosen | "No paths chosen yet. You can choose them in Settings." and the main bar for a free session |
+| no module chosen | "Nothing here." with "Choose paths", which opens the choice in Settings (R51), and the main bar for a free session |
 
 **Acceptance:** With Strength and Stamina chosen and only Strength built, Start shows two cards in that order, Stamina's reading "Arrives in a later update".
 
@@ -1848,7 +1868,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R96 · The resume card
 
-**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens, every open session with sets that began on an earlier counting day, in the zone it was recorded in (R30), and whose last set is over 3 h old is closed as stopped early at its last set, and the module cards show. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
+**Rule:** While a session is open, Start shows the resume card below and hides the module cards; but when Start opens, every open session idle for over 3 h, counted from its last set or, with none, from its start, is closed as stopped early at its last set, or dropped when nothing was logged in it (no set and no time of its own), and the module cards show. "End/Save" records the session as stopped early (`KA2`), ending at its last set's time. A session without sets asks when it ended, proposing the time it was paused, and records that.
 
 **Values:**
 
@@ -1859,11 +1879,11 @@ Shape, line, elevation and motion (the same at both densities):
 | main bar | "Resume this session" |
 | pill | "End/Save" |
 
-**Evidence:** `SessionStore.endAndSave` ends at the last set, or at a time given for a session without sets that lies between its start and the tap, and `SessionStore.closeIfIdle` closes every idle one when Start opens, judged in each session's own zone (`SessionsTest`, `StartViewModelTest`, 2026-11-26). Not checked: the resume card and its end-time question are not built, and the app records no pause time to propose yet.
+**Evidence:** `SessionStore.endAndSave` ends at the last set, or at a time given for a session without sets that lies between its start and the tap, and `SessionStore.closeIfIdle` closes or drops every idle one when Start opens (`SessionsTest`, `StartViewModelTest`, 2026-11-26). Not checked: the resume card and its end-time question are not built, and the app records no pause time to propose yet.
 
-**Acceptance:** With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
+**Acceptance:** With a session open, Start shows the resume card and no module card; "End/Save" at 09:40 on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened at 18:00 on a session whose last set was at 08:31 the same day closes it at 08:31 and shows the module cards; Start opened 3 h 1 min after a session with nothing logged began leaves no session; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
 
-**Not:** Ending when "End/Save" is tapped: a session forgotten overnight would last hours. Closing every session from an earlier day: one still going past midnight would be cut. Ending a session without sets at its start: it would record no time.
+**Not:** Ending when "End/Save" is tapped: a session forgotten for hours would last hours. Closing every session from an earlier day: one still going past midnight would be cut. Closing only sessions from an earlier day: a morning's session left open would take the evening's sets. Keeping a session with nothing logged: a mistaken start would wait as a card. Ending a session without sets at its start: it would record no time.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1887,11 +1907,11 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R99 · Where exercises are made and managed
 
-**Rule:** Exercises are made in the flow, from the session's "Add an exercise" sheet (Start, Strength, the session), and managed under More, grouped by module in R19's order. Editing lives only under More.
+**Rule:** Exercises are made in the flow, from the session's "Add an exercise" sheet (Start, Strength, the session), and managed under More, grouped by module in R19's order; an exercise with no module goes in "Other" after them, and archived exercises in "Archived" at the foot, each with "Bring it back". Within a group exercises run by last use, the latest first, as in the add sheet (R100). Editing lives only under More.
 
-**Evidence:** The groups follow Start's order so a list repeated across screens keeps one order (`app-register-layout`, skill review 2026-11-26).
+**Evidence:** The groups follow Start's order and the exercises the add sheet's, so a list repeated across screens keeps one order (`app-register-layout`, skill review 2026-11-26).
 
-**Acceptance:** The add sheet has no edit action; More lists the exercises grouped by module in R19's order, each opening its editor.
+**Acceptance:** The add sheet has no edit action; More lists the exercises grouped by module in R19's order, then "Other", then "Archived", the latest used first in each, each opening its editor; an exercise with no module is listed under "Other".
 
 **Not:** More, "Exercises and routines", ungrouped, as the first thing a new person does: clunky and low on the smooth path. Edit and Open pills on each row: "Open" was unclear, and the add sheet has no editing.
 
@@ -1914,6 +1934,7 @@ Shape, line, elevation and motion (the same at both densities):
 | "New exercise" | always shown; starts with the picked tags |
 | an exercise in the session when the sheet opens | not listed |
 | a row tapped | stays in place, its pill reading "Added" with a tick; a second tap takes it back out; rows never move while the sheet is open |
+| an exercise made, or brought back (R102), from "New exercise" | joins the list's end as an "Added" row; the rows above it stay |
 | "X added to this session." | screen-reader text only, never shown |
 
 **Evidence:** Built into the trial as version 2 and adjusted in round 3 (2026-10-30): the visible line pushed the list down on the first add. With pill shapes whose ends change with width, tapping a row could wrap its details and move 11 of 14 rows below (2026-10-31), see R112. The order by last use and the module picked on opening follow `app-register-layout`'s most-used-first and route-cost requirements: adding two exercises scrolled 674 dp at 384 dp and 3420 dp at 360 dp and font size 2.0 with A-Z (skill review, 2026-11-26).
@@ -1957,11 +1978,11 @@ Shape, line, elevation and motion (the same at both densities):
 | modules offered | the chosen modules, plus any the exercise already carries |
 | a name already used, case ignored | refused: "You already have an exercise called Plank." |
 | a name an archived exercise has, case ignored | refused: "You have an archived exercise called Plank." with "Bring it back", which unarchives it with its history and discards the form in progress; from Edit it opens the revived exercise in its editor, and from the add sheet's "New exercise" it joins the session as an "Added" row |
-| archive | a quiet pill at the foot of Edit; archived exercises leave the list, their sets stay; no archived list yet |
+| archive | a quiet pill at the foot of Edit; archived exercises leave their group for "Archived" (R99), their sets stay |
 | Back with unsaved changes | a one-line sheet "Discard your changes?" with Discard and Keep editing |
 | look | the stone language, judged on the 6T |
 
-**Acceptance:** Saving "plank" beside "Plank" shows the refusal; an archived exercise is gone from the list with its sets kept in History; saving "Plank" while "Plank" is archived offers "Bring it back", and taking it lists the exercise again with its sets.
+**Acceptance:** Saving "plank" beside "Plank" shows the refusal; an archived exercise moves to "Archived" with its sets kept in History, and "Bring it back" there returns it to its group; saving "Plank" while "Plank" is archived offers "Bring it back", and taking it lists the exercise again with its sets.
 
 **Not:** Archived names left free: two exercises called "Plank" could exist, one of them hidden.
 
@@ -2003,7 +2024,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R105 · How modules are picked in the editor
 
-**Rule:** The editor's modules are filter chips that wrap (pattern 2.2), and a picked chip keeps its width (R126's picked state), so picking never moves a chip to another line.
+**Rule:** The editor's modules are filter chips that wrap (pattern 2.2), picked by outline and weight as R126 says, and each chip reserves the width of its picked label, so picking never moves a chip to another line.
 
 **Why:** Pattern 2.2 scored 3.23 on the owner's axes (`research/refs-2026-11-01/score/results.html`).
 
@@ -2013,7 +2034,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Not:** Chips that widen when picked: one moved to the next line.
 
-**Since:** 2026-11-26 · builder · own words
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R106 · How categories are picked in the editor
 
@@ -2158,7 +2179,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R52 · Gates G1-G5: The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp and font sizes 1.0-2.0.
 - R127 · Pressed and focused pieces: Each piece's golden includes its pressed and its focused state; with a keyboard, Tab reaches every control on a screen and its ring shows.
 - R128 · One-message screens: On the goldens of R92 and R122 at 1.0 and 2.0, the line's last row ends within `space.section` of the bottom zone.
-- R129 · Ending, archiving and deleting: Each control's screen test finds it last in its group and at least 16 dp from the main action; Undo within 10 s restores the session or the exercise as it was; deleting asks first.
+- R129 · Ending, archiving and deleting: Each control's screen test finds it last in its group and at least 16 dp from the main action; Undo within 10 s restores the session or the exercise as it was, and with a longer "Time to take action" the Undo stays that long; deleting asks first.
 - R53 · Greyscale: Every colour role in `design/tokens.json` resolves to a grey or a black alpha, and with the phone in dark theme the app draws as in light.
 - R54 · Screen width: At 600 dp wide the content column is 412 dp and centred on the screen.
 - R55 · Fit on the phone's app area: The goldens of the 6T's app area pass with and without the sheet.
@@ -2175,9 +2196,9 @@ Shape, line, elevation and motion (the same at both densities):
 - R65 · Stone language: The goldens of the gallery pass, and the pieces' sizes match the decided mockups within 1 dp.
 - R66 · The tab bar's valley: `TabBarTest` checks the valley's geometry and motion; the tab goldens pass.
 - R67 · The live comparison: On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Isometric to Timed, the card shows none of the Isometric sets as last time.
-- R68 · Set input: Each stepper tap moves the value by 1; a tap on the number raises the system numeric keyboard with the number and its row in view at font sizes 1.0 and 2.0; 61.25 kg is stored as 61250 g.
+- R68 · Set input: Each stepper tap moves the value by its step (60 → 62.5 kg, 5 → 6 reps, 30 → 35 s); a tap on the number raises the system numeric keyboard with the number and its row in view at font sizes 1.0 and 2.0; 61.25 kg is stored as 61250 g.
 - R69 · The main bar and running controls: Every doing screen draws one main bar at the bottom; no running control sits beside it.
-- R70 · The running control on the exercise screen: The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s leaves no row for that hold, shows its clock counting from the hold's start, and the rest round leaves.
+- R70 · The running control on the exercise screen: The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s leaves no row for that hold, shows its clock counting from the hold's start, and the rest round leaves; an Undo after a skip shows the round with the time it had left; while a rest runs the window keeps the screen on, and after it does not.
 - R71 · The rest timer: With the plan, the exercise and the default all set, the plan's length wins, even over an exercise's "None"; with none but the default, the default runs; an exercise set to "None" starts no rest; a per-side hold rests only after its second side; ±30 s moves the remaining time by 30 s.
 - R72 · Default rest length: A fresh install's Settings shows a 2 min default rest, and a rest started with no plan or exercise length counts down from 2:00.
 - R73 · Session clock: The clock's bounds are the same on all six session and exercise screens.
@@ -2202,12 +2223,12 @@ Shape, line, elevation and motion (the same at both densities):
 - R122 · When the data was set aside: A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed (`ShellViewModelTest.aSetAsideFileIsToldUntilDismissed`, `SetAsideTest`); the set-aside file is still on disk.
 - R94 · What Start shows: With Strength and Stamina chosen and only Strength built, Start shows two cards in that order, Stamina's reading "Arrives in a later update".
 - R95 · Session names: A session started on a Tuesday at 08:00 is "Tuesday morning", and one at 00:30 on a Wednesday "Wednesday night"; at 360 dp and font size 2.0 it shortens only if the full name does not fit.
-- R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
+- R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" at 09:40 on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened at 18:00 on a session whose last set was at 08:31 the same day closes it at 08:31 and shows the module cards; Start opened 3 h 1 min after a session with nothing logged began leaves no session; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
 - R97 · Start's date line: On 2026-10-20 the line reads "Tuesday 20 October".
-- R99 · Where exercises are made and managed: The add sheet has no edit action; More lists the exercises grouped by module in R19's order, each opening its editor.
+- R99 · Where exercises are made and managed: The add sheet has no edit action; More lists the exercises grouped by module in R19's order, then "Other", then "Archived", the latest used first in each, each opening its editor; an exercise with no module is listed under "Other".
 - R100 · The add sheet: Tapping a row twice leaves every row's position unchanged; an exercise added before the sheet opened is not listed; opened from a Strength session, the sheet lists Strength's exercises at once, the last used first.
 - R101 · Changing an exercise's type: Switching the type of an exercise with logged sets shows the question, and "Keep" leaves the type unchanged; an Isometric exercise offers no partial-reps switch.
-- R102 · Editing an exercise: Saving "plank" beside "Plank" shows the refusal; an archived exercise is gone from the list with its sets kept in History; saving "Plank" while "Plank" is archived offers "Bring it back", and taking it lists the exercise again with its sets.
+- R102 · Editing an exercise: Saving "plank" beside "Plank" shows the refusal; an archived exercise moves to "Archived" with its sets kept in History, and "Bring it back" there returns it to its group; saving "Plank" while "Plank" is archived offers "Bring it back", and taking it lists the exercise again with its sets.
 - R103 · Exercise editor fields: Plank can be made with 60 s rest, a note and the category "core", and the session shows its note; a new exercise's rest reads "Default".
 - R104 · How the type is chosen in the editor: "New exercise" opens the type sheet before the form, and the form shows the picked type with "Change".
 - R105 · How modules are picked in the editor: Picking and unpicking each module chip leaves every chip where it was, at 360 and 384 dp and font sizes 1.0 and 2.0.

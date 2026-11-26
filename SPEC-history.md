@@ -293,3 +293,25 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R112 · renamed · "Pill and chip shapes" → "Pill and chip ends" · builder
 - 2026-11-26 · R112 · changed · default: round action pills, 8 dp choice chips · builder
 - 2026-11-26 · R12 · changed · default: the boulder on the page grey, in the safe zone · builder
+- 2026-11-26 · R08 · changed · the design skills settle, the owner signs off · owner
+- 2026-11-26 · R53 · changed · dark-gym glare recorded as an accepted cost · owner
+- 2026-11-26 · R56 · changed · shrink floor: set number 35, partials on the heading's 20 · owner
+- 2026-11-26 · R60 · changed · compact set number 35 sp, compact body lines 21 sp; partials take the heading · owner
+- 2026-11-26 · R62 · changed · evidence points to the palette round · owner
+- 2026-11-26 · R65 · changed · greys from the palette round; pressable worn cards on the 1 dp shadow · owner
+- 2026-11-26 · R75 · changed · the figure's body #1e1e1e → #1c1c1c · owner
+- 2026-11-26 · R126 · changed · evidence: the palette round's values · owner
+- 2026-11-26 · R105 · changed · chips reserve their picked width; citation fixed · owner
+- 2026-11-26 · R129 · changed · Undo as after a hold, longer with "Time to take action"; delete on its own screen · owner
+- 2026-11-26 · R78 · changed · the note chip's target on R50's step 1 · owner
+- 2026-11-26 · R90 · changed · the tick area excludes the chip's touch area · owner
+- 2026-11-26 · R127 · changed · focus ring in ink.primary, 2 dp outside the shape · owner
+- 2026-11-26 · R68 · changed · steps: 2.5 kg, 1 rep, 5 s · owner
+- 2026-11-26 · R70 · changed · Undo after a skip; screen kept on during a rest · owner
+- 2026-11-26 · R87 · changed · idle sessions closed or dropped, any day · owner
+- 2026-11-26 · R96 · changed · close after 3 h idle on any day; drop a session with nothing logged · owner
+- 2026-11-26 · R99 · changed · "Other" and "Archived" groups; exercises by last use · owner
+- 2026-11-26 · R100 · changed · a new or brought-back exercise joins the list's end · owner
+- 2026-11-26 · R102 · changed · archived exercises move to "Archived" · owner
+- 2026-11-26 · R94 · changed · no module chosen: "Nothing here." with "Choose paths" · owner
+- 2026-11-26 · R122 · changed · line says the old data can be restored once backups arrive · owner

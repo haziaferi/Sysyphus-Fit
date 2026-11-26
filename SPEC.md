@@ -11,6 +11,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | ID | Name | Section |
 |---|---|---|
 | D-R01 | Jobs and how often | 1. Purpose and jobs |
+| D-R125 | Purpose profile | 1. Purpose and jobs |
 | D-R02 | Records and comments, never prescribes | 1. Purpose and jobs |
 | D-R03 | Platform | 2. Platform and build |
 | D-R04 | Package name | 2. Platform and build |
@@ -65,6 +66,9 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | O-R50 | Touch areas and hierarchy | 9. Screen rules |
 | D-R51 | Judgement-free | 9. Screen rules |
 | D-R52 | Gates G1-G5 | 9. Screen rules |
+| D-R127 | Pressed and focused pieces | 9. Screen rules |
+| D-R128 | One-message screens | 9. Screen rules |
+| D-R129 | Ending, archiving and deleting | 9. Screen rules |
 | D-R53 | Greyscale | 9. Screen rules |
 | D-R54 | Screen width | 9. Screen rules |
 | D-R55 | Fit on the phone's app area | 9. Screen rules |
@@ -75,6 +79,7 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R60 | Type roles | 10. Type and tokens |
 | D-R61 | Text line boxes | 10. Type and tokens |
 | D-R62 | Design tokens | 10. Type and tokens |
+| D-R126 | Colour and spacing targets | 10. Type and tokens |
 | D-R63 | Evidence note sheet spacing | 10. Type and tokens |
 | D-R64 | Icons | 11. Visual language |
 | D-R65 | Stone language | 11. Visual language |
@@ -118,14 +123,14 @@ Kinds: O owner rule · D decided · I inherited · A assumed · Q open.
 | D-R101 | Changing an exercise's type | 16. Exercises and routines |
 | D-R102 | Editing an exercise | 16. Exercises and routines |
 | D-R103 | Exercise editor fields | 16. Exercises and routines |
-| Q-R104 | How the type is chosen in the editor | 16. Exercises and routines |
-| Q-R105 | How modules are picked in the editor | 16. Exercises and routines |
-| Q-R106 | How categories are picked in the editor | 16. Exercises and routines |
-| Q-R107 | How optional fields show | 16. Exercises and routines |
-| Q-R108 | How the default rest is picked | 16. Exercises and routines |
-| Q-R109 | How notes are written | 16. Exercises and routines |
+| D-R104 | How the type is chosen in the editor | 16. Exercises and routines |
+| D-R105 | How modules are picked in the editor | 16. Exercises and routines |
+| D-R106 | How categories are picked in the editor | 16. Exercises and routines |
+| D-R107 | How optional fields show | 16. Exercises and routines |
+| D-R108 | How the default rest is picked | 16. Exercises and routines |
+| D-R109 | How notes are written | 16. Exercises and routines |
 | Q-R111 | How the add sheet adds | 16. Exercises and routines |
-| Q-R112 | Pill and chip shapes | 16. Exercises and routines |
+| Q-R112 | Pill and chip ends | 16. Exercises and routines |
 | D-R113 | How the add sheet's search reaches categories | 16. Exercises and routines |
 | D-R114 | Categories and labels | 16. Exercises and routines |
 | D-R115 | No streaks | Out of scope |
@@ -194,6 +199,31 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 **Acceptance:** none: this ranks jobs; the rules that apply it carry their own checks.
 
 **Since:** 2026-11-21 · owner · agreed rewording
+
+### D-R125 · Purpose profile
+
+**Rule:** Every screen is designed and judged against the profile below, which the design skills read through `design/direction.md`. Design questions are settled by the evaluations of the dedicated skills (`app-register-layout`, `typography-spacing-core`, `visual-craft` with `color-optimization-core`, `design-critique-plus` with `design-system-plus`), each recorded in the rule it settles; the owner picks only where they leave a tie or a matter of taste.
+
+**Values:**
+
+| Field | Profile |
+|---|---|
+| purpose | record what was done and comment on it neutrally, against the person's own past (R02, R51) |
+| posture and hands | portrait, mostly one thumb; the phone held or set down between sets |
+| context | home, gym or outdoors, in short glances between sets; walks outdoors in daylight |
+| frequency | R01's table |
+| stakes | a logged value lost or wrong; a mis-tap that ends, archives or deletes |
+| data | body measures and weight are sensitive |
+| tone | 0.25 on `app-register-layout`'s scale: no deadlines, no targets to fall short of, a gap is not a failure |
+| comparison | the person's own history only; never other people |
+| requirements that lead | legibility and reach mid-set, mis-tap safety, fit at font size 2.0, the route cost of logging, rows that never move |
+| requirements that do not apply | urgency colouring, social comparison, splitting screens by module (modules are tags, R23) |
+
+**Evidence:** Placed from R01, R02, R23 and R51 by two `app-register-layout` reviews, which put the tone at 0.25 and 0.3 with the person's own history as the comparison, near the skill's sleep-tracking anchor (2026-11-26, `research/skill-review-2026-11-26.md`).
+
+**Acceptance:** none: a profile; each design rule's Evidence cites the skill evaluation that settled it.
+
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R02 · Records and comments, never prescribes
 
@@ -317,11 +347,11 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** What is the app's launcher icon?
 
-**Default:** none proposed: an icon is a visual decision, which the owner left for a design round of its own on 2026-11-21; lint's `MissingApplicationIcon` is suppressed in the manifest until there is one.
+**Default:** The rocc1 boulder alone in `rest.stone` on a `surface.page` background layer, inside the adaptive icon's safe zone, checked at 48 dp on dark and light wallpapers, with the same ground for the splash screen (`visual-craft`, skill review 2026-11-26). Changes: the launcher icon and the splash; lint's `MissingApplicationIcon` stays suppressed in the manifest until it is drawn in its own design round.
 
-**Why:** The boulder alone reads at launcher size (about 48 dp), while the figure pushing it tells more of the story but shrinks to a few pixels.
+**Why:** The boulder alone reads at launcher size (about 48 dp), while the figure pushing it tells more of the story but shrinks to a few pixels, under `visual-craft`'s 4% stroke minimum.
 
-**Since:** 2026-11-21 · owner · agreed rewording
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R13 · Signing key
 
@@ -824,13 +854,13 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | hybrid | 0.841 |
 | by module | 0.61 |
 
-**Evidence:** Method ported from Factotum (`research/purpose-2026-10-20/`: `purpose-map-method.md`, the checker `purpose_map.py --map <json>` with a selftest, `score_maps.py`), on the owner's axes with equal weights: few overlaps, calm load per screen, taps to common tasks, purpose coherence. Factotum's Today and purpose map are a skeleton to adapt, not a blueprint.
+**Evidence:** Method ported from Factotum (`research/purpose-2026-10-20/`: `purpose-map-method.md`, the checker `purpose_map.py --map <json>` with a selftest, `score_maps.py`), on the owner's axes with equal weights: few overlaps, calm load per screen, taps to common tasks, purpose coherence. Factotum's Today and purpose map are a skeleton to adapt, not a blueprint. The calm-load limit of 8 comes from Factotum's Today, and the taps axis weighs the nine tasks equally; weighted by R01's frequencies the mean taps move from 2.33 to 2.21 by purpose and from 2.11 to 1.98 for the hybrid [estimate], so the order holds (`app-register-layout` review, 2026-11-26).
 
 **Acceptance:** `purpose_map.py --map` passes on the working map: all 162 harvest rows placed, shared or left out.
 
 **Not:** Screens by module: it duplicates the session, history and exercise screens per module.
 
-**Since:** 2026-10-20 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R45 · Purposes and screens
 
@@ -898,12 +928,12 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | Step | Balanced / compact | Used for |
 |---|---|---|
 | minimum | 42 dp | never below (gate G4) |
-| 1 | 48 / 44 dp | chips, the smaller steppers (partials), icon buttons |
+| 1 | 48 / 44 dp | chips (the module card's "info" chip included), segmented choices, checkboxes, switches, the header title's tap (R56), the smaller steppers (partials), icon buttons |
 | 2 | 56 / 48 dp | rows, the main bar, the set steppers |
 | 3 | 64-72 / 56-72 dp | module cards, the tab bar, the floating control |
 | maximum | 72 dp at font size 1.0 | the rest round, its touch target growing with the round (about 121 dp at 2.0, R80) |
 
-**Evidence:** 42 dp is above WCAG 2.2 AA (24 px) and below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner flags it. The ladder meets `app-register-layout`'s hit-area requirement (a minimum, steps by importance, a maximum, no overlap), checked 2026-11-21; its sizes are the `size` tokens of `design/tokens.json`, not measured on rendered screens.
+**Evidence:** 42 dp is above WCAG 2.2 AA (24 px) and below Android's 48 dp guideline and WCAG AAA (44 px); Android's Accessibility Scanner flags it. The ladder meets `app-register-layout`'s hit-area requirement (a minimum, steps by importance, a maximum, no overlap), checked 2026-11-21; its sizes are the `size` tokens of `design/tokens.json`, not measured on rendered screens. Not checked: segmented choices are 44 dp from a private `SEGMENT_HEIGHT` in `Choices.kt`, under step 1's 48 dp, and the "info" chip's target lies inside its card's tick area (skill review, 2026-11-26).
 
 **Acceptance:** Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp; every touch target's `size` token sits on one row of the ladder.
 
@@ -913,11 +943,13 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R51 · Judgement-free
 
-**Rule:** Wording and charts never judge: no streaks, "Nothing here." when a list is empty, and charts and tracking are part of the app, never presented as success against failure. "No judgement" is how the app is built, never something it says, and mechanics a module has anyway (routines) are not named.
+**Rule:** Wording and charts never judge: no streaks, "Nothing here." when a list is empty, followed by the one neutral action that fills it where there is one ("Log afterwards"), and charts and tracking are part of the app, never presented as success against failure. "No judgement" is how the app is built, never something it says, and mechanics a module has anyway (routines) are not named.
 
-**Acceptance:** No screen text praises, blames or counts missed days; the empty state reads "Nothing here."
+**Evidence:** The action after "Nothing here." follows `app-register-layout`'s requirement that an empty state names the next step (skill review, 2026-11-26).
 
-**Since:** 2026-11-21 · owner · agreed rewording
+**Acceptance:** No screen text praises, blames or counts missed days; the empty state reads "Nothing here.", with its action where the list has one.
+
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R52 · Gates G1-G5
 
@@ -929,10 +961,10 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 |---|---|
 | G1 | no overlaps |
 | G2 | nothing clipped or wider than the screen |
-| G3 | touch targets at least 5 dp apart |
+| G3 | touch targets at least 5 dp apart, none inside another |
 | G4 | touch areas at least 42 dp |
-| G5 | no lost text with long real values at font sizes 1.0, 1.3, 1.5 and 2.0 on the curve of R56, which every Android version the app runs on uses: nothing cut, clipped, covered by the rest round, the figure or the main bar, or crossing other text; a title's "…" with its full text on a tap is allowed, and text below the fold of a scrolling body counts as kept |
-| axes | harmony, density, visual and functional hierarchy, reach and legibility, taps per set, at-a-glance clarity, consistency |
+| G5 | no lost text with long real values at font sizes 1.0, 1.3, 1.5 and 2.0 on the curve of R56, which every Android version the app runs on uses: nothing cut, clipped, covered by the rest round, the figure, the main bar or the keyboard (R68), or crossing other text; a title's "…" with its full text on a tap is allowed, and text below the fold of a scrolling body counts as kept |
+| axes | harmony, density (counted on the first screen against two outside apps doing the same job), visual and functional hierarchy, reach and legibility, taps per set, at-a-glance clarity, consistency |
 
 **Acceptance:** The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp and font sizes 1.0-2.0.
 
@@ -940,13 +972,57 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
+### D-R127 · Pressed and focused pieces
+
+**Rule:** Every piece you press shows a pressed look drawn in its own shape, and a 2 dp focus ring in `fill.dark` that follows that shape when keyboard or switch access reaches it; Foundation's rectangular default never shows. No control is drawn disabled: one that cannot act is not shown, or its screen says why, and the main bar always acts (R90).
+
+**Evidence:** Required by `design-system-plus` (component states, focus first) and `visual-craft` (pressed and focus-visible on every button); a visible focus is a floor of `app-register-layout`. Not checked: `Press.kt` uses Foundation's default indication, `ModuleChoiceScreen.kt` and `Sheet.kt` each pass `indication = null`, and each form's pressed look is drawn in the code pass with `visual-craft` (2026-11-26).
+
+**Acceptance:** Each piece's golden includes its pressed and its focused state; with a keyboard, Tab reaches every control on a screen and its ring shows.
+
+**Not:** A disabled look: it reads as broken, and the app has no step that waits on a condition.
+
+**Since:** 2026-11-26 · owner · agreed rewording
+
+### D-R128 · One-message screens
+
+**Rule:** A screen that tells one thing and offers one action (R92, R122) sets its title and line just above the bottom zone, next to that action. The space above stays empty, as the screen has nothing else to show.
+
+**Evidence:** `ck analyse` finds 68% of the can't-open screen and 62% of the set-aside screen empty at font size 1.0, the message 570 dp above its bar; `app-register-layout` and `design-critique-plus` take an empty pane only with a stated reason (2026-11-26). Not checked: the screens still draw the message at the top.
+
+**Acceptance:** On the goldens of R92 and R122 at 1.0 and 2.0, the line's last row ends within `space.section` of the bottom zone.
+
+**Not:** The message at the top with the action at the bottom: the eye and the thumb travel the whole screen between them.
+
+**Since:** 2026-11-26 · owner · agreed rewording
+
+### D-R129 · Ending, archiving and deleting
+
+**Rule:** A control that ends, archives or deletes sits last among its neighbours, apart from the main action, as the rows below say. Where the act can be undone, an Undo shows for 10 s, as after a rest (R70); a delete that cannot be undone asks first, naming what goes. More and Settings order their rows by R01's frequency, a setting before what depends on it, and deleting last.
+
+**Values:**
+
+| Control | Where | After it |
+|---|---|---|
+| "End/Save" (R96) | the resume card's pill, never the main bar | "Session ended · Undo", which reopens it |
+| archive (R102) | a quiet pill at the foot of Edit | "Archived · Undo" |
+| delete (R45) | last in Settings | a sheet naming what is deleted, with "Delete" and "Keep" |
+
+**Evidence:** `app-register-layout`'s mis-tap safety and order requirements (a destructive row last, spaced or confirmed, so a tap aimed at a neighbour lands on it under 5% of the time), skill review 2026-11-26. Not checked: none of these controls is built.
+
+**Acceptance:** Each control's screen test finds it last in its group and at least 16 dp from the main action; Undo within 10 s restores the session or the exercise as it was; deleting asks first.
+
+**Since:** 2026-11-26 · owner · agreed rewording
+
 ### D-R53 · Greyscale
 
-**Rule:** The app is greyscale until the palette is discussed with the owner.
+**Rule:** The app is greyscale and light only, whatever the phone's dark theme, until the palette is discussed with the owner. It has no status colours yet; when one comes, it carries a second cue besides colour.
 
-**Acceptance:** Every colour role in `design/tokens.json` resolves to a grey or a black alpha.
+**Evidence:** The app draws no night variant (2026-11-26). `visual-craft` asks for the light, dark or both decision and for status roles with a second cue (skill review, 2026-11-26).
 
-**Since:** 2026-10-20 · owner · migrated
+**Acceptance:** Every colour role in `design/tokens.json` resolves to a grey or a black alpha, and with the phone in dark theme the app draws as in light.
+
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R54 · Screen width
 
@@ -1037,27 +1113,27 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R60 · Type roles
 
-**Rule:** Every text element takes one role below, balanced / compact. In the comparison card, "Set N" (label) and the column heads (eyebrow) are 14 sp and the values body at 16 sp, at both densities; the evidence-note chip is 11 sp on 16 sp lines in the secondary grey on every screen it appears.
+**Rule:** Every text element takes one role below, balanced / compact; in the comparison card, "Set N" (label) and the column heads (eyebrow) are 14 sp and the values body at 16 sp at both densities, and the evidence-note chip is 11 sp on 16 sp lines in the secondary grey. At both densities the set number is at least 2.5 times body and body's lines at least 1.5 times its size. At font size 2.0 each heading outranks the content under it on the screen where they meet, by weight or carve where size alone does not.
 
 **Values:**
 
 | Role | Used for (stage 1a mockups) | Size sp | Line height sp | Weight | Carve | Features |
 |---|---|---|---|---|---|---|
 | label | secondary text, values beside a row | 13 / 12 | 20 / 16 | 400 | 0 | |
-| eyebrow | section heads, dates, column heads, a note's fact names: tracked capitals | 13 / 12 | 16 / 16 | 500 | 0 | |
+| eyebrow | section heads, dates, column heads, a note's fact names: capitals tracked 0.08 em | 13 / 12 | 16 / 16 | 500 | 0 | |
 | body | running text and rows | 16 / 14 | 24 / 20 | 400 | 0 | |
 | row title | names in rows, weekly amounts, the running timer | 19 / 17 | 24 / 24 | 500 | 100 | `tnum` on numbers |
 | heading | screen titles, large secondary values | 23 / 20 | 28 / 24 | 500 | 100 | |
 | exercise | the exercise's name on its own screen | 28 / 24 | 32 / 28 | 500 | 100 | |
 | set number | the set's weight, reps and partials | 40 / 34 | 44 / 40 | 500 | 100 | `tnum` |
 
-**Evidence:** From the polish round's type scale; `python tools/tokens.py check` compares this table with `design/tokens.json`.
+**Evidence:** From the polish round's type scale; `python tools/tokens.py check` compares this table with `design/tokens.json`. `typography-spacing-core` finds the sizes a minor third (1.2) apart, its pick for dense interfaces, and the headings' lines within its band (2026-11-26). Not checked: compact set number 34 / 14 is 2.43 and compact body lines 20 / 14 are 1.43, so the code pass moves them to 35 sp and 21 sp; on R56's curve at 2.0, heading and exercise differ by 1.05 in size, untested on the exercise screen.
 
-**Acceptance:** `python tools/tokens.py check` passes.
+**Acceptance:** `python tools/tokens.py check` passes and checks both ratios; at font size 2.0 the exercise screen's golden shows each heading above its content in weight or carve.
 
-**Not:** A 48 / 40 dp keypad readout: the app's own keypad is gone (R68), so it is not a token.
+**Not:** A 48 / 40 dp keypad readout: the app's own keypad is gone (R68), so it is not a token. A 50-70 character measure: the 6T's 352 dp column holds about 44 body characters a line, 25 at font size 2.0.
 
-**Since:** 2026-10-27 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R61 · Text line boxes
 
@@ -1158,15 +1234,41 @@ Shape, line, elevation and motion (the same at both densities):
 | motion.reduced | nothing turns or slides; the figure holds still; the ring and the time move once a second; the valley jumps (R74, R66) |  |
 <!-- tokens:end -->
 
-**Evidence:** `tools/tokens.py check` (CI runs it) checks every reference resolves, every raw value is used by a role, the density pairs, this spec's tables and `Tokens.kt`. Taken from the decided screens as drawn: rebuilt from the file, all 40 (20 per density) matched them pixel for pixel. The owner then merged #6a6a6a into #6b6b6b, drew History's date spindle in the edge grey and dropped the note's facts hairline. Kept apart though close: text #1c1c1c and the stone #1e1e1e, secondary text #575757 and the main bar's dip light #5a5a5a, the page #ebebeb and worn cards #f0f0f0, cards #fafafa and white. Contrast (WCAG 2.2, every text and icon on every surface it sits on, both densities): all pass, the lowest secondary text on the page at 6.1:1, where text needs 4.5:1 and icons 3:1 (2026-10-28).
+**Evidence:** `tools/tokens.py check` (CI runs it) checks every reference resolves, every raw value is used by a role, the density pairs, this spec's tables and `Tokens.kt`. Taken from the decided screens as drawn: rebuilt from the file, all 40 (20 per density) matched them pixel for pixel. The owner then merged #6a6a6a into #6b6b6b, drew History's date spindle in the edge grey and dropped the note's facts hairline. Kept apart though close: text #1c1c1c and the stone #1e1e1e, secondary text #575757 and the main bar's dip light #5a5a5a, the page #ebebeb and worn cards #f0f0f0, cards #fafafa and white. Contrast (WCAG 2.2, every text and icon on every surface it sits on, both densities): all pass AA, the lowest secondary text on the page at 6.1:1 (2026-10-28); R126 sets the targets the values must meet, which they miss.
 
 **Acceptance:** `python tools/tokens.py check` passes.
 
-**Since:** 2026-10-28 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
+
+### D-R126 · Colour and spacing targets
+
+**Rule:** The values in `design/tokens.json` meet the targets below at both densities, and `tools/tokens.py check` fails on a miss. A value that misses one changes through a palette or spacing round with the skill named in its row, not by hand.
+
+**Values:**
+
+| Target | Requirement | Skill |
+|---|---|---|
+| text contrast | every text, secondary text included, at least 7:1 on every surface it sits on; icons and outlines that carry meaning 3:1 | `visual-craft` (outdoor glances, R125) |
+| control separation | a fill you press stands at least 10 ΔE2000 from the ground it sits on, or has an edge that does | `visual-craft`, `design-system-plus` |
+| close greys | two greys under 2 ΔE2000 apart serve one role and merge, or move apart | `design-system-plus` |
+| picked state | a picked chip, segment or box differs from its unpicked form by at least 3:1, by outline and weight, never by the main bar's fill; the checkbox's tick keeps `fill.dark` | `design-critique-plus` |
+| spacing unit | balanced spaces are multiples of 8 dp (4 allowed), compact ones of 4 dp; `space.note-head` is the one exception (R63) | `typography-spacing-core` |
+| gap under a head | at least half the head's line height | `typography-spacing-core` |
+| padding | a card's or row's vertical padding is a space token with a compact value, never a number in code | `design-system-plus` |
+
+**Evidence:** From the skill review of 2026-11-26 (`research/skill-review-2026-11-26.md`). Not checked: today's tokens miss these: secondary text `#575757` is 6.06:1 on the page and 5.42:1 on `surface.sunk`; worn cards stand 1.06 ΔE2000 from the page, light pebbles 3.1 and sunk pills 2.6; four pairs are under 2 (text and stone 0.63, secondary text and the dip light 1.07, page and worn 1.06, card and white 1.00); selected and unselected outlines differ by 2.66:1; compact `space.eyebrow` is 4 dp under 16 dp lines; `Surfaces.kt` pads cards with a literal 12 dp.
+
+**Acceptance:** `python tools/tokens.py check` computes each row and passes.
+
+**Not:** The 4.5:1 floor alone for text: the app is read in glances, outdoors too (R125).
+
+**Since:** 2026-11-26 · owner · agreed rewording
 
 ### D-R63 · Evidence note sheet spacing
 
 **Rule:** The evidence note's sheet has `space.note-head` under its eyebrow and the claim in `type.note-claim`, as below.
+
+**Why:** The owner read the note as too dense on the 6T; its 12 dp head and its claim's lines (1.47 and 1.41) are deliberate exceptions to R126's spacing unit and R60's 1.5 line ratio, which is for body.
 
 **Values:**
 
@@ -1175,19 +1277,21 @@ Shape, line, elevation and motion (the same at both densities):
 | balanced | 12 dp | the row title's 19 sp on 28 sp lines |
 | compact | 12 dp | 17 sp on the compact row title's 24 sp lines (1.41, against 1.47) |
 
-**Evidence:** Chosen by the owner on the 6T walk of the foundation gallery, where the note read too dense (2026-10-28).
+**Evidence:** Chosen by the owner on the 6T walk of the foundation gallery (2026-10-28).
 
 **Acceptance:** The note sheet's golden matches these values.
 
 **Not:** As drawn, 8 dp and 24 sp lines: too dense; most, 16 dp and 30 sp lines.
 
-**Since:** 2026-10-28 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ## 11. Visual language
 
 ### D-R64 · Icons
 
 **Rule:** Icons are the app's own set of 28, drawn on a 24 grid with a 2 dp stroke and no fill. Object icons are faceted, while the path icons (navigation, chevrons, play, stop, timer, tabs) and − and + keep round caps. Holds and partial reps are shown as text, not markers.
+
+**Why:** Object icons are things, so they take the stone's facets (R65); path icons and − and + are signs, not things, so they keep the round caps that `visual-craft` asks of one icon set.
 
 **Values:**
 
@@ -1203,11 +1307,11 @@ Shape, line, elevation and motion (the same at both densities):
 | Session clock | a wristwatch, so it cannot be taken for the circled "i" at 24 px |
 | Start tab | a play sign in a rounded square, for the same reason |
 
-**Evidence:** Chosen by the owner after scoring variants on legibility at 1x and distinctness (`research/screens-2026-10-20/polish/icons/review-2026-10-21`).
+**Evidence:** Chosen by the owner after scoring variants on legibility at 1x and distinctness (`research/screens-2026-10-20/polish/icons/review-2026-10-21`). Not checked: legibility at 16 dp and 48 dp, which `visual-craft` asks for.
 
-**Acceptance:** `IconsTest` and `StoneIconTest` pass.
+**Acceptance:** `IconsTest` and `StoneIconTest` pass, and every icon stays distinct at 16 dp and 48 dp.
 
-**Since:** 2026-10-28 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R65 · Stone language
 
@@ -1274,13 +1378,15 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R68 · Set input
 
-**Rule:** − and + change a value by 1 at a time, and tapping the number opens the phone's own numeric keyboard; the app draws no keypad of its own. Weight accepts up to two decimals (61.25 kg), stored in grams.
+**Rule:** − and + change a value by 1 at a time, and tapping the number opens the phone's own numeric keyboard; the app draws no keypad of its own. With the keyboard up, the body scrolls so the number being typed and its set row stay above the keyboard. Weight accepts up to two decimals (61.25 kg), stored in grams.
 
-**Acceptance:** Each stepper tap moves the value by 1; a tap on the number raises the system numeric keyboard; 61.25 kg is stored as 61250 g.
+**Evidence:** Not checked: on the 2026-10-22 mockups the keyboard covered the set value by 44 dp and the − stepper by 46 dp, and the body did not scroll (`ck layout`, skill review 2026-11-26).
+
+**Acceptance:** Each stepper tap moves the value by 1; a tap on the number raises the system numeric keyboard with the number and its row in view at font sizes 1.0 and 2.0; 61.25 kg is stored as 61250 g.
 
 **Not:** The app's own keypad: replaced by the phone's keyboard.
 
-**Since:** 2026-10-22 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R69 · The main bar and running controls
 
@@ -1479,7 +1585,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R80 · The rest round grows with its time
 
-**Rule:** The boulder, the white ring and the figure scale together by the time's font scale, so the time keeps its asked size inside the ring; a time still wider than the ring at that size ("10:00") steps down until it fits. The round stays on the centre line with the figure at its left, and at large font sizes it may sit below the first screenful and scroll with the body.
+**Rule:** The boulder, the white ring and the figure scale together by the time's font scale, so the time keeps its asked size inside the ring; a time still wider than the ring at that size ("10:00") steps down until it fits. The round stays on the centre line with the figure at its left, and at large font sizes it may sit below the first screenful and scroll with the body; while it is out of view, the remaining time also shows as plain text in a fixed place outside the body, set by the exercise screen's layout evaluation.
 
 **Values:**
 
@@ -1488,7 +1594,9 @@ Shape, line, elevation and motion (the same at both densities):
 | 1.0 | 19 sp | 1.0× | 80 dp |
 | 2.0 | 32 dp | 1.68× | about 135 dp; its 72 dp touch target scales with it to about 121 dp |
 
-**Acceptance:** At font size 2.0 the boulder is about 135 dp, its touch target about 121 dp, and "10:00" fits inside the ring.
+**Evidence:** The time outside the body follows `app-register-layout`'s co-visibility requirement: what a step needs shows together (skill review, 2026-11-26). Not checked: not built.
+
+**Acceptance:** At font size 2.0 the boulder is about 135 dp, its touch target about 121 dp, and "10:00" fits inside the ring; scrolled so the round is out of view, the time still shows.
 
 **Not:** The time shrinking inside an unchanged 80 dp boulder (0.760 against 0.762; the time stopped at 24 dp where 32 were asked); a time fixed in dp (0.749); the time beside the round (0.708).
 
@@ -1615,7 +1723,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R90 · The module choice screen
 
-**Rule:** Before the tabs, with no tab bar, the app asks once for the modules, with the wording below. All five modules start unticked and all five are offered, each one not built yet marked "Arrives in a later update"; stepping forward with none ticked is a choice, and a tap anywhere on a card ticks it.
+**Rule:** Before the tabs, with no tab bar, the app asks once for the modules, with the wording below. All five modules start unticked and all five are offered, each one not built yet marked "Arrives in a later update"; stepping forward with none ticked is a choice, and a tap anywhere on a card but its "info" chip ticks it.
 
 **Values:**
 
@@ -1640,15 +1748,15 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R91 · Module cards on the choice
 
-**Rule:** Each card shows the module's icon before its name and an "info" chip (carved lines, `type.chip`) that opens a small raised card in place with "Includes: …"; Back or a tap elsewhere closes it, and with TalkBack the open card is announced while the list behind it waits. At large font sizes the cards follow R88's reflow, and the screen keeps clear of the sides as R85 says. A choice is recorded even when Back follows "Step forward" at once, and while it is read only the page is drawn.
+**Rule:** Each card shows the module's icon before its name and an "info" chip (carved lines, `type.chip`), whose touch target lies outside the card's tick area and at least 5 dp from it, that opens a small raised card in place with "Includes: …"; Back or a tap elsewhere closes it, and with TalkBack the open card is announced while the list behind it waits. At large font sizes the cards follow R88's reflow, and the screen keeps clear of the sides as R85 says. A choice is recorded even when Back follows "Step forward" at once, and while it is read only the page is drawn.
 
-**Evidence:** The owner's picks on the 6T: the "info" chip over two symbol marks ("info is more explanatory"), the icon before the name. A mutant on Back closing the card was caught (2026-10-29).
+**Evidence:** The owner's picks on the 6T: the "info" chip over two symbol marks ("info is more explanatory"), the icon before the name. A mutant on Back closing the card was caught (2026-10-29). Not checked: the chip's target lies inside the card's toggle (`ModuleChoiceScreen.kt`), which `design-critique-plus` counts as overlapping targets (2026-11-26).
 
 **Acceptance:** `ModuleChoiceScreenTest` checks the open card, Back and TalkBack; `ShellViewModelTest.aChoiceSurvivesLeavingAtOnce` checks the choice survives Back.
 
 **Not:** The circled "i" as the mark: it stays the evidence notes' (R16).
 
-**Since:** 2026-10-29 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R92 · When the data cannot be opened
 
@@ -1680,9 +1788,9 @@ Shape, line, elevation and motion (the same at both densities):
 |---|---|
 | title | "Your data was damaged" |
 | line | "It couldn't be read, so it was set aside on your phone, not deleted. The app starts again from the beginning; restoring a backup comes in a later update." |
-| bar | "Continue" |
+| bar | "Start fresh" |
 
-**Evidence:** The set-aside file on disk is the mark (`newestSetAside`), so a failed open or a killed process after the set-aside cannot lose the notice; "Continue" records its stamp as seen (`set_aside_seen`), and a later file is told again. Goldens `set-aside-balanced-{100,200}` (2026-11-26). Not checked: restoring a backup made before the damage brings back no seen stamp, so the notice shows once more.
+**Evidence:** The set-aside file on disk is the mark (`newestSetAside`), so a failed open or a killed process after the set-aside cannot lose the notice; "Start fresh" records its stamp as seen (`set_aside_seen`), and a later file is told again. Goldens `set-aside-balanced-{100,200}` (2026-11-26). Not checked: restoring a backup made before the damage brings back no seen stamp, so the notice shows once more.
 
 **Acceptance:** A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed (`ShellViewModelTest.aSetAsideFileIsToldUntilDismissed`, `SetAsideTest`); the set-aside file is still on disk.
 
@@ -1706,6 +1814,8 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** Start shows only the chosen modules, in R19's order, with the wording below. Start is built straight in the stone language, with no variants to score, and passes the gates of R52 before the owner judges it on the 6T walk.
 
+**Why:** On Start "Arrives in a later update" takes the pill's place because the card cannot be started; on the module choice (R90) it is a line under the description because the card can still be ticked.
+
 **Values:**
 
 | Case | Start shows |
@@ -1715,7 +1825,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Acceptance:** With Strength and Stamina chosen and only Strength built, Start shows two cards in that order, Stamina's reading "Arrives in a later update".
 
-**Since:** 2026-10-29 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R95 · Session names
 
@@ -1777,13 +1887,15 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R99 · Where exercises are made and managed
 
-**Rule:** Exercises are made in the flow, from the session's "Add an exercise" sheet (Start, Strength, the session), and managed under More, grouped by module. Editing lives only under More.
+**Rule:** Exercises are made in the flow, from the session's "Add an exercise" sheet (Start, Strength, the session), and managed under More, grouped by module in R19's order. Editing lives only under More.
 
-**Acceptance:** The add sheet has no edit action; More lists the exercises grouped by module, each opening its editor.
+**Evidence:** The groups follow Start's order so a list repeated across screens keeps one order (`app-register-layout`, skill review 2026-11-26).
+
+**Acceptance:** The add sheet has no edit action; More lists the exercises grouped by module in R19's order, each opening its editor.
 
 **Not:** More, "Exercises and routines", ungrouped, as the first thing a new person does: clunky and low on the smooth path. Edit and Open pills on each row: "Open" was unclear, and the add sheet has no editing.
 
-**Since:** 2026-10-30 · owner · migrated
+**Since:** 2026-11-26 · owner · migrated
 
 ### D-R100 · The add sheet
 
@@ -1793,7 +1905,9 @@ Shape, line, elevation and motion (the same at both densities):
 
 | Case | Behaviour |
 |---|---|
-| tags offered | the modules, plus the person's own categories (R103), never labels (R114); tags A-Z, exercises A-Z; tags no exercise carries are hidden |
+| tags offered | the modules in R19's order, then the person's own categories A-Z (R103), never labels (R114); tags no exercise carries are hidden |
+| opened from a module's session | that module's tag starts picked |
+| exercises listed | by last use, the latest first, the order fixed when the sheet opens; those never used after them, A-Z |
 | several tags | the exercises carrying all of them |
 | no tag and no name | no list |
 | a typed word with no tag | searches every exercise's name and categories (R113) |
@@ -1802,9 +1916,9 @@ Shape, line, elevation and motion (the same at both densities):
 | a row tapped | stays in place, its pill reading "Added" with a tick; a second tap takes it back out; rows never move while the sheet is open |
 | "X added to this session." | screen-reader text only, never shown |
 
-**Evidence:** Built into the trial as version 2 and adjusted in round 3 (2026-10-30): the visible line pushed the list down on the first add. With pill shapes whose ends change with width, tapping a row could wrap its details and move 11 of 14 rows below (2026-10-31), see R112.
+**Evidence:** Built into the trial as version 2 and adjusted in round 3 (2026-10-30): the visible line pushed the list down on the first add. With pill shapes whose ends change with width, tapping a row could wrap its details and move 11 of 14 rows below (2026-10-31), see R112. The order by last use and the module picked on opening follow `app-register-layout`'s most-used-first and route-cost requirements: adding two exercises scrolled 674 dp at 384 dp and 3420 dp at 360 dp and font size 2.0 with A-Z (skill review, 2026-11-26).
 
-**Acceptance:** Tapping a row twice leaves every row's position unchanged; an exercise added before the sheet opened is not listed.
+**Acceptance:** Tapping a row twice leaves every row's position unchanged; an exercise added before the sheet opened is not listed; opened from a Strength session, the sheet lists Strength's exercises at once, the last used first.
 
 **Not:** Listing the session's exercises as "Added" too: a tap could take out one with logged sets.
 
@@ -1863,7 +1977,7 @@ Shape, line, elevation and motion (the same at both densities):
 |---|---|
 | Default rest | optional; Default · None · 30 s · 60 s · 90 s · 2 min · 3 min; Default (where it starts) uses Settings' length (R72), None means no rest after its sets (R71) |
 | Notes | free text (self-notes, cues, equipment), readable from inside the session; whether it is also edited there, against R48 and R99, is settled in the Strength session plan |
-| Categories | the person's own words (dumbbells, core, push, legs), several per exercise, apart from modules and session labels; typed into a field that shows nothing until the first letter, then existing ones matching the start of any word, A-Z, and a "New: X" row, case ignored; none to start with |
+| Categories | the person's own words (dumbbells, core, push, legs), several per exercise, apart from modules and session labels; picked as R106 says, a search matching the start of any word, case ignored; none to start with |
 
 **Evidence:** Schema 3 holds `exercise.rest_seconds` (null for Default, 0 for None), `exercise.note` and the `category` and `exercise_category` tables (R121, 2026-11-26). Not checked: the editor is not built.
 
@@ -1873,85 +1987,107 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
-### Q-R104 · How the type is chosen in the editor
+### D-R104 · How the type is chosen in the editor
 
-**Rule:** How does the editor ask for an exercise's type?
+**Rule:** "New exercise" first asks "What kind of exercise?" in a sheet with the four types (pattern 1.1); the form then shows the type as a plain line with "Change", whose touch target sits on R50's step 1. Changing it later follows R101.
 
-**Default:** Pattern 1.1, asked before the form (3.17): "New exercise" opens a dialog "What kind of exercise?" with the four types, and the form shows the type as a plain line with "Change". Changes: the editor's top and the add sheet's "New exercise" step. Next: 1.4, the inline segmented bar of editor A (3.06).
+**Why:** Pattern 1.1 scored highest on the owner's axes from outside references (3.17, against 3.06 for 1.4, the inline segmented bar; `research/refs-2026-11-01/score/results.html`), and it fits a job done rarely, at the start (R01).
 
-**Why:** Scored on the owner's axes from outside references (`research/refs-2026-11-01/score/results.html`); the owner picks next.
+**Evidence:** `app-register-layout` supports 1.1 asked in a sheet: its low consistency score (2.3 against 3.7) came from a centred dialog stacked over the add sheet (skill review, 2026-11-26).
 
-**Since:** 2026-11-01 · builder · own words
+**Acceptance:** "New exercise" opens the type sheet before the form, and the form shows the picked type with "Change".
 
-### Q-R105 · How modules are picked in the editor
+**Not:** A centred dialog: stacked over the add sheet, it is a second kind of overlay. Pattern 1.4, the inline segmented bar (3.06).
 
-**Rule:** How does the editor show and pick an exercise's modules?
+**Since:** 2026-11-26 · builder · own words
 
-**Default:** Pattern 2.2, filter chips that wrap (3.23), as in editor A. Changes: the modules control only.
+### D-R105 · How modules are picked in the editor
 
-**Why:** Scored on the owner's axes (`research/refs-2026-11-01/score/results.html`).
+**Rule:** The editor's modules are filter chips that wrap (pattern 2.2), and a picked chip keeps its width (R126's picked state), so picking never moves a chip to another line.
 
-**Since:** 2026-11-01 · builder · own words
+**Why:** Pattern 2.2 scored 3.23 on the owner's axes (`research/refs-2026-11-01/score/results.html`).
 
-### Q-R106 · How categories are picked in the editor
+**Evidence:** `app-register-layout` supports 2.2 only with the width kept: as drawn, a picked module chip moved to another line (`measure.json`), a row moving under the finger (skill review, 2026-11-26).
 
-**Rule:** How does the editor show and pick categories?
+**Acceptance:** Picking and unpicking each module chip leaves every chip where it was, at 360 and 384 dp and font sizes 1.0 and 2.0.
 
-**Default:** Pattern 3.3, chips in the form plus a picker over it (3.28): a "Categories" row with the picked chips and "+ Add" opening a sheet with a search box, every category as a checkbox row A-Z, a "Create x" row, and Done. Changes: the type-ahead of R103 gives way to the picker sheet.
+**Not:** Chips that widen when picked: one moved to the next line.
 
-**Why:** Scored on the owner's axes (`research/refs-2026-11-01/score/results.html`).
+**Since:** 2026-11-26 · builder · own words
 
-**Since:** 2026-11-01 · builder · own words
+### D-R106 · How categories are picked in the editor
 
-### Q-R107 · How optional fields show
+**Rule:** A "Categories" row shows the picked categories as chips and "+ Add", which opens a sheet with a search box, every category as a checkbox row A-Z, a "Create x" row and Done (pattern 3.3).
 
-**Rule:** How does the editor show its optional fields (categories, notes, default rest)?
+**Why:** Pattern 3.3 scored 3.28 on the owner's axes (`research/refs-2026-11-01/score/results.html`).
 
-**Default:** Pattern 4.1, everything up front with the optional ones marked "(optional)" (3.26). Changes: the marks only. Next: 4.2, value rows that open sheets (3.17), which wins on the judged axes.
+**Evidence:** `app-register-layout` supports it: the least scroll (64 dp), the picks visible in the form, and the app's own sheet (skill review, 2026-11-26).
 
-**Why:** Scored on the owner's axes (`research/refs-2026-11-01/score/results.html`).
+**Acceptance:** Plank gets "core" through "+ Add", typing "co", ticking "core" and Done, and the form shows "core"; "Create cardio" makes the category and picks it.
 
-**Since:** 2026-11-01 · builder · own words
+**Not:** A type-ahead field in the form: R103 had one until 2026-11-26.
 
-### Q-R108 · How the default rest is picked
+**Since:** 2026-11-26 · builder · own words
 
-**Rule:** How does the editor pick the default rest?
+### D-R107 · How optional fields show
 
-**Default:** Pattern 5.1, a value row "Default rest · Default ›" opening a list of the seven choices of R103, a tap picks and closes (3.37). Changes: the rest chips of editor A become one row. Next: 5.2, the chips inline (3.34), within the plateau.
+**Rule:** The editor shows its optional fields as value rows that open a sheet or a list (pattern 4.2): categories as R106 says, the default rest as R108 says; notes are R109's box.
 
-**Why:** Scored on the owner's axes (`research/refs-2026-11-01/score/results.html`).
+**Why:** Pattern 4.2 wins on the judged axes (3.17); 4.1, everything up front marked "(optional)", led overall (3.26) on familiarity and a code-size proxy (`research/refs-2026-11-01/score/results.html`).
+
+**Evidence:** `app-register-layout` picks 4.2: making exercises is rare (R01), so its extra taps cost little, every field comes within 46 dp of the first screen against 174 dp, and at 360 dp and font size 2.0 the form scrolls 352 dp against 702; it also matches R106 and R108 (skill review, 2026-11-26).
+
+**Acceptance:** At 384 dp and font size 1.0, every field of a new exercise's form starts within 46 dp of the first screen.
+
+**Not:** Pattern 4.1: more scroll on a rare job, its lead from familiarity rather than from a requirement.
+
+**Since:** 2026-11-26 · builder · own words
+
+### D-R108 · How the default rest is picked
+
+**Rule:** The default rest is a value row "Default rest · Default ›" that opens a list of R103's seven choices; a tap picks and closes (pattern 5.1).
+
+**Why:** Pattern 5.1 scored 3.37 on the owner's axes, 5.2, the chips inline, 3.34 (`research/refs-2026-11-01/score/results.html`).
+
+**Evidence:** `app-register-layout` supports it: mis-tap safety 3.7 against 2.8, and the inline chips widened 24.9 dp when picked (skill review, 2026-11-26).
+
+**Acceptance:** Tapping the row, then "60 s", closes the list and the row reads "Default rest · 60 s".
+
+**Not:** Pattern 5.2: the chips widen when picked.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
-### Q-R109 · How notes are written
+### D-R109 · How notes are written
 
-**Rule:** How does the editor hold notes?
+**Rule:** Notes are a box in the form that grows with its text (pattern 6.3).
 
-**Default:** Pattern 6.3, a box in the form that grows (3.56), the only clear win of the round. Changes: none to editor A.
+**Why:** Pattern 6.3 scored 3.56, the only clear win of the round (`research/refs-2026-11-01/score/results.html`).
 
-**Why:** Scored on the owner's axes (`research/refs-2026-11-01/score/results.html`).
+**Evidence:** `app-register-layout` supports it (skill review, 2026-11-26).
 
-**Since:** 2026-11-01 · builder · own words
+**Acceptance:** A five-line note shows whole in the form, with no scrolling inside the box.
+
+**Since:** 2026-11-26 · builder · own words
 
 ### Q-R111 · How the add sheet adds
 
 **Rule:** How does the add sheet take several exercises?
 
-**Default:** Pattern A.1, the checklist that stays open with rows that stay put (3.14), as R100 has it. Changes: none. Next: A.4, tick several then confirm with "Add 2" (3.12).
+**Default:** Pattern A.1, the checklist that stays open with rows that stay put (3.14), as R100 has it. Changes: none. Next: A.4, tick several then confirm with "Add 2" (3.12). `app-register-layout` finds a plateau and leans to A.4 on scroll (2068 dp against 3420 at 360 dp and font size 2.0), measured with exercises A-Z; it is measured again with R100's order by last use before the exercises plan.
 
 **Why:** Scored on the owner's axes (`research/refs-2026-11-01/score/results.html`).
 
-**Since:** 2026-11-01 · builder · own words
+**Since:** 2026-11-26 · builder · own words
 
-### Q-R112 · Pill and chip shapes
+### Q-R112 · Pill and chip ends
 
-**Rule:** What shape do pills and chips take, and how does a picked chip show?
+**Rule:** What ends do action pills and choice chips take?
 
-**Default:** Ends: pattern P.2, a small-radius rounded rectangle (8 dp) sized to its label (3.18), though the judges preferred P.1's round ends. Picked state: P.4, the colour changes and the width stays (2.88), which keeps every row of R100 still. Changes: `radius.pebble-pill` and the pills of R65.
+**Default:** Action pills with round ends (P.1, which the judges preferred) and choice chips as 8 dp rounded rectangles sized to their label (P.2, 3.18), so the two roles do not share one shape. Changes: `radius.pebble-pill`, the pills of R65 and the chips.
 
-**Why:** `radius.pebble-pill` is in % of the pill's size, so the ends change shape with width and look uneven across label lengths; the owner is rethinking the pebble pills.
+**Why:** `radius.pebble-pill` is in % of the pill's size, so the ends change shape with width and look uneven across label lengths, and the owner is rethinking the pebble pills. The skills leave the ends to taste and ask only that roles which differ look different (`design-critique-plus`); the picked state is settled by R126 and R105.
 
-**Since:** 2026-11-01 · builder · own words
+**Since:** 2026-11-26 · builder · own words
 
 ### D-R113 · How the add sheet's search reaches categories
 
@@ -2018,24 +2154,28 @@ Shape, line, elevation and motion (the same at both densities):
 - R48 · One home per thing: Every edit action in the app leads to one screen per thing.
 - R49 · One form per element: The stone pieces in `ui/stone` are the only implementations of these elements, and their goldens match on every screen that uses them.
 - R50 · Touch areas and hierarchy: Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp; every touch target's `size` token sits on one row of the ladder.
-- R51 · Judgement-free: No screen text praises, blames or counts missed days; the empty state reads "Nothing here."
+- R51 · Judgement-free: No screen text praises, blames or counts missed days; the empty state reads "Nothing here.", with its action where the list has one.
 - R52 · Gates G1-G5: The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp and font sizes 1.0-2.0.
-- R53 · Greyscale: Every colour role in `design/tokens.json` resolves to a grey or a black alpha.
+- R127 · Pressed and focused pieces: Each piece's golden includes its pressed and its focused state; with a keyboard, Tab reaches every control on a screen and its ring shows.
+- R128 · One-message screens: On the goldens of R92 and R122 at 1.0 and 2.0, the line's last row ends within `space.section` of the bottom zone.
+- R129 · Ending, archiving and deleting: Each control's screen test finds it last in its group and at least 16 dp from the main action; Undo within 10 s restores the session or the exercise as it was; deleting asks first.
+- R53 · Greyscale: Every colour role in `design/tokens.json` resolves to a grey or a black alpha, and with the phone in dark theme the app draws as in light.
 - R54 · Screen width: At 600 dp wide the content column is 412 dp and centred on the screen.
 - R55 · Fit on the phone's app area: The goldens of the 6T's app area pass with and without the sheet.
 - R56 · Text follows the phone's font size: The unit tests check Android 14's curve at 2.0, the same curve on Android 11 at 1.3 (`android11UsesTheSameNonlinearCurve`, `lineBoxFollowsTheTextOnAndroid11`), and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
 - R57 · Density: A fresh install draws balanced, and the compact setting switches every token to its compact value.
 - R58 · English first: Every string the app shows is English.
 - R59 · Typeface: The theme's unit tests check the variable axes and the carve by role.
-- R60 · Type roles: `python tools/tokens.py check` passes.
+- R60 · Type roles: `python tools/tokens.py check` passes and checks both ratios; at font size 2.0 the exercise screen's golden shows each heading above its content in weight or carve.
 - R61 · Text line boxes: The goldens at 1.3 and 2.0 pass, and wrapped lines never overlap.
 - R62 · Design tokens: `python tools/tokens.py check` passes.
+- R126 · Colour and spacing targets: `python tools/tokens.py check` computes each row and passes.
 - R63 · Evidence note sheet spacing: The note sheet's golden matches these values.
-- R64 · Icons: `IconsTest` and `StoneIconTest` pass.
+- R64 · Icons: `IconsTest` and `StoneIconTest` pass, and every icon stays distinct at 16 dp and 48 dp.
 - R65 · Stone language: The goldens of the gallery pass, and the pieces' sizes match the decided mockups within 1 dp.
 - R66 · The tab bar's valley: `TabBarTest` checks the valley's geometry and motion; the tab goldens pass.
 - R67 · The live comparison: On the exercise screen, last time's set N shows before set N is logged, and no other history appears; after a change from Isometric to Timed, the card shows none of the Isometric sets as last time.
-- R68 · Set input: Each stepper tap moves the value by 1; a tap on the number raises the system numeric keyboard; 61.25 kg is stored as 61250 g.
+- R68 · Set input: Each stepper tap moves the value by 1; a tap on the number raises the system numeric keyboard with the number and its row in view at font sizes 1.0 and 2.0; 61.25 kg is stored as 61250 g.
 - R69 · The main bar and running controls: Every doing screen draws one main bar at the bottom; no running control sits beside it.
 - R70 · The running control on the exercise screen: The rest round's top is at the same y on every exercise screen of a density; an Undo within 10 s leaves no row for that hold, shows its clock counting from the hold's start, and the rest round leaves.
 - R71 · The rest timer: With the plan, the exercise and the default all set, the plan's length wins, even over an exercise's "None"; with none but the default, the default runs; an exercise set to "None" starts no rest; a per-side hold rests only after its second side; ±30 s moves the remaining time by 30 s.
@@ -2046,7 +2186,7 @@ Shape, line, elevation and motion (the same at both densities):
 - R77 · What the figure and the stone share: `rest.ring-track` resolves to `rest.near-leg` in `design/tokens.json`.
 - R78 · One centre line: The round's, the values' and the card gap's centres lie on the screen's centre on every exercise screen.
 - R79 · The comparison card at larger font sizes: G1-G5 pass on the exercise screens at every font size G5 names (R52).
-- R80 · The rest round grows with its time: At font size 2.0 the boulder is about 135 dp, its touch target about 121 dp, and "10:00" fits inside the ring.
+- R80 · The rest round grows with its time: At font size 2.0 the boulder is about 135 dp, its touch target about 121 dp, and "10:00" fits inside the ring; scrolled so the round is out of view, the time still shows.
 - R81 · The compact rest screen: G1-G5 pass on the compact exercise screens at 360-412 dp and every font size G5 names (R52).
 - R82 · Navigation: `AppShellTest` checks the tabs, Back, rotation and process death.
 - R83 · The app opens on Start: After the module choice, a cold start shows the Start tab.
@@ -2064,11 +2204,17 @@ Shape, line, elevation and motion (the same at both densities):
 - R95 · Session names: A session started on a Tuesday at 08:00 is "Tuesday morning", and one at 00:30 on a Wednesday "Wednesday night"; at 360 dp and font size 2.0 it shortens only if the full name does not fit.
 - R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
 - R97 · Start's date line: On 2026-10-20 the line reads "Tuesday 20 October".
-- R99 · Where exercises are made and managed: The add sheet has no edit action; More lists the exercises grouped by module, each opening its editor.
-- R100 · The add sheet: Tapping a row twice leaves every row's position unchanged; an exercise added before the sheet opened is not listed.
+- R99 · Where exercises are made and managed: The add sheet has no edit action; More lists the exercises grouped by module in R19's order, each opening its editor.
+- R100 · The add sheet: Tapping a row twice leaves every row's position unchanged; an exercise added before the sheet opened is not listed; opened from a Strength session, the sheet lists Strength's exercises at once, the last used first.
 - R101 · Changing an exercise's type: Switching the type of an exercise with logged sets shows the question, and "Keep" leaves the type unchanged; an Isometric exercise offers no partial-reps switch.
 - R102 · Editing an exercise: Saving "plank" beside "Plank" shows the refusal; an archived exercise is gone from the list with its sets kept in History; saving "Plank" while "Plank" is archived offers "Bring it back", and taking it lists the exercise again with its sets.
 - R103 · Exercise editor fields: Plank can be made with 60 s rest, a note and the category "core", and the session shows its note; a new exercise's rest reads "Default".
+- R104 · How the type is chosen in the editor: "New exercise" opens the type sheet before the form, and the form shows the picked type with "Change".
+- R105 · How modules are picked in the editor: Picking and unpicking each module chip leaves every chip where it was, at 360 and 384 dp and font sizes 1.0 and 2.0.
+- R106 · How categories are picked in the editor: Plank gets "core" through "+ Add", typing "co", ticking "core" and Done, and the form shows "core"; "Create cardio" makes the category and picks it.
+- R107 · How optional fields show: At 384 dp and font size 1.0, every field of a new exercise's form starts within 46 dp of the first screen.
+- R108 · How the default rest is picked: Tapping the row, then "60 s", closes the list and the row reads "Default rest · 60 s".
+- R109 · How notes are written: A five-line note shows whole in the form, with no scrolling inside the box.
 - R113 · How the add sheet's search reaches categories: Typing "legs" with no tag picked lists every exercise named or categorised with a word starting "legs".
 - R114 · Categories and labels: No exercise carries a label and no session a category; the add sheet's tags are modules and categories.
 - R115 · No streaks: No table or column counts days in a row or missed days, and no screen shows one.

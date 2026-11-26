@@ -172,3 +172,32 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-21 · R114 · kind · Q → D · owner
 - 2026-11-21 · R114 · changed · labels on sessions, categories on exercises · owner
 - 2026-11-21 · R117 · changed · acceptance names the one proposal · owner
+- 2026-11-26 · R46 · changed · wording: History listed among the showing screens · owner
+- 2026-11-26 · R50 · changed · wording: each control on the step its row names · owner
+- 2026-11-26 · R90 · changed · wording: modules not built yet, not "the four of stage 1a" · owner
+- 2026-11-26 · R43 · changed · wording: only an item of a routine gets a proposal · owner
+- 2026-11-26 · R114 · changed · wording: Not drops the schema-change reason · owner
+- 2026-11-26 · R87 · changed · a session open from an earlier day is closed at its last set; the new one starts today · owner
+- 2026-11-26 · R96 · changed · End/Save ends at the last set's time · owner
+- 2026-11-26 · R35 · changed · the person is told when a file was set aside · owner
+- 2026-11-26 · R122 · added · screen for data set aside · owner
+- 2026-11-26 · R123 · added · scheduled backups are dated files and never replace a good one · owner
+- 2026-11-26 · R121 · added · session seconds and module, a steps table · owner
+- 2026-11-26 · R29 · changed · an amount keeps its time in seconds · owner
+- 2026-11-26 · R71 · changed · no rest between sides; None is no rest · owner
+- 2026-11-26 · R103 · changed · rest choices gain Default; None is no rest · owner
+- 2026-11-26 · R108 · changed · default row reads Default · owner
+- 2026-11-26 · R124 · added · rest timer in the background, open · owner
+- 2026-11-26 · R52 · changed · G5 also at 1.15 and 1.3 scaled evenly · owner
+- 2026-11-26 · R56 · changed · even scaling on Android 11-13 · owner
+- 2026-11-26 · R50 · changed · maximum grows with the rest round · owner
+- 2026-11-26 · R100 · changed · exercises in the session when the sheet opens are not listed · owner
+- 2026-11-26 · R102 · changed · an archived name offers Bring it back · owner
+- 2026-11-26 · R67 · changed · last time skips sets of another type · owner
+- 2026-11-26 · R101 · changed · comparison skips sets of the old type · owner
+- 2026-11-26 · R120 · changed · never triggered by the person's gaps · owner
+- 2026-11-26 · R95 · changed · the day is the counting day · owner
+- 2026-11-26 · R92 · changed · line ends "the app may need an update"; restore joins with backups · owner
+- 2026-11-26 · R21 · changed · switching a module off hides it and keeps its data · owner
+- 2026-11-26 · R25 · changed · no Body measures section · owner
+- 2026-11-26 · R70 · changed · Undo cancels the rest · owner

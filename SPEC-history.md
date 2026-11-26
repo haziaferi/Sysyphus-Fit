@@ -226,3 +226,11 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R25 · changed · steps take the larger count; measures show in History · owner
 - 2026-11-26 · R21 · changed · Daily movement off stops reminders, prompts and step counting · owner
 - 2026-11-26 · R102 · changed · Bring it back opens the exercise or joins the session · owner
+- 2026-11-26 · R56 · changed · correction: Compose uses the nonlinear curve on Android 11 too · builder
+- 2026-11-26 · R52 · changed · correction: no evenly scaled gate sizes · builder
+- 2026-11-26 · R88 · changed · correction: no evenly scaled tab pages · builder
+- 2026-11-26 · R122 · changed · wording: "Your data was damaged", "Continue" · owner
+- 2026-11-26 · R35 · changed · evidence: AppContainer notes a recovered open · builder
+- 2026-11-26 · R87 · changed · evidence: closeIfIdle built · builder
+- 2026-11-26 · R92 · changed · evidence: goldens re-recorded with the new line · builder
+- 2026-11-26 · R96 · changed · evidence: endAndSave and closeIfIdle built · builder

@@ -13,18 +13,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * What the shell shows: nothing while the setting loads, the module choice until one is recorded (SPEC:R90), then the tabs;
- * [Failed] when the data cannot be opened (owner's call, SPEC:R92), on any launch.
+ * [Failed] when the data cannot be opened (owner's call, SPEC:R92), on any launch; [SetAside] first, on every launch until
+ * dismissed, when a damaged file was set aside (SPEC:R122).
  */
 sealed interface ShellState {
     data object Loading : ShellState
+    data object SetAside : ShellState
     data object Choose : ShellState
     data object Ready : ShellState
     data object Failed : ShellState
@@ -37,11 +39,19 @@ class ShellViewModel(private val settings: Settings) : ViewModel() {
     @OptIn(ExperimentalCoroutinesApi::class)
     val state: StateFlow<ShellState> = attempts
         .flatMapLatest {
-            settings.modules()
-                .map<Set<Module>?, ShellState> { if (it == null) ShellState.Choose else ShellState.Ready }
-                .catch { emit(ShellState.Failed) }
+            combine(settings.setAsideOwed(), settings.modules()) { owed, modules ->
+                when {
+                    owed -> ShellState.SetAside
+                    modules == null -> ShellState.Choose
+                    else -> ShellState.Ready
+                }
+            }.catch { emit(ShellState.Failed) }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ShellState.Loading)
+
+    fun dismissSetAside() {
+        viewModelScope.launch { withContext(NonCancellable) { settings.dismissSetAside() } }
+    }
 
     // NonCancellable: Back right after "Step forward" ends this ViewModel; the choice is recorded all the same.
     fun choose(modules: Set<Module>) {

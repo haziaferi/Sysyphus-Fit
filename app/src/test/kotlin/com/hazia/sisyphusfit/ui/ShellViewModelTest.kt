@@ -85,6 +85,21 @@ class ShellViewModelTest {
         assertEquals(ShellState.Choose, waitFor { vm.state.first { it != ShellState.Failed && it != ShellState.Loading } })
     }
 
+    // SPEC:R122: a file set aside is told before the choice, on every launch until the person dismisses it.
+    @Test fun aSetAsideFileIsToldUntilDismissed() {
+        val recovered = AppContainer({ DatabaseOpen(db, recovered = true) })
+        assertEquals(ShellState.SetAside, waitFor { ShellViewModel(recovered.settings).state.first { it != ShellState.Loading } })
+        // The next launch opens the same, now healthy, file: the notice is still owed.
+        val nextLaunch = ShellViewModel(container.settings)
+        assertEquals(ShellState.SetAside, waitFor { nextLaunch.state.first { it != ShellState.Loading } })
+        nextLaunch.dismissSetAside()
+        assertEquals(ShellState.Choose, waitFor { nextLaunch.state.first { it != ShellState.SetAside && it != ShellState.Loading } })
+    }
+
+    @Test fun aHealthyOpenTellsNothing() {
+        assertEquals(ShellState.Choose, waitFor { ShellViewModel(container.settings).state.first { it != ShellState.Loading } })
+    }
+
     // Back right after "Step forward" ends the ViewModel before the write lands; the choice must still be recorded.
     @Test fun aChoiceSurvivesLeavingAtOnce() {
         val store = ViewModelStore()

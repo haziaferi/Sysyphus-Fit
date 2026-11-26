@@ -662,7 +662,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 **Rule:** Android opens the database through `KeepFileOnCorruptionDriver`, because the stock driver's default handler deletes a corrupt file. `openOrRecover` sets an unopenable file aside as `<name>.unopenable-<stamp>` and opens a fresh one, and the person is told before anything else shows (R122).
 
-**Evidence:** A Robolectric test writes garbage and finds the bytes set aside, with the stock driver as the failing control. Not checked: nothing reads `DatabaseOpen.recovered` yet (`DatabaseRecovery.kt:37`), so a fresh database opens silently (2026-11-26).
+**Evidence:** A Robolectric test writes garbage and finds the bytes set aside, with the stock driver as the failing control. `AppContainer` notes a recovered open for R122's screen (2026-11-26).
 
 **Acceptance:** That Robolectric test passes, and a set-aside file leads to R122's screen.
 
@@ -924,12 +924,12 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | G2 | nothing clipped or wider than the screen |
 | G3 | touch targets at least 5 dp apart |
 | G4 | touch areas at least 42 dp |
-| G5 | no lost text with long real values at font sizes 1.0, 1.3, 1.5 and 2.0 on Android 14's curve, and at 1.15 and 1.3 scaled evenly as Android 11-13 scale it (R56): nothing cut, clipped, covered by the rest round, the figure or the main bar, or crossing other text; a title's "…" with its full text on a tap is allowed, and text below the fold of a scrolling body counts as kept |
+| G5 | no lost text with long real values at font sizes 1.0, 1.3, 1.5 and 2.0 on the curve of R56, which every Android version the app runs on uses: nothing cut, clipped, covered by the rest round, the figure or the main bar, or crossing other text; a title's "…" with its full text on a tap is allowed, and text below the fold of a scrolling body counts as kept |
 | axes | harmony, density, visual and functional hierarchy, reach and legibility, taps per set, at-a-glance clarity, consistency |
 
-**Evidence:** Not checked: the even-scaling sizes have not been gated yet (added 2026-11-26).
+**Acceptance:** The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp and font sizes 1.0-2.0.
 
-**Acceptance:** The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp, font sizes 1.0-2.0 on Android 14's curve, and 1.15 and 1.3 scaled evenly.
+**Not:** Gating Android 11-13 at evenly scaled sizes: Compose scales text on R56's curve on those versions too (2026-11-26).
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -969,7 +969,7 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 
 ### D-R56 · Text follows the phone's font size
 
-**Rule:** The type tokens and their line heights are in sp, so text follows the phone's font size as its Android version scales it: evenly on Android 11-13, on the nonlinear curve up to 200% from Android 14. Padding, gaps, icons and touch targets stay in dp, the rest round's growing with it (R80), and no text has a fixed height. When text does not fit, it gives way as the rows below say.
+**Rule:** The type tokens and their line heights are in sp, so text follows the phone's font size up to 200% on Android 14's nonlinear curve, which Compose applies itself on every Android version the app runs on, the 6T's Android 11 included. Padding, gaps, icons and touch targets stay in dp, the rest round's growing with it (R80), and no text has a fixed height. When text does not fit, it gives way as the rows below say.
 
 **Values:**
 
@@ -982,11 +982,11 @@ SisyphusFit organises and tracks near-daily movement and training, built from tr
 | screen body | scrolls under the fixed main bar; the rest round's band moves down with the card at that font size, so R70's fixed height holds within one font size |
 | card rows, chip, main bar | take their sizes as minimums |
 | Android 14 curve at 2.0 | 11 → 22, 14 → 26, 16 → 28, 19 → 32, 23 → 35.5, 28 → 37.3, 40 → 46.9 dp (AOSP `FontScaleConverterFactory`) |
-| Android 11-13 at 1.3 | every size times 1.3: 19 → 24.7, 28 → 36.4, 40 → 52 dp; the 6T runs Android 11 |
+| the curve at 1.3 | 16 → 20.2 dp, 40 → 40 dp, the same on Android 11 and 16 |
 
-**Evidence:** Gated at 1.0, 1.3, 1.5 and 2.0 with long real values ("102.5 × 12", 142.25 kg, a 10:00 rest, "Single-leg Romanian deadlift", "Wednesday afternoon", 1:12:40) by G1-G5, on Android 14's curve only; the tests run on SDK 36. Sources: Android 14's notes on nonlinear font scaling; WCAG 2.2 SC 1.4.4 (resize to 200% without loss; truncation acceptable when the full content is available on activation) and WCAG2ICT. Not checked: the 6T's own largest text size.
+**Evidence:** Gated at 1.0, 1.3, 1.5 and 2.0 with long real values ("102.5 × 12", 142.25 kg, a 10:00 rest, "Single-leg Romanian deadlift", "Wednesday afternoon", 1:12:40) by G1-G5. Under Robolectric, SDK 30 and SDK 36 give the same sizes at 1.15 and 1.3 (16 sp → 18.1 and 20.2 dp), where an even scale gives 18.4 and 20.8 (2026-11-26). Sources: Android 14's notes on nonlinear font scaling; WCAG 2.2 SC 1.4.4 (resize to 200% without loss; truncation acceptable when the full content is available on activation) and WCAG2ICT. Not checked: the 6T's own largest text size.
 
-**Acceptance:** The unit tests check Android 14's curve at 2.0, even scaling at 1.15 and 1.3, and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
+**Acceptance:** The unit tests check Android 14's curve at 2.0, the same curve on Android 11 at 1.3 (`android11UsesTheSameNonlinearCurve`, `lineBoxFollowsTheTextOnAndroid11`), and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
 
 **Since:** 2026-11-26 · owner · agreed rewording
 
@@ -1574,7 +1574,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Rule:** Starting a session while one is open resumes it instead of failing: `SessionStore.start` returns the open session's id and adds nothing. A session left idle from an earlier day is closed first, as R96 says, so only one still in use is resumed. A database rule allowing only one open session (a partial unique index) waits for the backup plan's schema, where a restore that brings two is settled.
 
-**Evidence:** Not checked: nothing closes an idle session from an earlier day yet (`Sessions.kt:90`), 2026-11-26.
+**Evidence:** `SessionStore.closeIfIdle`, run by Start when it opens; `SessionsTest` and `StartViewModelTest` (2026-11-26).
 
 **Acceptance:** `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal.
 
@@ -1588,7 +1588,7 @@ Shape, line, elevation and motion (the same at both densities):
 
 **Evidence:** Gated on the four tab screens at both densities, 360, 384 and 412 dp, font sizes 1.0-2.0 and long names ("Start Wednesday afternoon", "Single-leg Romanian deadlift · Plank · Walk"): G1-G5 pass on all 144 pages, where the earlier tab pages failed G1, G2 and G4 from 1.3. Owner's axes, equal weights: the pill under with "Log afterwards" in the list 0.864 (2026-10-28).
 
-**Acceptance:** G1-G5 pass on all 144 tab pages, and on the tab pages at the evenly scaled sizes G5 names (R52).
+**Acceptance:** G1-G5 pass on all 144 tab pages.
 
 **Not:** Hiding the tab bar while scrolling down (the owner's pick on the 6T kept it fixed); "Log afterwards" fixed above the main bar (0.823); the whole card as the target with a chevron (0.823, lowest harmony); the pill beside (0.772).
 
@@ -1653,7 +1653,7 @@ Shape, line, elevation and motion (the same at both densities):
 | line | "Nothing has been deleted. Try again; if it keeps failing, the app may need an update." |
 | bar | "Try again" |
 
-**Evidence:** Goldens `cant-open-balanced-{100,200}` (2026-10-29). Not checked: `CantOpenScreen` and its goldens still show the earlier line, which ended "restart your phone" (2026-11-26).
+**Evidence:** Goldens `cant-open-balanced-{100,200}`, re-recorded with this line (2026-11-26).
 
 **Acceptance:** `CantOpenTest` passes (the screen replaces the choice and the tabs; a retry while broken stays; a retry once it opens goes on), and `CantOpenScreenshotTest`'s goldens match.
 
@@ -1663,11 +1663,19 @@ Shape, line, elevation and motion (the same at both densities):
 
 ### D-R122 · When the data was set aside
 
-**Rule:** When R35 has set a damaged file aside and opened a fresh database, a screen says so before the module choice or the tabs, on every launch until the person dismisses it: the data was damaged, kept on the phone and not deleted. Restoring from a backup joins this screen with the backup package. Its wording is settled with the screen's plan (R08).
+**Rule:** When R35 has set a damaged file aside and opened a fresh database, a screen says so before the module choice or the tabs, on every launch until the person dismisses it, with the wording below. Restoring from a backup joins this screen with the backup package.
 
-**Evidence:** Not checked: not built; nothing reads `DatabaseOpen.recovered` (R35), 2026-11-26.
+**Values:**
 
-**Acceptance:** A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed; the set-aside file is still on disk.
+| Part | Wording |
+|---|---|
+| title | "Your data was damaged" |
+| line | "It couldn't be read, so it was set aside on your phone, not deleted. The app starts again from the beginning; restoring a backup comes in a later update." |
+| bar | "Continue" |
+
+**Evidence:** The open notes it in the fresh database's `setting` table (`set_aside_notice`), and "Continue" clears it; goldens `set-aside-balanced-{100,200}` (2026-11-26).
+
+**Acceptance:** A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed (`ShellViewModelTest.aSetAsideFileIsToldUntilDismissed`, `SetAsideTest`); the set-aside file is still on disk.
 
 **Not:** A silent fresh start: the module choice would come back as if the app were new.
 
@@ -1732,7 +1740,7 @@ Shape, line, elevation and motion (the same at both densities):
 | main bar | "Resume this session" |
 | pill | "End/Save" |
 
-**Evidence:** Not checked: `SessionStore.finish` ends a session at the clock's time (`Sessions.kt:120`), 2026-11-26.
+**Evidence:** `SessionStore.endAndSave` ends at the last set, or at the time given for a session without sets, and `SessionStore.closeIfIdle` closes an idle one when Start opens (`SessionsTest`, `StartViewModelTest`, 2026-11-26). Not checked: the resume card and its end-time question are not built, and the app records no pause time to propose yet.
 
 **Acceptance:** With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.
 
@@ -2002,11 +2010,11 @@ Shape, line, elevation and motion (the same at both densities):
 - R49 · One form per element: The stone pieces in `ui/stone` are the only implementations of these elements, and their goldens match on every screen that uses them.
 - R50 · Touch areas and hierarchy: Gates G3 and G4 pass; the unit tests of the pieces check touch targets of at least 42 dp; every touch target's `size` token sits on one row of the ladder.
 - R51 · Judgement-free: No screen text praises, blames or counts missed days; the empty state reads "Nothing here."
-- R52 · Gates G1-G5: The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp, font sizes 1.0-2.0 on Android 14's curve, and 1.15 and 1.3 scaled evenly.
+- R52 · Gates G1-G5: The gate script reports G1-G5 passing on every page of the screen at both densities, 360-412 dp and font sizes 1.0-2.0.
 - R53 · Greyscale: Every colour role in `design/tokens.json` resolves to a grey or a black alpha.
 - R54 · Screen width: At 600 dp wide the content column is 412 dp and centred on the screen.
 - R55 · Fit on the phone's app area: The goldens of the 6T's app area pass with and without the sheet.
-- R56 · Text follows the phone's font size: The unit tests check Android 14's curve at 2.0, even scaling at 1.15 and 1.3, and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
+- R56 · Text follows the phone's font size: The unit tests check Android 14's curve at 2.0, the same curve on Android 11 at 1.3 (`android11UsesTheSameNonlinearCurve`, `lineBoxFollowsTheTextOnAndroid11`), and each piece's font-size behaviour; the goldens at 1.0, 1.3 and 2.0 pass.
 - R57 · Density: A fresh install draws balanced, and the compact setting switches every token to its compact value.
 - R58 · English first: Every string the app shows is English.
 - R59 · Typeface: The theme's unit tests check the variable axes and the carve by role.
@@ -2037,12 +2045,12 @@ Shape, line, elevation and motion (the same at both densities):
 - R85 · Edge to edge: The 6T golden shows the tab bar's surface under the navigation buttons; `SideInsetsTest` keeps the choice and a tab clear of side buttons.
 - R86 · The shared data core: The `:data` store tests (`SettingsTest`, `ExercisesTest`, `SessionsTest`) pass.
 - R87 · Starting while a session is open: `startingWhileOneIsOpenResumesIt` passes; it was red on the old refusal.
-- R88 · Tab screens at larger font sizes: G1-G5 pass on all 144 tab pages, and on the tab pages at the evenly scaled sizes G5 names (R52).
+- R88 · Tab screens at larger font sizes: G1-G5 pass on all 144 tab pages.
 - R89 · Tab roots without screens: Each unbuilt tab's root shows its name; `AppShellTest.eachTabShowsItsRoot` reaches every root.
 - R90 · The module choice screen: `ModuleChoiceScreenTest` and the goldens pass.
 - R91 · Module cards on the choice: `ModuleChoiceScreenTest` checks the open card, Back and TalkBack; `ShellViewModelTest.aChoiceSurvivesLeavingAtOnce` checks the choice survives Back.
 - R92 · When the data cannot be opened: `CantOpenTest` passes (the screen replaces the choice and the tabs; a retry while broken stays; a retry once it opens goes on), and `CantOpenScreenshotTest`'s goldens match.
-- R122 · When the data was set aside: A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed; the set-aside file is still on disk.
+- R122 · When the data was set aside: A launch whose open set a file aside shows this screen first, and so does the next launch if the app was closed before it was dismissed (`ShellViewModelTest.aSetAsideFileIsToldUntilDismissed`, `SetAsideTest`); the set-aside file is still on disk.
 - R94 · What Start shows: With Strength and Stamina chosen and only Strength built, Start shows two cards in that order, Stamina's reading "Arrives in a later update".
 - R95 · Session names: A session started on a Tuesday at 08:00 is "Tuesday morning", and one at 00:30 on a Wednesday "Wednesday night"; at 360 dp and font size 2.0 it shortens only if the full name does not fit.
 - R96 · The resume card: With a session open, Start shows the resume card and no module card; "End/Save" the next morning on a session whose last set was at 08:31 leaves it STOPPED_EARLY, ended at 08:31; Start opened on Wednesday at 09:00 on Tuesday's session, last set 19:10, closes it at 19:10 and shows the module cards; a session started at 23:30 with a set at 00:05 still shows the resume card at 00:15.

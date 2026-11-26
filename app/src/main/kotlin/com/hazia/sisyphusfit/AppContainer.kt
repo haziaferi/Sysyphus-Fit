@@ -7,6 +7,7 @@ import com.hazia.sisyphusfit.data.SessionStore
 import com.hazia.sisyphusfit.data.Settings
 import com.hazia.sisyphusfit.data.SisyphusDatabase
 import com.hazia.sisyphusfit.data.WallClock
+import com.hazia.sisyphusfit.data.oweSetAsideNotice
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
@@ -20,17 +21,20 @@ import kotlinx.coroutines.withContext
  */
 class AppContainer(
     private val open: () -> DatabaseOpen<SisyphusDatabase>,
-    clock: WallClock = WallClock.System,
+    private val clock: WallClock = WallClock.System,
     private val io: CoroutineDispatcher = Dispatchers.IO,
 ) {
     private val lock = Mutex()
     @Volatile private var opened: DatabaseOpen<SisyphusDatabase>? = null
 
     // NonCancellable: a screen left during a slow first open must not throw its result away (a leaked database, and a
-    // second open that no longer knows a corrupt file was set aside).
+    // second open that no longer knows a corrupt file was set aside). A file set aside is noted in the fresh database,
+    // so the person is told until they dismiss it (SPEC:R35, SPEC:R122).
     private val db: Db = {
         opened?.database ?: lock.withLock {
-            opened?.database ?: withContext(io + NonCancellable) { open().also { opened = it } }.database
+            opened?.database ?: withContext(io + NonCancellable) {
+                open().also { if (it.recovered) it.database.oweSetAsideNotice(clock); opened = it }
+            }.database
         }
     }
 

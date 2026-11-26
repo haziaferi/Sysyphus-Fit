@@ -76,15 +76,50 @@ abstract class SessionDao {
         insert(row.copy(position = nextPosition(row.sessionId)))
     }
 
+    @Query("SELECT MAX(done_at) FROM logged_set WHERE session_id = :sessionId")
+    protected abstract suspend fun lastSetAt(sessionId: String): Long?
+
     @Transaction
     open suspend fun finish(sessionId: String, endedAt: Long, state: String) {
         checkOpen(sessionId)
         close(sessionId, endedAt, state)
     }
 
+    @Query("SELECT started_at FROM session WHERE id = :sessionId")
+    protected abstract suspend fun startedAt(sessionId: String): Long?
+
+    /** Stops [sessionId] early at its last set's time, or, with no set, at [askedEnd] (SPEC:R96). */
+    @Transaction
+    open suspend fun stopAtLastSet(sessionId: String, askedEnd: Long?) {
+        checkOpen(sessionId)
+        val end = lastSetAt(sessionId) ?: requireNotNull(askedEnd) { "session $sessionId has no set: ask when it ended" }
+            .also { require(it >= (startedAt(sessionId) ?: it)) { "an end before the session's start" } }
+        close(sessionId, end, "STOPPED_EARLY")
+    }
+
+    @Query("SELECT day FROM session WHERE id = :sessionId")
+    protected abstract suspend fun dayOf(sessionId: String): String?
+
+    /**
+     * Closes the open session at its last set when it began before [today] and its last set is at least [idleMs] before
+     * [now] (SPEC:R96); a session without sets is left for the resume card to ask about. True when one was closed.
+     */
+    @Transaction
+    open suspend fun closeIfIdle(today: String, now: Long, idleMs: Long): Boolean {
+        val id = openId() ?: return false
+        val last = lastSetAt(id) ?: return false
+        val day = dayOf(id) ?: return false
+        if (day >= today || now - last < idleMs) return false
+        close(id, last, "STOPPED_EARLY")
+        return true
+    }
+
     private suspend fun checkOpen(sessionId: String) =
         check(stateOf(sessionId) == "OPEN") { "session $sessionId is not open" }
 }
+
+/** How long a session from an earlier day may sit with no new set before Start closes it (SPEC:R96). */
+private const val IDLE_MS = 3 * 60 * 60 * 1000L
 
 class SessionStore(private val db: Db, private val clock: WallClock) {
     /** Starts a session now, or returns the one already open; it counts on the local day it starts, in the zone it starts in (FA13). */
@@ -118,6 +153,21 @@ class SessionStore(private val db: Db, private val clock: WallClock) {
     /** Ends an open session; stopped early keeps only the sets that were done (KA2). */
     suspend fun finish(sessionId: String, stoppedEarly: Boolean = false) =
         db().sessionDao().finish(sessionId, clock.now(), if (stoppedEarly) "STOPPED_EARLY" else "FINISHED")
+
+    /**
+     * "End/Save" on the resume card (SPEC:R96): stopped early (KA2), ending at its last set's time, not at the tap. A session
+     * without sets ends at [askedEnd], the time the screen asks for.
+     */
+    suspend fun endAndSave(sessionId: String, askedEnd: Long? = null) = db().sessionDao().stopAtLastSet(sessionId, askedEnd)
+
+    /**
+     * What Start does when it opens (SPEC:R96): a session with sets begun on an earlier counting day whose last set is over
+     * 3 h old is stopped early at that set, so today's sets never join it (SPEC:R87). True when one was closed.
+     */
+    suspend fun closeIfIdle(): Boolean {
+        val now = clock.now()
+        return db().sessionDao().closeIfIdle(countingDay(now, clock.zone()).toString(), now, IDLE_MS)
+    }
 
     /** The sets of the last closed session that did [exerciseId]: last time, for the comparison (SG2). */
     suspend fun lastSets(exerciseId: String): List<LoggedSetEntity> = db().floorDao().lastSets(exerciseId)

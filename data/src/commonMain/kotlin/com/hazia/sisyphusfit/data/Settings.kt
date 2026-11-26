@@ -46,7 +46,21 @@ class Settings(private val db: Db, private val clock: WallClock) {
         }
     }
 
+    /** True while the person has not dismissed the notice that a damaged file was set aside (SPEC:R122). */
+    fun setAsideOwed(): Flow<Boolean> = flow { emitAll(db().settingDao().value(SET_ASIDE)) }.map { it == OWED }
+
+    suspend fun dismissSetAside() = db().settingDao().put(Ids.ulid(clock.now()), SET_ASIDE, "0")
+
     private companion object {
         const val MODULES = "modules"
     }
 }
+
+private const val SET_ASIDE = "set_aside_notice"
+private const val OWED = "1"
+
+/**
+ * Records, in the fresh database [openOrRecover] opened, that a damaged file was set aside, so the person is told on every
+ * launch until they dismiss it (SPEC:R35, SPEC:R122).
+ */
+suspend fun SisyphusDatabase.oweSetAsideNotice(clock: WallClock) = settingDao().put(Ids.ulid(clock.now()), SET_ASIDE, OWED)

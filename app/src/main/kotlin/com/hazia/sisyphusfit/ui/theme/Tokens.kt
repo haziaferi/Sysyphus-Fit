@@ -31,9 +31,9 @@ object Tokens {
         /** the screen behind everything */
         val surfacePage = Color(0xFFEBEBEB)
         /** comparison card, facts, light pebbles (steppers, the rest round's control), the tab bar */
-        val surfaceCard = Color(0xFFFAFAFA)
+        val surfaceCard = Color(0xFFFFFFFF)
         /** module cards, week sections, the resume card and rows: cut left, worn right (R65) */
-        val surfaceWorn = Color(0xFFF0F0F0)
+        val surfaceWorn = Color(0xFFF5F5F5)
         /** the soft light toward their worn right side */
         val surfaceWornLight = Color(0xFFFFFFFF)
         /** the bottom zone behind the main bar; secondary pills */
@@ -47,7 +47,7 @@ object Tokens {
         /** text, icons, the current set's pebble outline */
         val inkPrimary = Color(0xFF1C1C1C)
         /** secondary text, the evidence-note chip, tags */
-        val inkSecondary = Color(0xFF575757)
+        val inkSecondary = Color(0xFF4A4A4A)
         /** outlines (flat rows), the 1.5 dp underline of a number you tap to type, the sheet's grab handle, switches */
         val lineEdge = Color(0xFF6B6B6B)
         /** a carved line's cut: column heads, the chip's lines (3 dp, dark over light) */
@@ -57,17 +57,23 @@ object Tokens {
         /** History's carved date divider (owner 2026-10-28: the edge grey, not a grey of its own) */
         val lineSpindle = Color(0xFF6B6B6B)
         /** the 2 dp ground under a pill */
-        val shadowGround = Color(0xFFC4C4C4)
-        /** the 1 dp shadow under light pebbles */
-        val shadowStep = Color(0x2E000000)
+        val shadowGround = Color(0xFFBDBDBD)
+        /** the 1 dp shadow under light pebbles and the worn cards you press: their edge on the page (R126) */
+        val shadowStep = Color(0x33000000)
         /** a sheet's near shadow */
         val shadowFloatNear = Color(0x24000000)
         /** a sheet's far shadow */
         val shadowFloatFar = Color(0x33000000)
         /** behind a sheet */
         val shadowScrim = Color(0x6B000000)
+        /** drawn over a light piece while it is pressed, in its own shape (R127) */
+        val statePressed = Color(0x0F000000)
+        /** a dark piece's fill while it is pressed, under its label (R127) */
+        val statePressedDark = Color(0xFF3B3B3B)
+        /** the focus ring, outside the piece's shape (R127) */
+        val stateFocus = Color(0xFF1C1C1C)
         /** the boulder and the figure (R75, R76) */
-        val restStone = Color(0xFF1E1E1E)
+        val restStone = Color(0xFF1C1C1C)
         /** the figure's near leg (R75) */
         val restNearLeg = Color(0xFF4A4A4A)
         /** the white ring's track before it fills: the near leg's grey (R77) */
@@ -76,10 +82,10 @@ object Tokens {
         val restRing = Color(0xFFFFFFFF)
     }
 
-    class Space(val gutter: Dp, val pad: Dp, val gap: Dp, val section: Dp, val eyebrow: Dp, val foot: Dp, val noteHead: Dp) {
+    class Space(val gutter: Dp, val pad: Dp, val padY: Dp, val gap: Dp, val section: Dp, val eyebrow: Dp, val foot: Dp, val noteHead: Dp) {
         companion object {
-            val Balanced = Space(16.dp, 16.dp, 8.dp, 24.dp, 8.dp, 16.dp, 12.dp)
-            val Compact = Space(12.dp, 12.dp, 8.dp, 16.dp, 4.dp, 12.dp, 12.dp)
+            val Balanced = Space(16.dp, 16.dp, 12.dp, 8.dp, 24.dp, 8.dp, 16.dp, 12.dp)
+            val Compact = Space(12.dp, 12.dp, 8.dp, 8.dp, 16.dp, 8.dp, 12.dp, 12.dp)
         }
     }
 
@@ -126,13 +132,17 @@ object Tokens {
         val underline = 4.dp
         /** the rest round's white ring and its track */
         val ring = 2.6.dp
+        /** the focus ring (R127) */
+        val focus = 2.dp
+        /** between a piece's shape and its focus ring (R127) */
+        val focusGap = 2.dp
     }
 
     object Elevation {
         /** a pill standing on the ground */
-        val ground = listOf(ShadowSpec(0.dp, 2.dp, 0.dp, 0.dp, Color(0xFFC4C4C4), inset = false))
+        val ground = listOf(ShadowSpec(0.dp, 2.dp, 0.dp, 0.dp, Color(0xFFBDBDBD), inset = false))
         /** a light pebble */
-        val step = listOf(ShadowSpec(0.dp, 1.dp, 0.dp, 0.dp, Color(0x2E000000), inset = false))
+        val step = listOf(ShadowSpec(0.dp, 1.dp, 0.dp, 0.dp, Color(0x33000000), inset = false))
         /** a flat row's outline */
         val edgeInset = listOf(ShadowSpec(0.dp, 0.dp, 0.dp, 1.dp, Color(0xFF6B6B6B), inset = true))
         /** a sheet */
@@ -169,11 +179,11 @@ object Tokens {
             val Compact = Type(
                 TypeRole(12.sp, 16.sp, 400, 0f),
                 TypeRole(12.sp, 16.sp, 500, 0f, upper = true, tracking = 0.08f),
-                TypeRole(14.sp, 20.sp, 400, 0f),
+                TypeRole(14.sp, 21.sp, 400, 0f),
                 TypeRole(17.sp, 24.sp, 500, 100f, features = "tnum"),
                 TypeRole(20.sp, 24.sp, 500, 100f),
                 TypeRole(24.sp, 28.sp, 500, 100f),
-                TypeRole(34.sp, 40.sp, 500, 100f, features = "tnum"),
+                TypeRole(35.sp, 40.sp, 500, 100f, features = "tnum"),
                 TypeRole(14.sp, 20.sp, 400, 0f),
                 TypeRole(14.sp, 16.sp, 500, 0f, upper = true, tracking = 0.08f),
                 TypeRole(16.sp, 24.sp, 400, 0f),

@@ -49,6 +49,30 @@ class PiecesTest {
         }
     }
 
+    // SPEC:R50 step 1: segmented choices take size.hit (48 / 44), not the mockups' 44 at both densities.
+    @Test
+    fun segmentsTakeTheTouchTarget() {
+        rule.setContent { SisyphusTheme { Segmented(listOf("Balanced", "Compact"), 0, {}) } }
+        rule.onAllNodes(SemanticsMatcher.expectValue(androidx.compose.ui.semantics.SemanticsProperties.TestTag, "piece:segment"))
+            .fetchSemanticsNodes().forEach {
+                val h = with(rule.density) { it.boundsInRoot.height.toDp() }
+                assertTrue("segment $h", h >= 48.dp - 0.5.dp)
+            }
+    }
+
+    // SPEC:R52 G3: touch targets at least 5 dp apart, none inside another; SPEC:R127: each one can take the focus.
+    @Test
+    fun noTouchTargetInsideAnother() {
+        rule.setContent { SisyphusTheme { PieceSamples() } }
+        val targets = rule.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsActions.OnClick)).fetchSemanticsNodes()
+        targets.forEach { n -> assertTrue("node ${n.id} takes the focus", n.config.getOrNull(SemanticsActions.RequestFocus) != null) }
+        for (a in targets) for (b in targets) {
+            if (a.id == b.id) continue
+            val inside = a.touchBoundsInRoot.let { r -> b.touchBoundsInRoot.let { r.left <= it.left && r.top <= it.top && r.right >= it.right && r.bottom >= it.bottom } }
+            assertTrue("node ${b.id} lies inside node ${a.id}", !inside)
+        }
+    }
+
     @Test
     fun compactPressablesAreAtLeast42dp() {
         rule.setContent { SisyphusTheme(DensityMode.Compact) { PieceSamples() } }
@@ -91,7 +115,7 @@ class PiecesTest {
         assertTrue("$before -> $after", after > before)
     }
 
-    // SPEC:R56: the value shrinks to fit between the steppers, not below the compact token (34 sp), then its unit moves under it.
+    // SPEC:R56: the value shrinks to fit between the steppers, not below its role's compact size (35 sp), then its unit moves under it.
     @Test
     fun stepperValueShrinksThenUnitMovesUnder() {
         RuntimeEnvironment.setFontScale(2f)

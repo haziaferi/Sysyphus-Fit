@@ -254,3 +254,72 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R121 · changed · every restore fills a missing set type; shape compared on the desktop only · builder
 - 2026-11-26 · R33 · changed · evidence: schema-2 files, refused shape told by Room's message · builder
 - 2026-11-26 · R67 · changed · evidence: lastSets matches the exercise's current type · builder
+- 2026-11-26 · R125 · added · purpose profile; design settled by the dedicated skills' evaluations · owner
+- 2026-11-26 · R126 · added · colour and spacing targets from the skill review · owner
+- 2026-11-26 · R127 · added · pressed and focused pieces; no disabled look · owner
+- 2026-11-26 · R128 · added · one-message screens set their message above the bottom zone · owner
+- 2026-11-26 · R129 · added · ending, archiving and deleting: last, apart, Undo or a confirmation · owner
+- 2026-11-26 · R50 · changed · step 1 names segments, checkboxes, switches, the info chip, the header title · owner
+- 2026-11-26 · R51 · changed · "Nothing here." followed by its neutral action · owner
+- 2026-11-26 · R52 · changed · G3 forbids nested targets; G5 includes the keyboard; density counted against two apps · owner
+- 2026-11-26 · R53 · changed · light only; status colours carry a second cue · owner
+- 2026-11-26 · R60 · changed · set number 2.5x body, body lines 1.5x, headings outrank content at 2.0 · owner
+- 2026-11-26 · R62 · changed · evidence: R126 holds the targets · builder
+- 2026-11-26 · R63 · changed · why: deliberate exceptions to the spacing unit and line ratio · builder
+- 2026-11-26 · R64 · changed · why for two cap families; legibility at 16 and 48 dp · builder
+- 2026-11-26 · R68 · changed · the typed number and its row stay above the keyboard · owner
+- 2026-11-26 · R80 · changed · the time shows outside the body while the round is out of view · owner
+- 2026-11-26 · R90 · changed · a tap on the card but its info chip ticks it · owner
+- 2026-11-26 · R91 · changed · the info chip's target lies outside the tick area · owner
+- 2026-11-26 · R94 · changed · why the later-update mark differs from the choice screen · builder
+- 2026-11-26 · R122 · changed · "Continue" → "Start fresh" · owner
+- 2026-11-26 · R44 · changed · evidence: frequency-weighted taps keep the order · builder
+- 2026-11-26 · R99 · changed · More's groups in R19's order · owner
+- 2026-11-26 · R100 · changed · tags in R19's order; exercises by last use; the session's module picked · owner
+- 2026-11-26 · R103 · changed · categories picked as R106 says · builder
+- 2026-11-26 · R104 · kind · Q → D · builder
+- 2026-11-26 · R104 · changed · type asked in a sheet before the form (1.1) · builder
+- 2026-11-26 · R105 · kind · Q → D · builder
+- 2026-11-26 · R105 · changed · wrapping chips that keep their width (2.2) · builder
+- 2026-11-26 · R106 · kind · Q → D · builder
+- 2026-11-26 · R106 · changed · chips plus a picker sheet (3.3) · builder
+- 2026-11-26 · R107 · kind · Q → D · builder
+- 2026-11-26 · R107 · changed · value rows (4.2), the skill's pick over 4.1 · builder
+- 2026-11-26 · R108 · kind · Q → D · builder
+- 2026-11-26 · R108 · changed · value row opening a list (5.1) · builder
+- 2026-11-26 · R109 · kind · Q → D · builder
+- 2026-11-26 · R109 · changed · a box that grows (6.3) · builder
+- 2026-11-26 · R111 · changed · default: re-measure after R100's order · builder
+- 2026-11-26 · R112 · renamed · "Pill and chip shapes" → "Pill and chip ends" · builder
+- 2026-11-26 · R112 · changed · default: round action pills, 8 dp choice chips · builder
+- 2026-11-26 · R12 · changed · default: the boulder on the page grey, in the safe zone · builder
+- 2026-11-26 · R08 · changed · the design skills settle, the owner signs off · owner
+- 2026-11-26 · R53 · changed · dark-gym glare recorded as an accepted cost · owner
+- 2026-11-26 · R56 · changed · shrink floor: set number 35, partials on the heading's 20 · owner
+- 2026-11-26 · R60 · changed · compact set number 35 sp, compact body lines 21 sp; partials take the heading · owner
+- 2026-11-26 · R62 · changed · evidence points to the palette round · owner
+- 2026-11-26 · R65 · changed · greys from the palette round; pressable worn cards on the 1 dp shadow · owner
+- 2026-11-26 · R75 · changed · the figure's body #1e1e1e → #1c1c1c · owner
+- 2026-11-26 · R126 · changed · evidence: the palette round's values · owner
+- 2026-11-26 · R105 · changed · chips reserve their picked width; citation fixed · owner
+- 2026-11-26 · R129 · changed · Undo as after a hold, longer with "Time to take action"; delete on its own screen · owner
+- 2026-11-26 · R78 · changed · the note chip's target on R50's step 1 · owner
+- 2026-11-26 · R90 · changed · the tick area excludes the chip's touch area · owner
+- 2026-11-26 · R127 · changed · focus ring in ink.primary, 2 dp outside the shape · owner
+- 2026-11-26 · R68 · changed · steps: 2.5 kg, 1 rep, 5 s · owner
+- 2026-11-26 · R70 · changed · Undo after a skip; screen kept on during a rest · owner
+- 2026-11-26 · R87 · changed · idle sessions closed or dropped, any day · owner
+- 2026-11-26 · R96 · changed · close after 3 h idle on any day; drop a session with nothing logged · owner
+- 2026-11-26 · R99 · changed · "Other" and "Archived" groups; exercises by last use · owner
+- 2026-11-26 · R100 · changed · a new or brought-back exercise joins the list's end · owner
+- 2026-11-26 · R102 · changed · archived exercises move to "Archived" · owner
+- 2026-11-26 · R94 · changed · no module chosen: "Nothing here." with "Choose paths" · owner
+- 2026-11-26 · R122 · changed · line says the old data can be restored once backups arrive · owner
+- 2026-11-26 · R50 · changed · evidence: segments on size.hit, the chip out of the tick area · builder
+- 2026-11-26 · R91 · changed · the chip in a strip of its own after the box · owner
+- 2026-11-26 · R127 · changed · evidence: StoneIndication and its goldens · builder
+- 2026-11-26 · R128 · changed · evidence: MessageScreen and its test · builder
+- 2026-11-26 · R96 · changed · note, intensity or labels keep a session; End/Save ends at the last set or track point · owner
+- 2026-11-26 · R87 · changed · evidence: starting closes an idle session first · builder
+- 2026-11-26 · R126 · changed · the gap rule names section heads · builder
+- 2026-11-26 · R65 · changed · acceptance: segments at size.hit, not the mockups' 44 · builder

@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -234,7 +235,12 @@ fun TabBar(
                     Modifier
                         .weight(1f)
                         .height(with(density) { barH.toDp() })
-                        .selectable(on, role = Role.Tab) { onSelect(i) },
+                        .selectable(
+                            on,
+                            interactionSource = stoneSource(),
+                            indication = StoneIndication(RoundedCornerShape(Tokens.Radius.card)),
+                            role = Role.Tab,
+                        ) { onSelect(i) },
                     contentAlignment = Alignment.TopCenter,
                 ) {
                     Column(Modifier.padding(top = TAB_PAD.dp), horizontalAlignment = Alignment.CenterHorizontally) {

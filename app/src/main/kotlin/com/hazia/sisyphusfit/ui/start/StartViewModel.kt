@@ -30,8 +30,8 @@ data class StartState(
 )
 
 class StartViewModel(sessions: SessionStore, settings: Settings) : ViewModel() {
-    // Whenever Start's state starts being collected (it opens, or returns after more than 5 s away), an idle session from
-    // an earlier day is closed first (SPEC:R96), so it is not offered for resume. replayExpirationMillis = 0: back after
+    // Whenever Start's state starts being collected (it opens, or returns after more than 5 s away), a session idle over
+    // 3 h is closed or dropped first (SPEC:R96), so it is not offered for resume. replayExpirationMillis = 0: back after
     // more than 5 s, Start shows loading, never the last session it held, until that has run.
     val state: StateFlow<StartState> = flow {
         sessions.closeIfIdle()

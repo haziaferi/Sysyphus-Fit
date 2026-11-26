@@ -92,7 +92,137 @@ def check(t):
     for name in raw_values(t):
         if name not in used:
             findings.append(f"{name}: raw value no role uses")
-    return findings
+    # the targets are measured only on a file whose references all resolve
+    return findings or targets(t)
+
+
+# Colour measures (SPEC:R126): WCAG 2 contrast and CIEDE2000, sRGB under D65.
+
+def rgba(hex_):
+    h = hex_.lstrip("#")
+    return [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)], (int(h[6:8], 16) / 255 if len(h) == 8 else 1.0)
+
+
+def over(hex_, ground):
+    """An alpha colour composited over an opaque ground, as #rrggbb."""
+    (c, a), (g, _) = rgba(hex_), rgba(ground)
+    return "#" + "".join(f"{round((a * x + (1 - a) * y) * 255):02x}" for x, y in zip(c, g))
+
+
+def _linear(s):
+    return s / 12.92 if s <= 0.04045 else ((s + 0.055) / 1.055) ** 2.4
+
+
+def luminance(hex_):
+    r, g, b = (_linear(x) for x in rgba(hex_)[0])
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b
+
+
+def contrast(a, b):
+    hi, lo = sorted((luminance(a), luminance(b)), reverse=True)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def lab(hex_):
+    r, g, b = (_linear(x) for x in rgba(hex_)[0])
+    xyz = (0.4124 * r + 0.3576 * g + 0.1805 * b, 0.2126 * r + 0.7152 * g + 0.0722 * b, 0.0193 * r + 0.1192 * g + 0.9505 * b)
+    f = [v / w for v, w in zip(xyz, (0.95047, 1.0, 1.08883))]
+    f = [v ** (1 / 3) if v > 216 / 24389 else (24389 / 27 * v + 16) / 116 for v in f]
+    return 116 * f[1] - 16, 500 * (f[0] - f[1]), 200 * (f[1] - f[2])
+
+
+def de2000(a, b):
+    import math
+    (l1, a1, b1), (l2, a2, b2) = lab(a), lab(b)
+    c_ = (math.hypot(a1, b1) + math.hypot(a2, b2)) / 2
+    g = 0.5 * (1 - math.sqrt(c_ ** 7 / (c_ ** 7 + 25 ** 7)))
+    a1p, a2p = a1 * (1 + g), a2 * (1 + g)
+    c1p, c2p = math.hypot(a1p, b1), math.hypot(a2p, b2)
+    h1p = math.degrees(math.atan2(b1, a1p)) % 360 if c1p else 0.0
+    h2p = math.degrees(math.atan2(b2, a2p)) % 360 if c2p else 0.0
+    dl, dc = l2 - l1, c2p - c1p
+    dh = 0.0 if c1p * c2p == 0 else (h2p - h1p if abs(h2p - h1p) <= 180 else h2p - h1p - 360 * math.copysign(1, h2p - h1p))
+    dH = 2 * math.sqrt(c1p * c2p) * math.sin(math.radians(dh / 2))
+    lp, cp = (l1 + l2) / 2, (c1p + c2p) / 2
+    if c1p * c2p == 0:
+        hp = h1p + h2p
+    elif abs(h1p - h2p) <= 180:
+        hp = (h1p + h2p) / 2
+    else:
+        hp = (h1p + h2p + 360) / 2 if h1p + h2p < 360 else (h1p + h2p - 360) / 2
+    tt = (1 - 0.17 * math.cos(math.radians(hp - 30)) + 0.24 * math.cos(math.radians(2 * hp))
+          + 0.32 * math.cos(math.radians(3 * hp + 6)) - 0.20 * math.cos(math.radians(4 * hp - 63)))
+    sl = 1 + 0.015 * (lp - 50) ** 2 / math.sqrt(20 + (lp - 50) ** 2)
+    sc, sh = 1 + 0.045 * cp, 1 + 0.015 * cp * tt
+    rt = (-2 * math.sqrt(cp ** 7 / (cp ** 7 + 25 ** 7))
+          * math.sin(math.radians(60 * math.exp(-(((hp - 275) / 25) ** 2)))))
+    return math.sqrt((dl / sl) ** 2 + (dc / sc) ** 2 + (dH / sh) ** 2 + rt * (dc / sc) * (dH / sh))
+
+
+TEXT_MIN, MARK_MIN, SEPARATION_MIN, CLOSE_MIN, PICKED_MIN = 7.0, 3.0, 10.0, 2.0, 3.0
+SET_OVER_BODY, BODY_LEADING = 2.5, 1.5
+
+
+def targets(t):
+    """SPEC:R126's colour and spacing targets and SPEC:R60's type ratios, from the file's `targets` block."""
+    if "targets" not in t:
+        return []
+    tab, tg, f = table(t), t["targets"], []
+    col = lambda name: resolve(tab[name], tab)
+    # A colour with an alpha is measured as it shows: composited over the ground it sits on.
+    seen = lambda name, ground: over(col(name), ground)
+    for row in tg["text"]:
+        for s in row["on"]:
+            r = contrast(seen(row["text"], col(s)), col(s))
+            if r < TEXT_MIN:
+                f.append(f"R126 text contrast: {row['text']} on {s} is {r:.2f}:1, under {TEXT_MIN:g}:1")
+    for row in tg["marks"]:
+        for s in row["on"]:
+            r = contrast(seen(row["mark"], col(s)), col(s))
+            if r < MARK_MIN:
+                f.append(f"R126 marks: {row['mark']} on {s} is {r:.2f}:1, under {MARK_MIN:g}:1")
+    for row in tg["controls"]:
+        ground = col(row["on"])
+        fill_de = de2000(seen(row["fill"], ground), ground)
+        edge_de = de2000(seen(row["edge"], ground), ground) if "edge" in row else 0.0
+        if max(fill_de, edge_de) < SEPARATION_MIN:
+            f.append(f"R126 control separation: {row['what']}: fill {fill_de:.2f}, edge {edge_de:.2f} dE2000 from {row['on']}, "
+                     f"under {SEPARATION_MIN:g}")
+    greys = {n: v for n, v in raw_values(t).items() if len(v) == 7}
+    names = sorted(greys)
+    for i, a in enumerate(names):
+        for b in names[i + 1:]:
+            d = de2000(greys[a], greys[b])
+            if d < CLOSE_MIN:
+                f.append(f"R126 close greys: {a} {greys[a]} and {b} {greys[b]} are {d:.2f} dE2000 apart: merge or move apart")
+    for row in tg["picked"]:
+        ground = col(row["on"])
+        picked, unpicked = seen(row["picked"], ground), seen(row["unpicked"], ground)
+        r = contrast(picked, unpicked)
+        if r < PICKED_MIN:
+            f.append(f"R126 picked contrast: {row['picked']} against {row['unpicked']} is {r:.2f}:1, under {PICKED_MIN:g}:1")
+        # compared as the colours that show, so a role that resolves to the bar's grey by another name is caught too
+        if picked == seen("color.fill.dark", ground):
+            f.append(f"R126 picked fill: {row['picked']} shows as the main bar's fill.dark")
+    for name, tok in leaves(t["space"], ("space",)):
+        if name in tg.get("unit-exceptions", []):
+            continue
+        b, c = tok["$value"]
+        if b % 4 or c % 4:
+            f.append(f"R126 spacing unit: {name} is {b:g} / {c:g} dp, not on the 8 dp (4 allowed) / 4 dp unit")
+    for row in tg["heads"]:
+        head, space = tab[row["head"]], tab[row["space"]]
+        for i, density in enumerate(("balanced", "compact")):
+            if space[i] < head["line"][i] / 2:
+                f.append(f"R126 gap under a head: {row['space']} is {space[i]:g} dp under {row['head']}'s {head['line'][i]:g} sp line "
+                         f"at {density}: under half")
+    body, number = tab["type.body"], tab["type.set-number"]
+    for i, density in enumerate(("balanced", "compact")):
+        if number["size"][i] < SET_OVER_BODY * body["size"][i]:
+            f.append(f"R60 set number: {number['size'][i]:g} sp is under {SET_OVER_BODY:g} times body's {body['size'][i]:g} at {density}")
+        if body["line"][i] < BODY_LEADING * body["size"][i]:
+            f.append(f"R60 body lines: {body['line'][i]:g} sp is under {BODY_LEADING:g} times body's {body['size'][i]:g} at {density}")
+    return f
 
 
 def css_name(name):
@@ -321,18 +451,41 @@ def type_table(t):
 def selftest():
     good = load()
     assert not check(good), check(good)
-    cases = {
-        "unknown reference": lambda t: t["color"]["ink"]["primary"].__setitem__("$value", "{grey.12}"),
-        "not #rrggbb": lambda t: t["raw"]["grey"].__setitem__("10", "#1c1c1"),
-        "raw value no role uses": lambda t: t["raw"]["grey"].__setitem__("50", "#777777"),
-        "density pair": lambda t: t["space"]["gap"].__setitem__("$value", 8),
-        "cycle": lambda t: t["color"]["rest"]["near-leg"].__setitem__("$value", "{color.rest.ring-track}"),
-    }
-    for what, plant in cases.items():
+    def two(*plants):
+        return lambda t: [p(t) for p in plants]
+
+    # Each case plants one defect, so a row that stopped working cannot hide behind another that still fires.
+    cases = [
+        ("unknown reference", lambda t: t["color"]["ink"]["primary"].__setitem__("$value", "{grey.12}")),
+        ("not #rrggbb", lambda t: t["raw"]["grey"].__setitem__("10", "#1c1c1")),
+        ("raw value no role uses", lambda t: t["raw"]["grey"].__setitem__("50", "#777777")),
+        ("density pair", lambda t: t["space"]["gap"].__setitem__("$value", 8)),
+        ("cycle", lambda t: t["color"]["rest"]["near-leg"].__setitem__("$value", "{color.rest.ring-track}")),
+        # SPEC:R126 and SPEC:R60, most with the value the palette round moved away from
+        ("R126 text contrast", lambda t: t["raw"]["grey"].__setitem__("31", "#575757")),
+        ("R126 control separation: light pebbles", lambda t: t["raw"]["black"].__setitem__("20", "#0000002e")),
+        ("R126 control separation: pills", lambda t: t["raw"]["grey"].__setitem__("76", "#c4c4c4")),
+        # an alpha colour is measured as it shows: black at 42% over the page is under 3:1, solid black would pass
+        ("R126 marks: color.state.focus", lambda t: t["color"]["state"]["focus"].__setitem__("$value", "{black.42}")),
+        ("R126 close greys", lambda t: t["raw"]["grey"].__setitem__("96", "#f0f0f0")),
+        ("R126 picked contrast", lambda t: t["targets"]["picked"][0].__setitem__("unpicked", "color.ink.secondary")),
+        # the bar's grey under another role's name, against an unpicked form it clears 3:1 from
+        ("R126 picked fill", two(lambda t: t["color"]["ink"]["primary"].__setitem__("$value", "{grey.17}"),
+                                 lambda t: t["targets"]["picked"][0].__setitem__("unpicked", "color.surface.page"))),
+        ("R126 spacing unit", lambda t: t["space"]["gutter"].__setitem__("$value", [16, 10])),
+        ("R126 gap under a head", lambda t: t["space"]["eyebrow"].__setitem__("$value", [8, 4])),
+        ("R60 set number", lambda t: t["type"]["set-number"]["$value"].__setitem__("size", [40, 34])),
+        ("R60 body lines", lambda t: t["type"]["body"]["$value"].__setitem__("line", [24, 20])),
+    ]
+    for what, plant in cases:
         t = copy.deepcopy(good)
         plant(t)
         f = check(t)
         assert any(what in x for x in f), (what, f)
+    # the picked-fill case fires only its own row
+    t = copy.deepcopy(good)
+    cases[11][1](t)
+    assert [x for x in check(t) if x.startswith("R126 picked")] == [x for x in check(t) if "picked fill" in x], check(t)
     t = copy.deepcopy(good)
     t["type"]["body"]["$value"]["size"] = [17, 14]
     assert any("type.body" in x for x in type_table(t)), "a type role that differs from SPEC's table"

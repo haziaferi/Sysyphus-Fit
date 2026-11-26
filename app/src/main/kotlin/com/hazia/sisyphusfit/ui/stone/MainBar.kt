@@ -100,7 +100,7 @@ fun MainBar(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @
                     alpha = LIGHT_ALPHA,
                 )
             }
-            .press(onClick)
+            .press(onClick, shape = DipShape, look = PressLook.Dark)
             .padding(start = 24.dp, end = 24.dp, top = LABEL_TOP),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically,

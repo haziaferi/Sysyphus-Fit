@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,10 +46,17 @@ fun HeaderRow(title: String, clock: String?, onBack: (() -> Unit)?, onFinish: ((
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (onBack != null) {
-            Box(Modifier.press(onBack, description = "Back"), contentAlignment = Alignment.Center) { StoneIcon(R.drawable.ic_back) }
+            Box(Modifier.press(onBack, description = "Back", shape = CircleShape), contentAlignment = Alignment.Center) { StoneIcon(R.drawable.ic_back) }
         }
         Box(
-            Modifier.weight(1f).heightIn(min = Theme.size.hit).clickable(onClickLabel = "show the full title") { full = !full },
+            Modifier
+                .weight(1f)
+                .heightIn(min = Theme.size.hit)
+                .clickable(
+                    interactionSource = stoneSource(),
+                    indication = StoneIndication(RoundedCornerShape(Tokens.Radius.box)),
+                    onClickLabel = "show the full title",
+                ) { full = !full },
             contentAlignment = Alignment.CenterStart,
         ) {
             StoneText(

@@ -63,7 +63,7 @@ class ShellViewModel(private val settings: Settings, private val setAsideStamp: 
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ShellState.Loading)
 
-    // A failed write keeps the screen up, so "Continue" can be tapped again, rather than ending the app.
+    // A failed write keeps the screen up, so "Start fresh" can be tapped again, rather than ending the app.
     fun dismissSetAside() {
         val stamp = owed ?: return
         viewModelScope.launch {

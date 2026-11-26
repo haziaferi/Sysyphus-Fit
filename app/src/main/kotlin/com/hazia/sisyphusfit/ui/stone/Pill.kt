@@ -2,6 +2,7 @@ package com.hazia.sisyphusfit.ui.stone
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -30,12 +31,14 @@ private val PILL_HEIGHT = 36.dp
 fun Pill(label: String, onClick: () -> Unit, modifier: Modifier = Modifier, @DrawableRes icon: Int? = null, quiet: Boolean = false) {
     val shape = remember { PebbleShape(Tokens.Radius.pebblePill) }
     val style = Theme.type.body.copy(fontWeight = FontWeight(500), fontFamily = sisifo(500, Theme.type.roles.body.carve))
-    Box(modifier.press(onClick), contentAlignment = Alignment.Center) {
+    val source = remember { MutableInteractionSource() }
+    Box(modifier.press(onClick, source = source), contentAlignment = Alignment.Center) {
         Row(
             Modifier
                 .testTag(if (quiet) "piece:pill-quiet" else "piece:pill")
                 .heightIn(min = PILL_HEIGHT)
                 .then(if (quiet) Modifier else Modifier.elevation(Tokens.Elevation.ground, shape).background(Tokens.Colors.surfaceSunk, shape))
+                .stoneIndication(source, shape)
                 .padding(horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,

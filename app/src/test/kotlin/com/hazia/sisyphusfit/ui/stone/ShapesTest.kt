@@ -27,10 +27,10 @@ class ShapesTest {
     }
 
     @Test
-    fun pebbleKeepsPercentagesAtAWidePill() {
-        val c = cssCorners(Size(200f, 50f), Tokens.Radius.pebblePill)
-        assertCorner(0.52f * 200, 0.50f * 50, c[0])
-        assertCorner(0.50f * 200, 0.46f * 50, c[2])
+    fun pebbleKeepsPercentagesAtAWideBox() {
+        val c = cssCorners(Size(200f, 50f), Tokens.Radius.pebbleA)
+        assertCorner(0.49f * 200, 0.52f * 50, c[0])
+        assertCorner(0.56f * 200, 0.54f * 50, c[2])
     }
 
     // CSS Backgrounds 3, 5.5: when adjacent radii exceed their side, every radius is scaled by the smallest side / sum.

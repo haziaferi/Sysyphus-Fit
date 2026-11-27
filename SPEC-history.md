@@ -323,3 +323,7 @@ Not a source of current rules: `SPEC.md` is. One line per change, newest at the 
 - 2026-11-26 · R87 · changed · evidence: starting closes an idle session first · builder
 - 2026-11-26 · R126 · changed · the gap rule names section heads · builder
 - 2026-11-26 · R65 · changed · acceptance: segments at size.hit, not the mockups' 44 · builder
+- 2026-11-26 · R111 · kind · Q → D: A.1 kept, rows at their "Added" height, re-measured by last use · builder
+- 2026-11-26 · R112 · kind · Q → D: round-ended action pills, 8 dp choices · owner
+- 2026-11-26 · R65 · changed · secondary buttons are round-ended pills (R112) · owner
+- 2026-11-26 · R100 · changed · rows laid out at their "Added" height (R111) · builder
